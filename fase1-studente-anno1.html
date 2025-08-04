@@ -102,6 +102,9 @@
       <p>Perché pensi che questo lavoro faccia per te?<br><textarea name="motivazioni_lavoro" rows="4" style="width: 100%;"></textarea></p>
       <p>Quali desideri, sogni, obiettivi pensi di poter realizzare con questo lavoro?<br><textarea name="obiettivi" rows="4" style="width: 100%;"></textarea></p>
       <p>C'è qualcuno che ammiri o che ti ispira per il suo lavoro o modo di vivere?<br><textarea name="ispirazioni" rows="2" style="width: 100%;"></textarea></p>
+<br><br>
+<button type="button" id="save-submit-btn">Salva e Scarica PDF</button>
+
     </form>
   </main>
 
@@ -183,5 +186,6 @@
       Object.entries(counts).forEach(([cat, val]) => sumFields[cat].textContent = val);
     });
   </script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
