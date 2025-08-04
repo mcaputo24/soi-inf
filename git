@@ -1,0 +1,9 @@
+mkdir soi-inf
+cd soi-inf
+git init
+echo "# SOI INF" > README.md
+git add .
+git commit -m "Primo commit"
+git branch -M main
+git remote add origin https://github.com/mcaputo24/soi-inf.git
+git push -u origin main
