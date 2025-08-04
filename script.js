@@ -1,7 +1,7 @@
 // Inizializzazione della mappa con Cytoscape
 import cytoscape from 'https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js';
 import { db } from './firebase-init.js';
-import jsPDF from 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+const { jsPDF } = window.jspdf;
 
 const cyContainer = document.getElementById('cy');
 if (cyContainer) {
