@@ -1,6 +1,7 @@
 // Inizializzazione della mappa con Cytoscape
 import cytoscape from 'https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js';
 import { db } from './firebase-init.js';
+import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
 const cyContainer = document.getElementById('cy');
 if (cyContainer) {
@@ -117,9 +118,9 @@ if (saveBtn) {
       cose: parseInt(sumFields.cose.textContent)
     };
 
-    // Salva su Firebase
+    // Salva su Firebase con API moderna
     try {
-      const docRef = await db.collection('fase1-studente-anno1').add({
+      const docRef = await addDoc(collection(db, 'fase1-studente-anno1'), {
         ...data,
         checkboxCounts,
         timestamp: new Date()
