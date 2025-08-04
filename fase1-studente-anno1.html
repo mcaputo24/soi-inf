@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fase 1 - Studente Anno I</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-form.css">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -34,6 +36,7 @@
   </header>
 
   <main>
+<div class="card">
     <h2>Dati anagrafici</h2>
     <form>
       <label>Nome: <input type="text" name="nome" required></label><br><br>
@@ -42,7 +45,8 @@
       <label>Data: <input type="date" name="data" required></label>
 
       <hr>
-
+</div>
+<div class="card">
       <h2>Scheda 1 – Mappa di descrizione di sé</h2>
       <p>Elenca dieci aggettivi che ritieni essere i più adatti per descriverti:</p>
       <ol>
@@ -63,7 +67,8 @@
       <p style="font-size: 14px; color: gray">Clicca per creare nodi e collegamenti alla tua mappa personale.</p>
 
       <hr>
-
+</div>
+<div class="card">
       <h2>Scheda 2 – Un pensiero sul lavoro</h2>
       <label>Secondo te, cos'è il lavoro?<br><textarea name="cos_e_lavoro" rows="4" style="width: 100%;"></textarea></label><br><br>
       <label>Perché le persone lavorano?<br><textarea name="perche_lavoro" rows="4" style="width: 100%;"></textarea></label><br><br>
@@ -71,7 +76,8 @@
       <label>Se penso al lavoro, mi sento...<br><textarea name="emozioni_lavoro" rows="2" style="width: 100%;"></textarea></label>
 
       <hr>
-
+</div>
+<div class="card">
       <h2>Scheda 3 – Modi di lavorare</h2>
       <p>Seleziona le affermazioni che ti descrivono:</p>
       <fieldset id="checkbox-area">
@@ -97,13 +103,15 @@
       </table>
 
       <hr>
-
+</div>
+<div class="card">
       <h2>Scheda 4 – Tutte le possibili strade</h2>
       <p>Quale o quali lavori ti piacerebbe fare da grande?<br><textarea name="lavori_preferiti" rows="3" style="width: 100%;"></textarea></p>
       <p>Come ti immagini mentre svolgi uno di questi lavori?<br><textarea name="immaginazione_lavoro" rows="3" style="width: 100%;"></textarea></p>
       <p>Perché pensi che questo lavoro faccia per te?<br><textarea name="motivazioni_lavoro" rows="4" style="width: 100%;"></textarea></p>
       <p>Quali desideri, sogni, obiettivi pensi di poter realizzare con questo lavoro?<br><textarea name="obiettivi" rows="4" style="width: 100%;"></textarea></p>
       <p>C'è qualcuno che ammiri o che ti ispira per il suo lavoro o modo di vivere?<br><textarea name="ispirazioni" rows="2" style="width: 100%;"></textarea></p>
+</div>
 <br><br>
 <button type="button" id="save-submit-btn">Salva e Scarica PDF</button>
 
