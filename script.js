@@ -1,7 +1,8 @@
 // Inizializzazione della mappa con Cytoscape
 import cytoscape from 'https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js';
 import { db } from './firebase-init.js';
-const { jsPDF } = window.jspdf;
+import { jsPDF } from 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.es.min.js';
+window.jsPDF = jsPDF;
 
 const cyContainer = document.getElementById('cy');
 if (cyContainer) {
@@ -131,8 +132,7 @@ if (saveBtn) {
     }
 
     // Genera PDF
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+    const pdf = new window.jsPDF();
     let y = 10;
     pdf.setFontSize(12);
     for (const [key, value] of Object.entries(data)) {
