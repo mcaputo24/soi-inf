@@ -50,24 +50,53 @@ if (cyContainer) {
 // Conteggio dinamico checkbox Scheda 3
 const categorie = {
   gente: [
-    'Ti piace lavorare in gruppo',
-    'Aiuti spesso i compagni in difficoltà',
-    'Ti esprimi con disinvoltura con gli altri'
-  ],
-  idee: [
-    'Ti piace leggere',
-    'Ti piacciono le discussioni su temi importanti',
-    'Hai il gusto della ricerca'
+    'Nelle interrogazioni orali ti esprimi con disinvoltura',
+    'A scuola, ti piace lavorare in gruppo',
+    'Non resisti a lungo in un posto in cui non puoi parlare',
+    'Tutti ti dicono che sei garbato e cordiale',
+    "Vai d'accordo con tutti, anche con le persone che hai appena conosciuto",
+    'Ti capita spesso di persuadere gli altri a fare ciò che vuoi tu',
+    'Ammiri molto le persone che aiutano la gente che ha bisogno',
+    'Ti capita spesso di aiutare qualche compagno in difficoltà',
+    'Sei disponibile ad ascoltare le persone che ti parlano dei loro problemi',
+    'Ti piacerebbe svolgere un servizio volontario per aiutare delle persone in difficoltà'
   ],
   dati: [
-    'Ti piacciono i calcoli',
-    'Ti piace costruire grafici',
-    'Sei molto ordinato'
+    'Ti piace fare i calcoli di matematica',
+    'Sei capace di seguire con precisione delle istruzioni, anche lunghe e complesse',
+    'Non sopporti il disordine e la confusione',
+    'Ti piace organizzare bene le tue attività',
+    'Ti piace costruire grafici e diagrammi',
+    'Quando devi ricordare delle informazioni, le organizzi con degli schemi, degli elenchi...',
+    'A scuola i professori ti affidano volentieri degli incarichi che richiedono attenzione e precisione',
+    'Per presentare un compito ordinato sei disposto a rifarlo più volte',
+    'Hai buone doti di osservazione e ricordi facilmente ciò che hai osservato',
+    'Sei costante nel dedicarti agli impegni che ti assumi'
+  ],
+  idee: [
+    "Ti piace studiare e non ti spaventa l'idea di studiare ancora per parecchi anni",
+    'Ti piace leggere',
+    'Ti piace discutere di problemi sociali o religiosi o politici o scientifici',
+    
+    "C'è un argomento culturale che ti interessa in modo particolare e che approfondisci in modo autonomo",
+    'Non ti capita quasi mai di pensare che certe materie che si studiano a scuola non servono a niente',
+    'Ti piacciono gli esercizi che mettono alla prova la tua logica',
+    'Hai buona memoria',
+    'Qualche volta segui alla televisione un programma culturale (un documentario, un dibattito...)',
+    'Hai il gusto della ricerca; consulti per conto tuo libri e/o Wikipedia, Google, ChatGPT',
+    'Per capire idee e concetti astratti non hai sempre bisogno che ti facciano degli esempi concreti'
   ],
   cose: [
-    'Ti piacciono i lavori manuali',
-    'Ti piace costruire oggetti',
-    'Ami la natura e il lavoro all\'aperto'
+    'Riesci bene nei piccoli lavori manuali',
+    'Ti piace costruire degli oggetti col legno o con altro materiale',
+    "Segui con precisione i consigli dell'insegnante di Educazione Tecnica quando ti aiuta a costruire qualcosa",
+    'Ti piace osservare gli artigiani mentre lavorano',
+    'Ti piace scoprire come funzionano i meccanismi di certi oggetti',
+    'Se stai a lungo seduto o fermo diventi nervoso',
+    'Sei affascinato da ogni tipo di macchina',
+    'Sai inventare delle soluzioni per certi problemi pratici che si presentano a casa o a scuola',
+    'Alla televisione segui i programmi che illustrano i progressi tecnologici',
+    'Ami la natura e ti piacerebbe lavorare con le piante o gli animali'
   ]
 };
 
@@ -80,7 +109,12 @@ const sumFields = {
 };
 
 if (checkboxArea) {
+  const container = document.createElement('div');
+  container.className = 'checkbox-columns';
+
   Object.entries(categorie).forEach(([cat, frasi]) => {
+    const column = document.createElement('div');
+    column.className = 'checkbox-column';
     frasi.forEach((testo, index) => {
       const id = `${cat}-${index}`;
       const label = document.createElement('label');
@@ -90,10 +124,13 @@ if (checkboxArea) {
       input.dataset.cat = cat;
       label.appendChild(input);
       label.appendChild(document.createTextNode(' ' + testo));
-      checkboxArea.appendChild(label);
-      checkboxArea.appendChild(document.createElement('br'));
+      column.appendChild(label);
+      column.appendChild(document.createElement('br'));
     });
+    container.appendChild(column);
   });
+
+  checkboxArea.appendChild(container);
 
   checkboxArea.addEventListener('change', () => {
     const counts = { gente: 0, idee: 0, dati: 0, cose: 0 };
