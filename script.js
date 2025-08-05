@@ -208,6 +208,7 @@ function initializeConceptMap() {
       const children = selectedNode.outgoers('node');
       selectedNode.union(children).remove();
       renderBaseControls();
+  window.cyInstance = cy;
     }
   }
 
@@ -247,6 +248,7 @@ function initializeConceptMap() {
   });
 
   renderBaseControls();
+  window.cyInstance = cy;
 }
 
 // SALVATAGGIO e PDF
@@ -292,7 +294,7 @@ if (saveBtn) {
 // Estrai connessioni dalla mappa Cytoscape
 let mappa = [];
 if (window.conceptMapInitialized && window.cytoscape) {
-  const cy = window.cytoscape.instances[0];
+  const cy = window.cyInstance;
   if (cy) {
     cy.edges().forEach(edge => {
       const source = cy.getElementById(edge.data('source')).data('label');
