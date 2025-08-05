@@ -113,13 +113,14 @@ img {
   }
 }
 ul.work-modes {
-  padding-left: 20px;
+  padding-left: 0;
   margin-top: 20px;
   margin-bottom: 20px;
-  list-style-type: disc;
+  list-style-type: none;
 }
 
 ul.work-modes li {
   margin-bottom: 16px;
   line-height: 1.6;
+  text-align: left;
 }
