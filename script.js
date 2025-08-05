@@ -305,7 +305,6 @@ try {
       y += 8;
     }
 // Estrai connessioni dalla mappa Cytoscape
-let mappa = [];
 if (window.conceptMapInitialized && window.cytoscape) {
   const cy = window.cyInstance;
   if (cy) {
@@ -329,4 +328,6 @@ if (mappa.length > 0) {
     pdf.save('questionario_fase1_anno1.pdf');
   });
 }
-initializeConceptMap();
+window.addEventListener('DOMContentLoaded', () => {
+  initializeConceptMap();
+});
