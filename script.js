@@ -77,7 +77,6 @@ const categorie = {
     "Ti piace studiare e non ti spaventa l'idea di studiare ancora per parecchi anni",
     'Ti piace leggere',
     'Ti piace discutere di problemi sociali o religiosi o politici o scientifici',
-    
     "C'è un argomento culturale che ti interessa in modo particolare e che approfondisci in modo autonomo",
     'Non ti capita quasi mai di pensare che certe materie che si studiano a scuola non servono a niente',
     'Ti piacciono gli esercizi che mettono alla prova la tua logica',
@@ -115,9 +114,15 @@ if (checkboxArea) {
   Object.entries(categorie).forEach(([cat, frasi]) => {
     const column = document.createElement('div');
     column.className = 'checkbox-column';
+    const heading = document.createElement('h3');
+    heading.textContent = cat.toUpperCase();
+    heading.style.marginTop = '0';
+    column.appendChild(heading);
+
     frasi.forEach((testo, index) => {
       const id = `${cat}-${index}`;
       const label = document.createElement('label');
+      label.className = 'checkbox-label';
       const input = document.createElement('input');
       input.type = 'checkbox';
       input.id = id;
@@ -125,7 +130,6 @@ if (checkboxArea) {
       label.appendChild(input);
       label.appendChild(document.createTextNode(' ' + testo));
       column.appendChild(label);
-      column.appendChild(document.createElement('br'));
     });
     container.appendChild(column);
   });
