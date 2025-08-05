@@ -3,49 +3,7 @@ import cytoscape from 'https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/c
 import { db } from './firebase-init.js';
 import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
-const cyContainer = document.getElementById('cy');
-if (cyContainer) {
-  const cy = cytoscape({
-    container: cyContainer,
-    elements: [],
-    style: [
-      {
-        selector: 'node',
-        style: {
-          'label': 'data(label)',
-          'background-color': '#007bff',
-          'color': '#fff',
-          'text-valign': 'center',
-          'text-halign': 'center'
-        }
-      },
-      {
-        selector: 'edge',
-        style: {
-          'width': 2,
-          'line-color': '#999'
-        }
-      }
-    ],
-    layout: { name: 'grid' }
-  });
 
-  cy.on('tap', function(event) {
-    if (event.target === cy) {
-      const id = 'n' + cy.elements().length;
-      const label = prompt('Etichetta del nodo?');
-      if (label) {
-        cy.add({ group: 'nodes', data: { id: id, label: label }, position: event.position });
-      }
-    } else if (event.target.isNode()) {
-      const selected = cy.$(':selected');
-      if (selected.length === 1 && selected[0] !== event.target) {
-        cy.add({ group: 'edges', data: { source: selected[0].id(), target: event.target.id() } });
-      }
-      event.target.select();
-    }
-  });
-}
 function initializeConceptMap() {
   if (window.conceptMapInitialized) return;
   window.conceptMapInitialized = true;
