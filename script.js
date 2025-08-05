@@ -289,6 +289,28 @@ if (saveBtn) {
       pdf.text(`${cat}: ${val}`, 10, y);
       y += 8;
     }
+// Estrai connessioni dalla mappa Cytoscape
+let mappa = [];
+if (window.conceptMapInitialized && window.cytoscape) {
+  const cy = window.cytoscape.instances[0];
+  if (cy) {
+    cy.edges().forEach(edge => {
+      const source = cy.getElementById(edge.data('source')).data('label');
+      const target = cy.getElementById(edge.data('target')).data('label');
+      mappa.push(`${source} → ${target}`);
+    });
+  }
+}
+
+// Aggiungi la mappa al PDF
+if (mappa.length > 0) {
+  pdf.text('Mappa Concettuale:', 10, y); y += 8;
+  mappa.forEach(riga => {
+    pdf.text('- ' + riga, 10, y);
+    y += 8;
+  });
+}
+
     pdf.save('questionario_fase1_anno1.pdf');
   });
 }
