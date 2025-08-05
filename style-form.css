@@ -124,3 +124,14 @@ ul.work-modes li {
   line-height: 1.6;
   text-align: left;
 }
+.checkbox-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.checkbox-column {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
