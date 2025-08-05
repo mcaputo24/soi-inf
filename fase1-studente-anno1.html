@@ -47,27 +47,36 @@
       <hr>
 </div>
 <div class="card">
-      <h2>Scheda 1 – Mappa di descrizione di sé</h2>
-      <p>Elenca dieci aggettivi che ritieni essere i più adatti per descriverti:</p>
-      <ol>
-        <li><input type="text" name="agg1"></li>
-        <li><input type="text" name="agg2"></li>
-        <li><input type="text" name="agg3"></li>
-        <li><input type="text" name="agg4"></li>
-        <li><input type="text" name="agg5"></li>
-        <li><input type="text" name="agg6"></li>
-        <li><input type="text" name="agg7"></li>
-        <li><input type="text" name="agg8"></li>
-        <li><input type="text" name="agg9"></li>
-        <li><input type="text" name="agg10"></li>
-      </ol>
-      <p>Utilizza alcuni aggettivi per costruire la tua mappa concettuale. Guarda l'esempio qui sotto:</p>
-      <img src="mappa-esempio.png" alt="Esempio mappa" style="max-width: 100%; height: auto;">
-      <div id="cy"></div>
-      <p style="font-size: 14px; color: gray">Clicca per creare nodi e collegamenti alla tua mappa personale.</p>
+  <h2>Scheda 1 – Mappa di descrizione di sé</h2>
 
-      <hr>
+  <p>Elenca dieci aggettivi che ritieni essere i più adatti per descriverti:</p>
+  <ol>
+    <li><input type="text" name="agg1"></li>
+    <li><input type="text" name="agg2"></li>
+    <li><input type="text" name="agg3"></li>
+    <li><input type="text" name="agg4"></li>
+    <li><input type="text" name="agg5"></li>
+    <li><input type="text" name="agg6"></li>
+    <li><input type="text" name="agg7"></li>
+    <li><input type="text" name="agg8"></li>
+    <li><input type="text" name="agg9"></li>
+    <li><input type="text" name="agg10"></li>
+  </ol>
+
+  <p>Utilizza alcuni aggettivi per costruire la tua mappa concettuale. Guarda l'esempio qui sotto:</p>
+  <img src="mappa-esempio.png" alt="Esempio mappa" style="max-width: 100%; height: auto;">
+
+  <p><strong>Crea la tua mappa concettuale interattiva:</strong></p>
+  <div id="cy" style="height: 500px; border: 1px solid #ccc; margin-bottom: 20px;"></div>
+  <div id="controls-content"></div>
+
+  <p style="font-size: 14px; color: gray">
+    Clicca su un aggettivo per collegare attività o contesti. Puoi selezionare i tuoi aggettivi anche dal blocco sopra.
+  </p>
+
+  <hr>
 </div>
+
 <div class="card">
       <h2>Scheda 2 – Un pensiero sul lavoro</h2>
       <label>Secondo te, cos'è il lavoro?<br><textarea name="cos_e_lavoro" rows="4" style="width: 100%;"></textarea></label><br><br>
@@ -200,5 +209,9 @@
     });
   </script>
 <script type="module" src="script.js"></script>
+<script type="module">
+  import { initializeConceptMap } from './script.js';
+  initializeConceptMap();
+</script>
 </body>
 </html>
