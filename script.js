@@ -265,17 +265,30 @@ if (saveBtn) {
       cose: parseInt(sumFields.cose.textContent)
     };
 
-    // Salva su Firebase con API moderna
-    try {
-      const docRef = await addDoc(collection(db, 'fase1-studente-anno1'), {
-        ...data,
-        checkboxCounts,
-        timestamp: new Date()
-      });
-      console.log('Dati salvati con ID:', docRef.id);
-    } catch (e) {
-      console.error('Errore salvataggio Firebase:', e);
-    }
+    // Estrai connessioni dalla mappa Cytoscape
+let mappa = [];
+if (window.conceptMapInitialized && window.cyInstance) {
+  const cy = window.cyInstance;
+  cy.edges().forEach(edge => {
+    const source = cy.getElementById(edge.data('source')).data('label');
+    const target = cy.getElementById(edge.data('target')).data('label');
+    mappa.push({ from: source, to: target });
+  });
+}
+
+// Salva su Firebase
+try {
+  const docRef = await addDoc(collection(db, 'fase1-studente-anno1'), {
+    ...data,
+    checkboxCounts,
+    conceptMap: mappa, // ⬅ AGGIUNTO
+    timestamp: new Date()
+  });
+  console.log('Dati salvati con ID:', docRef.id);
+} catch (e) {
+  console.error('Errore salvataggio Firebase:', e);
+}
+
 
     // Genera PDF usando UMD
     const { jsPDF } = window.jspdf;
