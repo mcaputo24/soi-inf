@@ -1,5 +1,4 @@
 // Inizializzazione della mappa con Cytoscape
-import cytoscape from 'https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js';
 import { db } from './firebase-init.js';
 import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
