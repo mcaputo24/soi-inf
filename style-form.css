@@ -141,3 +141,87 @@ ul.work-modes li {
   font-size: 15px;
   line-height: 1.4;
 }
+/* NODI MAPPA */
+.cy-node {
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Specifici */
+.cy-node.io-sono {
+  background-color: #005a87;
+  text-outline-color: #005a87;
+}
+
+.cy-node.aggettivo {
+  background-color: #c15c2d;
+  text-outline-color: #c15c2d;
+}
+
+.cy-node.attivita {
+  background-color: #3a7d44;
+  text-outline-color: #3a7d44;
+}
+
+.cy-node.contesto {
+  background-color: #5bc0de;
+  color: #000;
+  text-outline-color: #5bc0de;
+}
+
+/* PANNELO DI CONTROLLO */
+#controls-content {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 350px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 20px;
+}
+
+#controls-content h4 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #003366;
+}
+
+#controls-content .form-group {
+  margin-bottom: 16px;
+}
+
+#controls-content input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#controls-content button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#controls-content button:hover {
+  opacity: 0.9;
+}
+
+#controls-content button.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+#controls-content button:not(.delete-btn) {
+  background-color: #007bff;
+  color: white;
+}
