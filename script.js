@@ -492,3 +492,4 @@ if (saveBtn) {
     pdf.save('questionario_fase1_anno1.pdf');
   });
 }
+initializeConceptMap();
