@@ -112,3 +112,14 @@ img {
     font-size: 16px;
   }
 }
+ul.work-modes {
+  padding-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  list-style-type: disc;
+}
+
+ul.work-modes li {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
