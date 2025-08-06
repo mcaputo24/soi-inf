@@ -41,7 +41,6 @@ const etichette = {
   senza_lavoro: "3) Se nessuno lavorasse, cosa succederebbe?",
   emozioni_lavoro: "4) Se penso al lavoro, mi sento...",
   scheda3: "Questionario di autovalutazione",
-  scheda3_riflessioni: "Cosa hai capito di te? Quale potrebbe essere la modalità di lavorare migliore per te? (In pratica: come ti piacerebbe lavorare?)"
   scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
   'gente': "Scheda 3 – Lavorare con la Gente",
   'idee': "Scheda 3 – Lavorare con le Idee",
@@ -54,7 +53,6 @@ const sezioni = {
   'Scheda 1 – Mappa di descrizione di sé': ['agg1','agg2','agg3','agg4','agg5','agg6','agg7','agg8','agg9','agg10'],
   'Scheda 2 – Un pensiero sul lavoro': ['pensiero_lavoro','cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
   'Scheda 3 – Modi di lavorare': ['scheda3','gente','idee','dati','cose'],
-  'Cosa hai capito di te? Quale potrebbe essere la modalità di lavorare migliore per te? (In pratica: come ti piacerebbe lavorare?)': [scheda3_riflessioni],
   'Scheda 4 – Tutte le possibili strade': ['scheda4']
 };
 
