@@ -112,7 +112,8 @@ if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
     p.textContent = aggettivi.join(', ');
     section.appendChild(p);
   }
-  return; // Salta gli altri aggettivi uno a uno
+        studentAnswers.appendChild(section);
+   return; // Salta gli altri aggettivi uno a uno
 }
 
       chiavi.forEach(k => {
