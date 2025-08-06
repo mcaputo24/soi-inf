@@ -98,44 +98,54 @@ async function loadStudentDetail(studentId, studentFullName) {
           section.appendChild(p);
         }
       });
+if (titolo === 'Scheda 3 – Modi di lavorare' && data.checkboxCounts) {
+  for (const cat of ['gente', 'idee', 'dati', 'cose']) {
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>${etichette['sum-' + cat]}:</strong> ${data.checkboxCounts[cat] ?? 0}`;
+    section.appendChild(p);
+  }
+}
 
       studentAnswers.appendChild(section);
     });
 
-    if (data.cyElements) {
-      const cyBox = document.createElement('div');
-      cyBox.id = 'cy-preview';
-      studentAnswers.appendChild(cyBox);
+    if (data.cyElements && Array.isArray(data.cyElements)) {
+  const cyBox = document.createElement('div');
+  cyBox.id = 'cy-preview';
+  cyBox.style.height = '400px';
+  cyBox.style.border = '1px solid #ccc';
+  cyBox.style.marginTop = '20px';
+  studentAnswers.appendChild(cyBox);
 
-      import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
-        const cytoscape = module.default;
-        cytoscape({
-          container: cyBox,
-          elements: data.cyElements,
-          style: [
-            {
-              selector: 'node',
-              style: {
-                'label': 'data(label)',
-                'background-color': '#007bff',
-                'color': '#fff',
-                'text-valign': 'center',
-                'text-halign': 'center'
-              }
-            },
-            {
-              selector: 'edge',
-              style: {
-                'width': 2,
-                'line-color': '#999'
-              }
-            }
-          ],
-          layout: { name: 'grid' }
-        });
-      });
-    }
-  }
+  import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
+    const cytoscape = module.default;
+    cytoscape({
+      container: cyBox,
+      elements: data.cyElements,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'label': 'data(label)',
+            'background-color': '#007bff',
+            'color': '#fff',
+            'text-valign': 'center',
+            'text-halign': 'center'
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'width': 2,
+            'line-color': '#999'
+          }
+        }
+      ],
+      layout: { name: 'grid' }
+    });
+  });
+}
+
 
   // Valutazione
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
