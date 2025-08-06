@@ -31,11 +31,12 @@ const etichette = {
   senza_lavoro: "3) Se nessuno lavorasse, cosa succederebbe?",
   emozioni_lavoro: "4) Se penso al lavoro, mi sento...",
   scheda3: "Questionario di autovalutazione",
-  scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
   'gente': "Scheda 3 – Lavorare con la Gente",
   'idee': "Scheda 3 – Lavorare con le Idee",
   'dati': "Scheda 3 – Lavorare con i Dati",
   'cose': "Scheda 3 – Lavorare con le Cose"
+  scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
+  
 };
 
 const sezioni = {
