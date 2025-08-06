@@ -73,17 +73,16 @@ async function loadStudentList() {
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
   studentEvaluation.style.display = 'block';
-  studentNameTitle.textContent = studentFullName;
+  evaluationForm.innerHTML = '';
   studentAnswers.innerHTML = '';
+
+  // Titolo evidenziato
+  studentNameTitle.innerHTML = `<span class="student-name">${studentFullName}</span>`;
 
   const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
 
   if (studenteDoc.exists()) {
     const data = studenteDoc.data();
-
-    const title = document.createElement('h3');
-    title.textContent = 'Risposte dello studente';
-    studentAnswers.appendChild(title);
 
     Object.entries(sezioni).forEach(([titolo, chiavi]) => {
       const section = document.createElement('div');
@@ -143,7 +142,6 @@ async function loadStudentDetail(studentId, studentFullName) {
   const valutazioneSnap = await getDoc(valutazioneDocRef);
   const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
 
-  evaluationForm.innerHTML = '';
   Object.entries(schede).forEach(([schedaTitolo, dimensioni]) => {
     const card = document.createElement('div');
     card.className = 'card';
