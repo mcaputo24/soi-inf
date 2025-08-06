@@ -12,43 +12,36 @@ const backButton = document.getElementById('back-button');
 const studentNameTitle = document.getElementById('student-name-title');
 
 const schede = {
-  'Scheda 1 – Mappa di descrizione di sé': [
-    'autoconsapevolezza',
-    'processo decisionale',
-    'visione futura',
-    'organizzazione'
-  ],
-  'Scheda 2 – Un pensiero sul lavoro': [
-    'autoconsapevolezza',
-    'conoscenza del mondo del lavoro',
-    'visione futura',
-    'organizzazione'
-  ],
-  'Scheda 3 – Modi di lavorare': [
-    'autoconsapevolezza',
-    'processo decisionale',
-    'visione futura',
-    'organizzazione'
-  ],
-  'Scheda 4 – Tutte le possibili strade': [
-    'autoconsapevolezza',
-    'conoscenza del mondo del lavoro',
-    'processo decisionale',
-    'visione futura',
-    'organizzazione'
-  ]
+  'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
+  'Scheda 3 – Modi di lavorare': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
 };
 
-// Ordine delle domande (chiavi Firebase) da visualizzare
-const orderedKeys = [
-  'cognome', 'nome', 'classe', 'data',
-  'agg1', 'agg2', 'agg3', 'agg4', 'agg5',
-  'agg6', 'agg7', 'agg8', 'agg9', 'agg10',
-  'pensiero_lavoro', 'scheda3', 'scheda4',
-  'sum-gente', 'sum-idee', 'sum-dati', 'sum-cose'
-];
+const etichette = {
+  cognome: "Cognome",
+  nome: "Nome",
+  classe: "Classe",
+  data: "Data compilazione",
+  agg1: "Aggettivo 1", agg2: "Aggettivo 2", agg3: "Aggettivo 3", agg4: "Aggettivo 4", agg5: "Aggettivo 5",
+  agg6: "Aggettivo 6", agg7: "Aggettivo 7", agg8: "Aggettivo 8", agg9: "Aggettivo 9", agg10: "Aggettivo 10",
+  pensiero_lavoro: "Pensiero sul lavoro",
+  scheda3: "Scheda 3 – Testo autovalutazione",
+  scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
+  'sum-gente': "Scheda 3 – Gente",
+  'sum-idee': "Scheda 3 – Idee",
+  'sum-dati': "Scheda 3 – Dati",
+  'sum-cose': "Scheda 3 – Cose"
+};
 
-// Mostra elenco studenti ordinati per Cognome Nome
+const sezioni = {
+  'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
+  'Scheda 1 – Mappa di descrizione di sé': ['agg1','agg2','agg3','agg4','agg5','agg6','agg7','agg8','agg9','agg10'],
+  'Scheda 2 – Un pensiero sul lavoro': ['pensiero_lavoro'],
+  'Scheda 3 – Modi di lavorare': ['scheda3','sum-gente','sum-idee','sum-dati','sum-cose'],
+  'Scheda 4 – Tutte le possibili strade': ['scheda4']
+};
+
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
   const students = [];
@@ -77,14 +70,13 @@ async function loadStudentList() {
   });
 }
 
-// Mostra risposte e form valutazione
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
   studentEvaluation.style.display = 'block';
   studentNameTitle.textContent = studentFullName;
+  studentAnswers.innerHTML = '';
 
   const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
-  studentAnswers.innerHTML = '';
 
   if (studenteDoc.exists()) {
     const data = studenteDoc.data();
@@ -93,15 +85,24 @@ async function loadStudentDetail(studentId, studentFullName) {
     title.textContent = 'Risposte dello studente';
     studentAnswers.appendChild(title);
 
-    orderedKeys.forEach(key => {
-      if (data[key]) {
-        const p = document.createElement('p');
-        p.innerHTML = `<strong>${key}:</strong> ${data[key]}`;
-        studentAnswers.appendChild(p);
-      }
+    Object.entries(sezioni).forEach(([titolo, chiavi]) => {
+      const section = document.createElement('div');
+      section.className = 'card';
+      const h4 = document.createElement('h4');
+      h4.textContent = titolo;
+      section.appendChild(h4);
+
+      chiavi.forEach(k => {
+        if (data[k]) {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+          section.appendChild(p);
+        }
+      });
+
+      studentAnswers.appendChild(section);
     });
 
-    // Mappa concettuale se presente
     if (data.cyElements) {
       const cyBox = document.createElement('div');
       cyBox.id = 'cy-preview';
@@ -137,7 +138,7 @@ async function loadStudentDetail(studentId, studentFullName) {
     }
   }
 
-  // Carica valutazioni esistenti
+  // Valutazione
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
   const valutazioneSnap = await getDoc(valutazioneDocRef);
   const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
