@@ -230,6 +230,66 @@ if (titolo === 'Dati anagrafici' && data.conceptMap) {
   });
 
   const saveBtn = document.createElement('button');
+// --- Calcolo riepilogo dimensioni ---
+const dimensioniTotali = {
+  autoconsapevolezza: 0,
+  'conoscenza del mondo del lavoro': 0,
+  'processo decisionale': 0,
+  'visione futura': 0,
+  organizzazione: 0
+};
+const dimensioniPresenti = {
+  autoconsapevolezza: 0,
+  'conoscenza del mondo del lavoro': 0,
+  'processo decisionale': 0,
+  'visione futura': 0,
+  organizzazione: 0
+};
+
+Object.entries(valutazioni).forEach(([chiave, valore]) => {
+  const match = chiave.match(/__([^_]+(?: [^_]+)*)$/); // estrae la dimensione dopo '__'
+  if (!match) return;
+  const dimensione = match[1].toLowerCase();
+  if (!(dimensione in dimensioniTotali)) return;
+  dimensioniTotali[dimensione]++;
+  if (valore === 'presente') {
+    dimensioniPresenti[dimensione]++;
+  }
+});
+
+// --- Creazione tabella riepilogativa ---
+const summaryCard = document.createElement('div');
+summaryCard.className = 'card';
+summaryCard.innerHTML = `<h3>Riepilogo per dimensione</h3>
+  <table class="summary-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #ccc; padding: 8px;">Dimensione</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Presente</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Da potenziare</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Risultato generale</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${Object.keys(dimensioniTotali).map(dim => {
+        const presenti = dimensioniPresenti[dim];
+        const totali = dimensioniTotali[dim];
+        const potenziare = totali - presenti;
+        const risultato = (presenti > potenziare) ? 'PRESENTE' : 'DA POTENZIARE';
+        return `
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px;">${dim.charAt(0).toUpperCase() + dim.slice(1)}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${presenti} / ${totali}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${potenziare} / ${totali}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;"><strong>${risultato}</strong></td>
+          </tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+`;
+
+evaluationForm.appendChild(summaryCard);
+
   saveBtn.textContent = 'Salva valutazione';
   saveBtn.type = 'submit';
   evaluationForm.appendChild(saveBtn);
