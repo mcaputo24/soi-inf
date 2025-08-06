@@ -2,7 +2,7 @@ function renderMapDataAsText(mappa) {
   if (!Array.isArray(mappa)) return '';
   return `
     <div class="card">
-      <h4>Mappa concettuale</h4>
+      <h4>Scheda 1 – Mappa di descrizione di sé</h4>
       ${mappa.map(conn => `<p>${conn.from} → ${conn.to}</p>`).join('')}
     </div>
   `;
@@ -103,15 +103,35 @@ async function loadStudentDetail(studentId, studentFullName) {
       const section = document.createElement('div');
       section.className = 'card';
       const h4 = document.createElement('h4');
-      h4.textContent = titolo;
-      section.appendChild(h4);
+h4.textContent = (titolo === 'Scheda 1 – Mappa di descrizione di sé') ? 'Aggettivi' : titolo;
+section.appendChild(h4);
+
 
       chiavi.forEach(k => {
-        if (data[k]) {
-          const p = document.createElement('p');
-          p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
-          section.appendChild(p);
-        }
+if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
+  const aggettivi = chiavi.map(k => data[k]).filter(Boolean);
+  if (aggettivi.length > 0) {
+    const p = document.createElement('p');
+    p.textContent = aggettivi.join(', ');
+    section.appendChild(p);
+  }
+  return; // Salta gli altri aggettivi uno a uno
+}
+
+        if (k.startsWith('sum-') && data.checkboxCounts) {
+  const categoria = k.split('-')[1];
+  const valore = data.checkboxCounts[categoria];
+  if (valore !== undefined) {
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${valore}`;
+    section.appendChild(p);
+  }
+} else if (data[k]) {
+  const p = document.createElement('p');
+  p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+  section.appendChild(p);
+}
+
       });
 
       studentAnswers.appendChild(section);
