@@ -39,38 +39,102 @@ const schede = {
   ]
 };
 
-// Mostra elenco studenti
+// Ordine delle domande (chiavi Firebase) da visualizzare
+const orderedKeys = [
+  'cognome', 'nome', 'classe', 'data',
+  'agg1', 'agg2', 'agg3', 'agg4', 'agg5',
+  'agg6', 'agg7', 'agg8', 'agg9', 'agg10',
+  'pensiero_lavoro', 'scheda3', 'scheda4',
+  'sum-gente', 'sum-idee', 'sum-dati', 'sum-cose'
+];
+
+// Mostra elenco studenti ordinati per Cognome Nome
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
+  const students = [];
+
   querySnapshot.forEach(docSnap => {
     const data = docSnap.data();
+    if (data.cognome && data.nome) {
+      students.push({
+        id: docSnap.id,
+        nome: data.nome,
+        cognome: data.cognome,
+        label: data.cognome + ' ' + data.nome
+      });
+    }
+  });
+
+  students.sort((a, b) => a.label.localeCompare(b.label));
+  students.forEach(s => {
     const li = document.createElement('li');
-    li.textContent = data.nome || 'Studente senza nome';
+    li.textContent = s.label;
     li.style.cursor = 'pointer';
     li.addEventListener('click', () => {
-      loadStudentDetail(docSnap.id, data.nome || 'Studente');
+      loadStudentDetail(s.id, s.label);
     });
     studentList.appendChild(li);
   });
 }
 
 // Mostra risposte e form valutazione
-async function loadStudentDetail(studentId, studentName) {
+async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
   studentEvaluation.style.display = 'block';
-  studentNameTitle.textContent = studentName;
+  studentNameTitle.textContent = studentFullName;
 
-  // Risposte studente in ordine leggibile
   const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
   studentAnswers.innerHTML = '';
+
   if (studenteDoc.exists()) {
     const data = studenteDoc.data();
-    const orderedKeys = Object.keys(data).filter(k => typeof data[k] === 'string').sort();
+
+    const title = document.createElement('h3');
+    title.textContent = 'Risposte dello studente';
+    studentAnswers.appendChild(title);
+
     orderedKeys.forEach(key => {
-      const p = document.createElement('p');
-      p.innerHTML = `<strong>${key}:</strong> ${data[key]}`;
-      studentAnswers.appendChild(p);
+      if (data[key]) {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${key}:</strong> ${data[key]}`;
+        studentAnswers.appendChild(p);
+      }
     });
+
+    // Mappa concettuale se presente
+    if (data.cyElements) {
+      const cyBox = document.createElement('div');
+      cyBox.id = 'cy-preview';
+      studentAnswers.appendChild(cyBox);
+
+      import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
+        const cytoscape = module.default;
+        cytoscape({
+          container: cyBox,
+          elements: data.cyElements,
+          style: [
+            {
+              selector: 'node',
+              style: {
+                'label': 'data(label)',
+                'background-color': '#007bff',
+                'color': '#fff',
+                'text-valign': 'center',
+                'text-halign': 'center'
+              }
+            },
+            {
+              selector: 'edge',
+              style: {
+                'width': 2,
+                'line-color': '#999'
+              }
+            }
+          ],
+          layout: { name: 'grid' }
+        });
+      });
+    }
   }
 
   // Carica valutazioni esistenti
@@ -78,7 +142,6 @@ async function loadStudentDetail(studentId, studentName) {
   const valutazioneSnap = await getDoc(valutazioneDocRef);
   const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
 
-  // Crea form di valutazione diviso per schede
   evaluationForm.innerHTML = '';
   Object.entries(schede).forEach(([schedaTitolo, dimensioni]) => {
     const card = document.createElement('div');
@@ -95,17 +158,19 @@ async function loadStudentDetail(studentId, studentName) {
       label.textContent = dim.charAt(0).toUpperCase() + dim.slice(1);
       label.style.display = 'block';
 
+      const nameKey = `${schedaTitolo}__${dim}`;
+
       const presente = document.createElement('input');
       presente.type = 'radio';
-      presente.name = `${schedaTitolo}__${dim}`;
+      presente.name = nameKey;
       presente.value = 'presente';
-      if (valutazioni[`${schedaTitolo}__${dim}`] === 'presente') presente.checked = true;
+      if (valutazioni[nameKey] === 'presente') presente.checked = true;
 
       const potenziare = document.createElement('input');
       potenziare.type = 'radio';
-      potenziare.name = `${schedaTitolo}__${dim}`;
+      potenziare.name = nameKey;
       potenziare.value = 'da potenziare';
-      if (valutazioni[`${schedaTitolo}__${dim}`] === 'da potenziare') potenziare.checked = true;
+      if (valutazioni[nameKey] === 'da potenziare') potenziare.checked = true;
 
       wrapper.appendChild(label);
       wrapper.appendChild(presente);
