@@ -18,6 +18,13 @@ const schede = {
   'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
 };
 
+const checkboxCounts = {
+    cose: 5,
+    dati: 1,
+    gente: 3,
+    idee: 8
+};
+
 const etichette = {
   cognome: "Cognome",
   nome: "Nome",
@@ -46,6 +53,16 @@ const sezioni = {
   'Scheda 3 – Modi di lavorare': ['scheda3','gente','idee','dati','cose'],
   'Scheda 4 – Tutte le possibili strade': ['scheda4']
 };
+
+const chiaviScheda3 = sezioni['Scheda 3 – Modi di lavorare'];
+
+chiaviScheda3.forEach(chiave => {
+    if (checkboxCounts[chiave]) {
+        const etichetta = etichette[chiave];
+        const numero = checkboxCounts[chiave];
+        console.log(`Etichetta: ${etichetta} - Numero: ${numero}`);
+    }
+});
 
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
