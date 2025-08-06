@@ -30,19 +30,19 @@ const etichette = {
   perche_lavoro: "2) Perché le persone lavorano?",
   senza_lavoro: "3) Se nessuno lavorasse, cosa succederebbe?",
   emozioni_lavoro: "4) Se penso al lavoro, mi sento...",
-  scheda3: "Scheda 3 – Testo autovalutazione",
+  scheda3: "Questionario di autovalutazione",
   scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
-  'sum-gente': "Scheda 3 – Gente",
-  'sum-idee': "Scheda 3 – Idee",
-  'sum-dati': "Scheda 3 – Dati",
-  'sum-cose': "Scheda 3 – Cose"
+  'gente': "Scheda 3 – Lavorare con la Gente",
+  'idee': "Scheda 3 – Lavorare con le Idee",
+  'dati': "Scheda 3 – Lavorare con i Dati",
+  'cose': "Scheda 3 – Lavorare con le Cose"
 };
 
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
   'Scheda 1 – Mappa di descrizione di sé': ['agg1','agg2','agg3','agg4','agg5','agg6','agg7','agg8','agg9','agg10'],
   'Scheda 2 – Un pensiero sul lavoro': ['pensiero_lavoro','cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
-  'Scheda 3 – Modi di lavorare': ['scheda3','sum-gente','sum-idee','sum-dati','sum-cose'],
+  'Scheda 3 – Modi di lavorare': ['scheda3','gente','idee','dati','cose'],
   'Scheda 4 – Tutte le possibili strade': ['scheda4']
 };
 
