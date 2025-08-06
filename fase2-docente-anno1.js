@@ -47,10 +47,6 @@ const sezioni = {
   'Scheda 4 – Tutte le possibili strade': ['scheda4']
 };
 
-const chiaviScheda3 = sezioni['Scheda 3 – Modi di lavorare'];
-
-});
-
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
   const students = [];
@@ -111,7 +107,40 @@ async function loadStudentDetail(studentId, studentFullName) {
       studentAnswers.appendChild(section);
     });
 
-    
+    if (data.cyElements) {
+      const cyBox = document.createElement('div');
+      cyBox.id = 'cy-preview';
+      studentAnswers.appendChild(cyBox);
+
+      import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
+        const cytoscape = module.default;
+        cytoscape({
+          container: cyBox,
+          elements: data.cyElements,
+          style: [
+            {
+              selector: 'node',
+              style: {
+                'label': 'data(label)',
+                'background-color': '#007bff',
+                'color': '#fff',
+                'text-valign': 'center',
+                'text-halign': 'center'
+              }
+            },
+            {
+              selector: 'edge',
+              style: {
+                'width': 2,
+                'line-color': '#999'
+              }
+            }
+          ],
+          layout: { name: 'grid' }
+        });
+      });
+    }
+  }
 
   // Valutazione
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
