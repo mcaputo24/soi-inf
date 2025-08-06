@@ -1,3 +1,13 @@
+function renderMapDataAsText(mappa) {
+  if (!Array.isArray(mappa)) return '';
+  return `
+    <div class="card">
+      <h4>Mappa concettuale</h4>
+      ${mappa.map(conn => `<p>${conn.from} → ${conn.to}</p>`).join('')}
+    </div>
+  `;
+}
+
 import { db } from './firebase-init.js';
 import {
   collection, getDocs, getDoc, doc, setDoc
@@ -87,6 +97,11 @@ async function loadStudentDetail(studentId, studentFullName) {
 
   if (studenteDoc.exists()) {
     const data = studenteDoc.data();
+    if (data.conceptMap) {
+      const mappaBox = document.createElement('div');
+      mappaBox.innerHTML = renderMapDataAsText(data.conceptMap);
+     studentAnswers.appendChild(mappaBox);
+}
 
     Object.entries(sezioni).forEach(([titolo, chiavi]) => {
       const section = document.createElement('div');
