@@ -47,7 +47,7 @@ const etichette = {
   'sum-idee': 'Lavorare con le Idee',
   'sum-dati': 'Lavorare con i Dati',
   'sum-cose': 'Lavorare con le Cose',
-  lavori_preferiti: "Lavori desiderati",
+  lavori_preferiti: "Considerate tutte le “scoperte” che hai fatto con le schede precedenti, quale o quali lavori ti piacerebbe fare da grande?",
   immaginazione_lavoro: "Come ti immagini mentre lavori",
   motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te",
   obiettivi: "Desideri, sogni e obiettivi",
