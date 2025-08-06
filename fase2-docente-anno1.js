@@ -102,40 +102,23 @@ async function loadStudentDetail(studentId, studentFullName) {
       studentAnswers.appendChild(section);
     });
 
-    if (data.cyElements) {
-      const cyBox = document.createElement('div');
-      cyBox.id = 'cy-preview';
-      studentAnswers.appendChild(cyBox);
+    // Mostra la mappa concettuale come elenco testuale
+if (data.conceptMap && Array.isArray(data.conceptMap)) {
+  const section = document.createElement('div');
+  section.className = 'card';
+  const h4 = document.createElement('h4');
+  h4.textContent = 'Mappa concettuale';
+  section.appendChild(h4);
 
-      import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
-        const cytoscape = module.default;
-        cytoscape({
-          container: cyBox,
-          elements: data.cyElements,
-          style: [
-            {
-              selector: 'node',
-              style: {
-                'label': 'data(label)',
-                'background-color': '#007bff',
-                'color': '#fff',
-                'text-valign': 'center',
-                'text-halign': 'center'
-              }
-            },
-            {
-              selector: 'edge',
-              style: {
-                'width': 2,
-                'line-color': '#999'
-              }
-            }
-          ],
-          layout: { name: 'grid' }
-        });
-      });
-    }
-  }
+  data.conceptMap.forEach(conn => {
+    const p = document.createElement('p');
+    p.textContent = `${conn.from} → ${conn.to}`;
+    section.appendChild(p);
+  });
+
+  studentAnswers.appendChild(section);
+}
+
 
   // Valutazione
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
