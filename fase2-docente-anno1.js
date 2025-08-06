@@ -48,11 +48,11 @@ const etichette = {
   'sum-dati': 'Lavorare con i Dati',
   'sum-cose': 'Lavorare con le Cose',
   lavori_preferiti: "Considerate tutte le “scoperte” che hai fatto con le schede precedenti, quale o quali lavori ti piacerebbe fare da grande?",
-  immaginazione_lavoro: "Come ti immagini mentre lavori",
-  motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te",
-  obiettivi: "Desideri, sogni e obiettivi",
-  ispirazioni: "Chi ti ispira",
-  modo_studiare: "Il tuo modo di studiare"
+  immaginazione_lavoro: "Come ti immagini mentre svolgi uno di questi lavori?",
+  motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te?",
+  obiettivi: "Quali desideri, sogni, obiettivi pensi di poter realizzare con questo lavoro?",
+  ispirazioni: "C'è qualcuno che ammiri o che ti ispira per il suo lavoro o il suo modo di vivere?",
+  modo_studiare: "ADESSO - Come mi preparo al mio futuro? Qual è il modo di studiare che funziona meglio per te?"
 
 };
 
