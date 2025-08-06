@@ -11,14 +11,33 @@ const evaluationForm = document.getElementById('evaluation-form');
 const backButton = document.getElementById('back-button');
 const studentNameTitle = document.getElementById('student-name-title');
 
-// Elenco dimensioni da valutare
-const dimensions = [
-  'autoconsapevolezza',
-  'processo decisionale',
-  'visione futura',
-  'organizzazione',
-  'conoscenza del mondo del lavoro'
-];
+const schede = {
+  'Scheda 1 – Mappa di descrizione di sé': [
+    'autoconsapevolezza',
+    'processo decisionale',
+    'visione futura',
+    'organizzazione'
+  ],
+  'Scheda 2 – Un pensiero sul lavoro': [
+    'autoconsapevolezza',
+    'conoscenza del mondo del lavoro',
+    'visione futura',
+    'organizzazione'
+  ],
+  'Scheda 3 – Modi di lavorare': [
+    'autoconsapevolezza',
+    'processo decisionale',
+    'visione futura',
+    'organizzazione'
+  ],
+  'Scheda 4 – Tutte le possibili strade': [
+    'autoconsapevolezza',
+    'conoscenza del mondo del lavoro',
+    'processo decisionale',
+    'visione futura',
+    'organizzazione'
+  ]
+};
 
 // Mostra elenco studenti
 async function loadStudentList() {
@@ -41,18 +60,17 @@ async function loadStudentDetail(studentId, studentName) {
   studentEvaluation.style.display = 'block';
   studentNameTitle.textContent = studentName;
 
-  // Risposte studente
+  // Risposte studente in ordine leggibile
   const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
   studentAnswers.innerHTML = '';
   if (studenteDoc.exists()) {
     const data = studenteDoc.data();
-    for (const [key, value] of Object.entries(data)) {
-      if (typeof value === 'string') {
-        const p = document.createElement('p');
-        p.innerHTML = `<strong>${key}:</strong> ${value}`;
-        studentAnswers.appendChild(p);
-      }
-    }
+    const orderedKeys = Object.keys(data).filter(k => typeof data[k] === 'string').sort();
+    orderedKeys.forEach(key => {
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${key}:</strong> ${data[key]}`;
+      studentAnswers.appendChild(p);
+    });
   }
 
   // Carica valutazioni esistenti
@@ -60,34 +78,44 @@ async function loadStudentDetail(studentId, studentName) {
   const valutazioneSnap = await getDoc(valutazioneDocRef);
   const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
 
-  // Crea form di valutazione
+  // Crea form di valutazione diviso per schede
   evaluationForm.innerHTML = '';
-  dimensions.forEach(dim => {
-    const wrapper = document.createElement('div');
-    wrapper.style.marginBottom = '12px';
+  Object.entries(schede).forEach(([schedaTitolo, dimensioni]) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const h3 = document.createElement('h3');
+    h3.textContent = schedaTitolo;
+    card.appendChild(h3);
 
-    const label = document.createElement('label');
-    label.textContent = dim.charAt(0).toUpperCase() + dim.slice(1);
-    label.style.display = 'block';
+    dimensioni.forEach(dim => {
+      const wrapper = document.createElement('div');
+      wrapper.style.marginBottom = '12px';
 
-    const presente = document.createElement('input');
-    presente.type = 'radio';
-    presente.name = dim;
-    presente.value = 'presente';
-    if (valutazioni[dim] === 'presente') presente.checked = true;
+      const label = document.createElement('label');
+      label.textContent = dim.charAt(0).toUpperCase() + dim.slice(1);
+      label.style.display = 'block';
 
-    const potenziare = document.createElement('input');
-    potenziare.type = 'radio';
-    potenziare.name = dim;
-    potenziare.value = 'da potenziare';
-    if (valutazioni[dim] === 'da potenziare') potenziare.checked = true;
+      const presente = document.createElement('input');
+      presente.type = 'radio';
+      presente.name = `${schedaTitolo}__${dim}`;
+      presente.value = 'presente';
+      if (valutazioni[`${schedaTitolo}__${dim}`] === 'presente') presente.checked = true;
 
-    wrapper.appendChild(label);
-    wrapper.appendChild(presente);
-    wrapper.appendChild(document.createTextNode(' Presente '));
-    wrapper.appendChild(potenziare);
-    wrapper.appendChild(document.createTextNode(' Da potenziare '));
-    evaluationForm.appendChild(wrapper);
+      const potenziare = document.createElement('input');
+      potenziare.type = 'radio';
+      potenziare.name = `${schedaTitolo}__${dim}`;
+      potenziare.value = 'da potenziare';
+      if (valutazioni[`${schedaTitolo}__${dim}`] === 'da potenziare') potenziare.checked = true;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(presente);
+      wrapper.appendChild(document.createTextNode(' Presente '));
+      wrapper.appendChild(potenziare);
+      wrapper.appendChild(document.createTextNode(' Da potenziare '));
+      card.appendChild(wrapper);
+    });
+
+    evaluationForm.appendChild(card);
   });
 
   const saveBtn = document.createElement('button');
