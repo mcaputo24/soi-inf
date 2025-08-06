@@ -105,9 +105,6 @@ async function loadStudentDetail(studentId, studentFullName) {
       const h4 = document.createElement('h4');
 h4.textContent = (titolo === 'Scheda 1 – Mappa di descrizione di sé') ? 'Aggettivi' : titolo;
 section.appendChild(h4);
-
-
-      chiavi.forEach(k => {
 if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
   const aggettivi = chiavi.map(k => data[k]).filter(Boolean);
   if (aggettivi.length > 0) {
@@ -117,6 +114,8 @@ if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
   }
   return; // Salta gli altri aggettivi uno a uno
 }
+
+      chiavi.forEach(k => {
 
         if (k.startsWith('sum-') && data.checkboxCounts) {
   const categoria = k.split('-')[1];
