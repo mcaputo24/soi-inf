@@ -2,79 +2,48 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Accesso Docenti - Anno I</title>
-<link rel="stylesheet" href="style.css">
-
-  <script type="module">
-    import { auth } from './firebase-init.js';
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('login-form');
-      const errorBox = document.getElementById('login-error');
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-
-        try {
-          await auth.signInWithEmailAndPassword(email, password);
-          window.location.href = 'dashboard-docente-anno1.html';
-        } catch (error) {
-          errorBox.textContent = 'Errore: ' + error.message;
-        }
-      });
-    });
-  </script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-      padding: 40px;
-    }
-    .login-box {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    .login-box input {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-    }
-    .login-box button {
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-      text-align: center;
-    }
-  </style>
+  <title>Fase 1 - Accesso Docenti anno I</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="firebase-init.js"></script>
 </head>
 <body>
-<header>
-  <img src="logo.png" alt="Logo SOI">
-  <h1>Sistema di Orientamento Integrato</h1>
-</header>
+  <header>
+    <img src="logo.png" alt="Logo">
+    <h1>Fase 1 – Griglia di Osservazione della Classe</h1>
+  </header>
 
-  <div class="login-box">
-    <h2>Accesso Docenti – Anno I</h2>
-    <form id="login-form">
-      <input type="email" id="login-email" placeholder="Email docente" required />
-      <input type="password" id="login-password" placeholder="Password" required />
-      <button type="submit">Accedi</button>
+  <main>
+    <form id="fase1-docente-form">
+      <div class="card">
+        <h2>Scheda 1 – Io e la mia storia</h2>
+        <label>Autoconsapevolezza:<br><textarea name="scheda1_autoconsapevolezza" rows="3"></textarea></label><br>
+        <label>Processo decisionale:<br><textarea name="scheda1_processo_decisionale" rows="3"></textarea></label><br>
+        <label>Visione futura:<br><textarea name="scheda1_visione_futura" rows="3"></textarea></label><br>
+        <label>Organizzazione:<br><textarea name="scheda1_organizzazione" rows="3"></textarea></label>
+      </div>
+
+      <div class="card">
+        <h2>Scheda 2 – I miei interessi</h2>
+        <label>Consapevolezza dei propri interessi:<br><textarea name="scheda2_interessi" rows="3"></textarea></label><br>
+        <label>Conoscenza di sé attraverso gli interessi:<br><textarea name="scheda2_conoscenza" rows="3"></textarea></label>
+      </div>
+
+      <div class="card">
+        <h2>Scheda 3 – Modi di lavorare</h2>
+        <label>Preferenze operative:<br><textarea name="scheda3_preferenze" rows="3"></textarea></label><br>
+        <label>Modalità di apprendimento:<br><textarea name="scheda3_apprendimento" rows="3"></textarea></label>
+      </div>
+
+      <div class="card">
+        <h2>Scheda 4 – Il mio progetto</h2>
+        <label>Rappresentazione del futuro:<br><textarea name="scheda4_futuro" rows="3"></textarea></label><br>
+        <label>Coerenza con i dati emersi:<br><textarea name="scheda4_coerenza" rows="3"></textarea></label>
+      </div>
+
+      <button type="submit">Salva osservazioni</button>
     </form>
-    <div id="login-error" class="error"></div>
-  </div>
+  </main>
 
+  <script type="module" src="fase1-docente-anno1.js"></script>
 </body>
 </html>
