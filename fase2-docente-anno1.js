@@ -47,6 +47,13 @@ const etichette = {
   'sum-idee': 'Lavorare con le Idee',
   'sum-dati': 'Lavorare con i Dati',
   'sum-cose': 'Lavorare con le Cose',
+  lavori_preferiti: "Lavori desiderati",
+  immaginazione_lavoro: "Come ti immagini mentre lavori",
+  motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te",
+  obiettivi: "Desideri, sogni e obiettivi",
+  ispirazioni: "Chi ti ispira",
+  modo_studiare: "Il tuo modo di studiare"
+
 };
 
 const sezioni = {
@@ -54,7 +61,7 @@ const sezioni = {
   'Scheda 1 – Mappa di descrizione di sé': ['agg1','agg2','agg3','agg4','agg5','agg6','agg7','agg8','agg9','agg10'],
   'Scheda 2 – Un pensiero sul lavoro': ['pensiero_lavoro','cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
   'Scheda 3 – Modi di lavorare': ['scheda3_riflessione', 'sum-gente', 'sum-idee', 'sum-dati', 'sum-cose'],
-  'Scheda 4 – Tutte le possibili strade': ['scheda4']
+  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare']
 };
 
 async function loadStudentList() {
