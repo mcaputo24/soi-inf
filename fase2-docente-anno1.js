@@ -18,13 +18,6 @@ const schede = {
   'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
 };
 
-const checkboxCounts = {
-    cose: 5,
-    dati: 1,
-    gente: 3,
-    idee: 8
-};
-
 const etichette = {
   cognome: "Cognome",
   nome: "Nome",
