@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Fase 1 - Studente Anno II</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module" src="script-anno2.js"></script>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo">
+    <h1>FASE 1 - STUDENTE ANNO II</h1>
+  </header>
+
+  <main>
+    <!-- Schede da 1 a 4 come nel primo anno -->
+    <!-- Aggiunta nuova domanda nella scheda 4 -->
+
+    <section id="scheda4">
+      <h2>Scheda 4 – Tutte le possibili strade</h2>
+
+      <!-- Domande già esistenti -->
+
+      <label for="tipo_scuola">E quale potrebbe essere il tipo di scuola più adatta a te dopo la terza media?</label><br>
+      <textarea name="tipo_scuola" id="tipo_scuola" rows="4" style="width: 100%;"></textarea><br><br>
+
+      <p>Qui di seguito, a tale scopo, ti riportiamo un’immagine per riflettere sui possibili percorsi formativi che potresti considerare più giusti per te, ora che hai più conoscenza delle tue caratteristiche, attitudini, interessi e preferenze nel modo di studiare e di immaginare il tuo lavoro.</p>
+
+      <div style="text-align: center;">
+        <img src="scheda4.jpeg" alt="Percorsi formativi" style="max-width: 100%; height: auto;">
+      </div>
+    </section>
+
+    <!-- Nuova scheda 5 -->
+    <section id="scheda5">
+      <h2>Scheda 5 – Come ti senti di fronte alla scelta?</h2>
+
+      <p>Come ti vedi adesso pensando che al termine della scuola media dovrai scegliere cosa fare dopo?<br>
+      Prova a riflettere, scegliendo l’opzione che senti più vicina a te in questo momento.</p>
+
+      <ul>
+        <li><input type="checkbox" id="disinteressato"><label for="disinteressato"> Disinteressato perché</label><br>
+        <textarea name="disinteressato_testo" rows="2" style="width: 100%;"></textarea></li>
+
+        <li><input type="checkbox" id="curioso"><label for="curioso"> Curioso perché</label><br>
+        <textarea name="curioso_testo" rows="2" style="width: 100%;"></textarea></li>
+
+        <li><input type="checkbox" id="sicuro"><label for="sicuro"> Sicuro perché</label><br>
+        <textarea name="sicuro_testo" rows="2" style="width: 100%;"></textarea></li>
+
+        <li><input type="checkbox" id="confuso"><label for="confuso"> Confuso perché</label><br>
+        <textarea name="confuso_testo" rows="2" style="width: 100%;"></textarea></li>
+
+        <li><input type="checkbox" id="tranquillo"><label for="tranquillo"> Tranquillo perché</label><br>
+        <textarea name="tranquillo_testo" rows="2" style="width: 100%;"></textarea></li>
+
+        <li><input type="checkbox" id="supportato"><label for="supportato"> Supportato perché</label><br>
+        <textarea name="supportato_testo" rows="2" style="width: 100%;"></textarea></li>
+      </ul>
+
+      <label for="scoperta_finale">Al termine di questo percorso di orientamento, cosa racconteresti di te che prima non conoscevi?</label><br>
+      <textarea name="scoperta_finale" id="scoperta_finale" rows="4" style="width: 100%;"></textarea>
+    </section>
+
+  </main>
+</body>
+</html>

@@ -2,79 +2,44 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Accesso Docenti - Anno II</title>
-<link rel="stylesheet" href="style.css">
-
-  <script type="module">
-    import { auth } from './firebase-init.js';
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('login-form');
-      const errorBox = document.getElementById('login-error');
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-
-        try {
-          await auth.signInWithEmailAndPassword(email, password);
-          window.location.href = 'dashboard-docente-anno2.html';
-        } catch (error) {
-          errorBox.textContent = 'Errore: ' + error.message;
-        }
-      });
-    });
-  </script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-      padding: 40px;
-    }
-    .login-box {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    .login-box input {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-    }
-    .login-box button {
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-      text-align: center;
-    }
-  </style>
+  <title>Fase 1 - Accesso Docenti anno II</title>
+  <link rel="stylesheet" href="style-docente.css">
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module" src="fase1-docente-anno2.js"></script>
 </head>
 <body>
-<header>
-  <img src="logo.png" alt="Logo SOI">
-  <h1>Sistema di Orientamento Integrato</h1>
-</header>
+  <header>
+    <img src="logo.png" alt="Logo">
+    <h1>FASE 1 - GRIGLIA DI OSSERVAZIONE DELLA CLASSE (per gruppo classe) - ANNO II</h1>
+  </header>
 
-  <div class="login-box">
-    <h2>Accesso Docenti – Anno II</h2>
-    <form id="login-form">
-      <input type="email" id="login-email" placeholder="Email docente" required />
-      <input type="password" id="login-password" placeholder="Password" required />
-      <button type="submit">Accedi</button>
+  <main>
+    <form id="fase1-docente-form">
+      <!-- Schede 1-4 (come nel primo anno) -->
+      <!-- Scheda 4: aggiunta nuova domanda -->
+
+      <div class="card">
+        <h2>Scheda 4 – Tutte le possibili strade</h2>
+        <label>Autoconsapevolezza:<br><textarea name="scheda4_autoconsapevolezza" rows="3"></textarea></label><br>
+        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda4_conoscenza_lavoro" rows="3"></textarea></label><br>
+        <label>Processo decisionale:<br><textarea name="scheda4_processo_decisionale" rows="3"></textarea></label><br>
+        <label>Visione futura:<br><textarea name="scheda4_visione_futura" rows="3"></textarea></label><br>
+        <label>Organizzazione:<br><textarea name="scheda4_organizzazione" rows="3"></textarea></label><br>
+        <label>Scelta tipo scuola dopo la terza media:<br><textarea name="scheda4_tipo_scuola" rows="3"></textarea></label>
+      </div>
+
+      <!-- Scheda 5 -->
+      <div class="card">
+        <h2>Scheda 5 – Come ti senti di fronte alla scelta?</h2>
+        <label>Autoconsapevolezza:<br><textarea name="scheda5_autoconsapevolezza" rows="3"></textarea></label><br>
+        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda5_conoscenza_lavoro" rows="3"></textarea></label><br>
+        <label>Processo decisionale:<br><textarea name="scheda5_processo_decisionale" rows="3"></textarea></label><br>
+        <label>Visione futura:<br><textarea name="scheda5_visione_futura" rows="3"></textarea></label><br>
+        <label>Organizzazione:<br><textarea name="scheda5_organizzazione" rows="3"></textarea></label>
+      </div>
+
+      <button type="submit">Salva osservazioni</button>
     </form>
-    <div id="login-error" class="error"></div>
-  </div>
-
+  </main>
 </body>
 </html>
