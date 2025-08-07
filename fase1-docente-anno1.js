@@ -2,13 +2,20 @@
 
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
-// --- Bottone Fase 3 ---
-document.getElementById('show-fase3-btn')?.addEventListener('click', async () => {
+window.addEventListener('DOMContentLoaded', () => {
+  const fase3Btn = document.getElementById('show-fase3-btn');
+  if (fase3Btn) {
+    fase3Btn.addEventListener('click', showFase3);
+  }
+});
+
+async function showFase3() {
   try {
     const fase1Doc = await getDoc(doc(db, 'fase1-docente-anno1', 'griglia-classe'));
     const valutazioni = await fetchAllStudentEvaluations();
     const sintesi = calculateDimensionSummary(valutazioni);
     const savedData = await getDoc(doc(db, 'fase3-docente-anno1', 'sintesi-classe'));
+
     const testo = fase1Doc.exists() ? fase1Doc.data() : {};
     const datiSalvati = savedData.exists() ? savedData.data() : {};
 
@@ -16,12 +23,15 @@ document.getElementById('show-fase3-btn')?.addEventListener('click', async () =>
   } catch (e) {
     console.error('Errore nel caricamento Fase 3:', e);
   }
-});
+}
 
-// --- Mostra modale ---
 function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
   const modal = document.createElement('div');
   modal.className = 'modal';
+
+  const sezioni = ['scheda1_', 'scheda2_', 'scheda3_', 'scheda4_'];
+  const dimensioni = ['autoconsapevolezza','conoscenza_lavoro','processo_decisionale','visione_futura','organizzazione'];
+
   modal.innerHTML = `
     <div class="modal-content">
       <h2>FASE 3 - SCHEDA DI SINTESI GENERALE (per gruppo classe)</h2>
@@ -39,19 +49,24 @@ function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
             </tr>
           </thead>
           <tbody>
-            ${['autoconsapevolezza','conoscenza del mondo del lavoro','processo decisionale','visione futura','organizzazione'].map(dim => {
-              const chiave = `sintesi_${dim.replace(/ /g, '_')}`;
+            ${dimensioni.map(dim => {
+              const label = dim.replace(/_/g, ' ');
+              const chiave = `sintesi_${dim}`;
+              const osservazioni = sezioni
+                .map(prefix => fase1Data[`${prefix}${dim}`])
+                .filter(Boolean)
+                .join('<br>');
+
               return `
-              <tr>
-                <td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">${dim.charAt(0).toUpperCase() + dim.slice(1)}</td>
-                <td style="border: 1px solid #ccc; padding: 8px;">
-                  ${fase1Data[dim] || '(nessuna osservazione)'}
-                </td>
-                <td style="border: 1px solid #ccc; padding: 8px;">
-                  <input type="text" name="${chiave}" value="${datiSalvati[chiave] || sintesi[dim] || ''}" style="width: 100%;">
-                </td>
-              </tr>
-            `}).join('')}
+                <tr>
+                  <td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">${label.charAt(0).toUpperCase() + label.slice(1)}</td>
+                  <td style="border: 1px solid #ccc; padding: 8px;">${osservazioni || '(nessuna osservazione)'}</td>
+                  <td style="border: 1px solid #ccc; padding: 8px;">
+                    <input type="text" name="${chiave}" value="${datiSalvati[chiave] || sintesi[dim] || ''}" style="width: 100%;">
+                  </td>
+                </tr>
+              `;
+            }).join('')}
           </tbody>
         </table>
         <br>
@@ -62,12 +77,11 @@ function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
       </form>
     </div>
   `;
-  document.body.appendChild(modal);
 
+  document.body.appendChild(modal);
   document.getElementById('fase3-form').addEventListener('submit', handlePhase3Submit);
 }
 
-// --- Salvataggio dati Fase 3 ---
 async function handlePhase3Submit(e) {
   e.preventDefault();
   const form = e.target;
@@ -82,22 +96,20 @@ async function handlePhase3Submit(e) {
   }
 }
 
-// --- Recupera tutte le valutazioni fase 2 ---
 async function fetchAllStudentEvaluations() {
   const snapshot = await getDocs(collection(db, 'fase2-docente-anno1'));
   return snapshot.docs.map(doc => doc.data());
 }
 
-// --- Calcola sintesi per ogni dimensione ---
 function calculateDimensionSummary(records) {
-  const dimensioni = ['autoconsapevolezza','conoscenza del mondo del lavoro','processo decisionale','visione futura','organizzazione'];
+  const dimensioni = ['autoconsapevolezza','conoscenza_lavoro','processo_decisionale','visione_futura','organizzazione'];
   const conteggi = Object.fromEntries(dimensioni.map(d => [d, { presente: 0, potenziare: 0 }]));
 
   records.forEach(risposte => {
     Object.entries(risposte).forEach(([k, v]) => {
       const match = k.match(/__([^_]+(?: [^_]+)*)$/);
       if (!match) return;
-      const dim = match[1].toLowerCase();
+      const dim = match[1].toLowerCase().replace(/ /g, '_');
       if (!(dim in conteggi)) return;
       if (v === 'presente') conteggi[dim].presente++;
       if (v === 'da potenziare') conteggi[dim].potenziare++;
