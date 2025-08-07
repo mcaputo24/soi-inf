@@ -1,5 +1,5 @@
 // 🔁 Aggiungi questo blocco IN FONDO al file fase1-docente-anno1.js
-
+import { db } from './firebase-init.js';
 import {
   getDoc,
   getDocs,
