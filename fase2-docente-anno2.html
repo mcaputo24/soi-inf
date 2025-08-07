@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <link rel="stylesheet" href="style-fase2.css">
+  <meta charset="UTF-8">
+  <title>Fase 2 - Scheda di sintesi individuale – Anno II</title>
+  <link rel="stylesheet" href="style-docente.css">
+  <script type="module" src="firebase-init.js"></script>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo">
+    <h1>FASE 2 – Scheda di sintesi individuale (per studente) – Anno II (per studente)</h1>
+    <button id="logout-btn" style="position: absolute; top: 20px; right: 30px;">Esci</button>
+  </header>
+
+  <main>
+    <div id="student-selection">
+      <h2>Seleziona uno studente</h2>
+      <ul id="student-list"></ul>
+    </div>
+
+    <div id="student-evaluation" style="display:none;">
+      <a href="#" id="back-button">&larr; Torna all'elenco studenti</a>
+      <h2 id="student-name-title">Studente</h2>
+      <div class="split-view">
+        <div class="left-column">
+          <h3>Risposte dello studente</h3>
+          <div id="student-answers"></div>
+        </div>
+        <div class="right-column">
+          <h3>Valutazione docente</h3>
+          <form id="evaluation-form"></form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="fase2-docente-anno2.js"></script>
+</body>
+</html>

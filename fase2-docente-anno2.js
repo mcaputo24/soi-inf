@@ -1,0 +1,314 @@
+function renderMapDataAsText(mappa) {
+  if (!Array.isArray(mappa)) return '';
+  return `
+    <div class="card">
+      <h4>Scheda 1 – Mappa di descrizione di sé</h4>
+      ${mappa.map(conn => `<p>${conn.from} → ${conn.to}</p>`).join('')}
+    </div>
+  `;
+}
+
+import { db } from './firebase-init.js';
+import {
+  collection, getDocs, getDoc, doc, setDoc
+} from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+
+const studentList = document.getElementById('student-list');
+const studentSelection = document.getElementById('student-selection');
+const studentEvaluation = document.getElementById('student-evaluation');
+const studentAnswers = document.getElementById('student-answers');
+const evaluationForm = document.getElementById('evaluation-form');
+const backButton = document.getElementById('back-button');
+const studentNameTitle = document.getElementById('student-name-title');
+
+const schede = {
+  'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
+  'Scheda 3 – Modi di lavorare': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 5 – Come ti senti di fronte alla scelta?': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione'],
+};
+
+const etichette = {
+  cognome: "Cognome",
+  nome: "Nome",
+  classe: "Classe",
+  data: "Data compilazione",
+  agg1: "Aggettivo 1", agg2: "Aggettivo 2", agg3: "Aggettivo 3", agg4: "Aggettivo 4", agg5: "Aggettivo 5",
+  agg6: "Aggettivo 6", agg7: "Aggettivo 7", agg8: "Aggettivo 8", agg9: "Aggettivo 9", agg10: "Aggettivo 10",
+  pensiero_lavoro: "Un pensiero sul lavoro",
+  cos_e_lavoro: "1) Secondo te, cosa è il lavoro?",
+  perche_lavoro: "2) Perché le persone lavorano?",
+  senza_lavoro: "3) Se nessuno lavorasse, cosa succederebbe?",
+  emozioni_lavoro: "4) Se penso al lavoro, mi sento...",
+  scheda3: "Questionario di autovalutazione",
+  scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
+  'scheda3_riflessione': 'Riflessione dello studente',
+  'sum-gente': 'Lavorare con la Gente',
+  'sum-idee': 'Lavorare con le Idee',
+  'sum-dati': 'Lavorare con i Dati',
+  'sum-cose': 'Lavorare con le Cose',
+  lavori_preferiti: "Considerate tutte le “scoperte” che hai fatto con le schede precedenti, quale o quali lavori ti piacerebbe fare da grande?",
+  immaginazione_lavoro: "Come ti immagini mentre svolgi uno di questi lavori?",
+  motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te?",
+  obiettivi: "Quali desideri, sogni, obiettivi pensi di poter realizzare con questo lavoro?",
+  ispirazioni: "C'è qualcuno che ammiri o che ti ispira per il suo lavoro o il suo modo di vivere?",
+  modo_studiare: "ADESSO - Come mi preparo al mio futuro? Qual è il modo di studiare che funziona meglio per te?"
+
+};
+
+const sezioni = {
+  'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
+  'Scheda 1 – Mappa di descrizione di sé': ['agg1','agg2','agg3','agg4','agg5','agg6','agg7','agg8','agg9','agg10'],
+  'Scheda 2 – Un pensiero sul lavoro': ['pensiero_lavoro','cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
+  'Scheda 3 – Modi di lavorare': ['scheda3_riflessione', 'sum-gente', 'sum-idee', 'sum-dati', 'sum-cose'],
+  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare']
+};
+
+async function loadStudentList() {
+  const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno2'));
+  const students = [];
+
+  querySnapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    if (data.cognome && data.nome) {
+      students.push({
+        id: docSnap.id,
+        nome: data.nome,
+        cognome: data.cognome,
+        label: data.cognome + ' ' + data.nome
+      });
+    }
+  });
+
+  students.sort((a, b) => a.label.localeCompare(b.label));
+  students.forEach(s => {
+    const li = document.createElement('li');
+    li.textContent = s.label;
+    li.style.cursor = 'pointer';
+    li.addEventListener('click', () => {
+      loadStudentDetail(s.id, s.label);
+    });
+    studentList.appendChild(li);
+  });
+}
+
+async function loadStudentDetail(studentId, studentFullName) {
+  studentSelection.style.display = 'none';
+  studentEvaluation.style.display = 'block';
+  evaluationForm.innerHTML = '';
+  studentAnswers.innerHTML = '';
+
+  // Titolo evidenziato
+  studentNameTitle.innerHTML = `<span class="student-name">${studentFullName}</span>`;
+
+  const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno2', studentId));
+
+  if (studenteDoc.exists()) {
+    const data = studenteDoc.data();
+    
+    Object.entries(sezioni).forEach(([titolo, chiavi]) => {
+      const section = document.createElement('div');
+      section.className = 'card';
+      const h4 = document.createElement('h4');
+h4.textContent = (titolo === 'Scheda 1 – Mappa di descrizione di sé') ? 'Aggettivi' : titolo;
+section.appendChild(h4);
+if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
+  const aggettivi = chiavi.map(k => data[k]).filter(Boolean);
+  if (aggettivi.length > 0) {
+    const p = document.createElement('p');
+    p.textContent = aggettivi.join(', ');
+    section.appendChild(p);
+  }
+        studentAnswers.appendChild(section);
+   return; // Salta gli altri aggettivi uno a uno
+}
+
+      chiavi.forEach(k => {
+
+        if (k.startsWith('sum-') && data.checkboxCounts) {
+  const categoria = k.split('-')[1];
+  const valore = data.checkboxCounts[categoria];
+  if (valore !== undefined) {
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${valore}`;
+    section.appendChild(p);
+  }
+} else if (data[k]) {
+  const p = document.createElement('p');
+  p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+  section.appendChild(p);
+}
+
+      });
+
+      studentAnswers.appendChild(section);
+if (titolo === 'Dati anagrafici' && data.conceptMap) {
+    const mappaBox = document.createElement('div');
+    mappaBox.innerHTML = renderMapDataAsText(data.conceptMap);
+    studentAnswers.appendChild(mappaBox);
+  }
+    });
+
+    if (data.cyElements) {
+      const cyBox = document.createElement('div');
+      cyBox.id = 'cy-preview';
+      studentAnswers.appendChild(cyBox);
+
+      import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
+        const cytoscape = module.default;
+        cytoscape({
+          container: cyBox,
+          elements: data.cyElements,
+          style: [
+            {
+              selector: 'node',
+              style: {
+                'label': 'data(label)',
+                'background-color': '#007bff',
+                'color': '#fff',
+                'text-valign': 'center',
+                'text-halign': 'center'
+              }
+            },
+            {
+              selector: 'edge',
+              style: {
+                'width': 2,
+                'line-color': '#999'
+              }
+            }
+          ],
+          layout: { name: 'grid' }
+        });
+      });
+    }
+  }
+
+  // Valutazione
+  const valutazioneDocRef = doc(db, 'fase2-docente-anno2', studentId);
+  const valutazioneSnap = await getDoc(valutazioneDocRef);
+  const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
+
+  Object.entries(schede).forEach(([schedaTitolo, dimensioni]) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const h3 = document.createElement('h3');
+    h3.textContent = schedaTitolo;
+    card.appendChild(h3);
+
+    dimensioni.forEach(dim => {
+      const wrapper = document.createElement('div');
+      wrapper.style.marginBottom = '12px';
+
+      const label = document.createElement('label');
+      label.textContent = dim.charAt(0).toUpperCase() + dim.slice(1);
+      label.style.display = 'block';
+
+      const nameKey = `${schedaTitolo}__${dim}`;
+
+      const presente = document.createElement('input');
+      presente.type = 'radio';
+      presente.name = nameKey;
+      presente.value = 'presente';
+      if (valutazioni[nameKey] === 'presente') presente.checked = true;
+
+      const potenziare = document.createElement('input');
+      potenziare.type = 'radio';
+      potenziare.name = nameKey;
+      potenziare.value = 'da potenziare';
+      if (valutazioni[nameKey] === 'da potenziare') potenziare.checked = true;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(presente);
+      wrapper.appendChild(document.createTextNode(' Presente '));
+      wrapper.appendChild(potenziare);
+      wrapper.appendChild(document.createTextNode(' Da potenziare '));
+      card.appendChild(wrapper);
+    });
+
+    evaluationForm.appendChild(card);
+  });
+
+  const saveBtn = document.createElement('button');
+// --- Calcolo riepilogo dimensioni ---
+const dimensioniTotali = {
+  autoconsapevolezza: 0,
+  'conoscenza del mondo del lavoro': 0,
+  'processo decisionale': 0,
+  'visione futura': 0,
+  organizzazione: 0
+};
+const dimensioniPresenti = {
+  autoconsapevolezza: 0,
+  'conoscenza del mondo del lavoro': 0,
+  'processo decisionale': 0,
+  'visione futura': 0,
+  organizzazione: 0
+};
+
+Object.entries(valutazioni).forEach(([chiave, valore]) => {
+  const match = chiave.match(/__([^_]+(?: [^_]+)*)$/); // estrae la dimensione dopo '__'
+  if (!match) return;
+  const dimensione = match[1].toLowerCase();
+  if (!(dimensione in dimensioniTotali)) return;
+  dimensioniTotali[dimensione]++;
+  if (valore === 'presente') {
+    dimensioniPresenti[dimensione]++;
+  }
+});
+
+// --- Creazione tabella riepilogativa ---
+const summaryCard = document.createElement('div');
+summaryCard.className = 'card';
+summaryCard.innerHTML = `<h3>Riepilogo per dimensione</h3>
+  <table class="summary-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #ccc; padding: 8px;">Dimensione</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Presente</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Da potenziare</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Risultato generale</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${Object.keys(dimensioniTotali).map(dim => {
+        const presenti = dimensioniPresenti[dim];
+        const totali = dimensioniTotali[dim];
+        const potenziare = totali - presenti;
+        const risultato = (presenti > potenziare) ? 'PRESENTE' : 'DA POTENZIARE';
+        return `
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px;">${dim.charAt(0).toUpperCase() + dim.slice(1)}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${presenti} / ${totali}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${potenziare} / ${totali}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;"><strong>${risultato}</strong></td>
+          </tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+`;
+
+evaluationForm.appendChild(summaryCard);
+
+  saveBtn.textContent = 'Salva valutazione';
+  saveBtn.type = 'submit';
+  evaluationForm.appendChild(saveBtn);
+
+  evaluationForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(evaluationForm).entries());
+    await setDoc(valutazioneDocRef, data);
+    alert('Valutazione salvata');
+  };
+}
+
+backButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  studentSelection.style.display = 'block';
+  studentEvaluation.style.display = 'none';
+  evaluationForm.innerHTML = '';
+  studentAnswers.innerHTML = '';
+});
+
+loadStudentList();
