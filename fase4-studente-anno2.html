@@ -36,36 +36,69 @@
         <p>Ora attraverso le domande di seguito proposte rifletti sulle esperienze svolte...</p>
 
         <table class="responsive-table" border="1" style="margin-top: 1em;">
-          <thead>
-            <tr>
-              <th>Domanda</th>
-              <th>Sì/No</th>
-              <th>Quanto? (1–4)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Hai capito meglio come sei fatto?</td>
-              <td><input type="text" name="capito_chi_sei_si_no" /></td>
-              <td><input type="number" min="1" max="4" name="capito_chi_sei_val" /></td>
-            </tr>
-            <tr>
-              <td>Stai scoprendo cosa ti piace di più?</td>
-              <td><input type="text" name="cosa_ti_piace_si_no" /></td>
-              <td><input type="number" min="1" max="4" name="cosa_ti_piace_val" /></td>
-            </tr>
-            <tr>
-              <td>Preferisci continuare a studiare o lavorare?</td>
-              <td><input type="text" name="studiare_o_lavorare_si_no" /></td>
-              <td><input type="number" min="1" max="4" name="studiare_o_lavorare_val" /></td>
-            </tr>
-            <tr>
-              <td>Sai come prendi le tue decisioni?</td>
-              <td><input type="text" name="decisioni_si_no" /></td>
-              <td><input type="number" min="1" max="4" name="decisioni_val" /></td>
-            </tr>
-          </tbody>
-        </table>
+  <thead>
+    <tr>
+      <th>Domanda</th>
+      <th>Sì/No</th>
+      <th>Quanto? (1–4)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hai capito meglio come sei fatto?</td>
+      <td>
+        <label><input type="radio" name="capito_chi_sei_si_no" value="Sì" required> Sì</label><br>
+        <label><input type="radio" name="capito_chi_sei_si_no" value="No"> No</label>
+      </td>
+      <td>
+        <label><input type="radio" name="capito_chi_sei_val" value="1" required> 1 – Poco utile</label><br>
+        <label><input type="radio" name="capito_chi_sei_val" value="2"> 2 – Sufficientemente utile</label><br>
+        <label><input type="radio" name="capito_chi_sei_val" value="3"> 3 – Abbastanza utile</label><br>
+        <label><input type="radio" name="capito_chi_sei_val" value="4"> 4 – Molto utile</label>
+      </td>
+    </tr>
+    <tr>
+      <td>Stai scoprendo cosa ti piace di più?</td>
+      <td>
+        <label><input type="radio" name="cosa_ti_piace_si_no" value="Sì" required> Sì</label><br>
+        <label><input type="radio" name="cosa_ti_piace_si_no" value="No"> No</label>
+      </td>
+      <td>
+        <label><input type="radio" name="cosa_ti_piace_val" value="1" required> 1 – Poco utile</label><br>
+        <label><input type="radio" name="cosa_ti_piace_val" value="2"> 2 – Sufficientemente utile</label><br>
+        <label><input type="radio" name="cosa_ti_piace_val" value="3"> 3 – Abbastanza utile</label><br>
+        <label><input type="radio" name="cosa_ti_piace_val" value="4"> 4 – Molto utile</label>
+      </td>
+    </tr>
+    <tr>
+      <td>Preferisci continuare a studiare o lavorare?</td>
+      <td>
+        <label><input type="radio" name="studiare_o_lavorare_si_no" value="Sì" required> Sì</label><br>
+        <label><input type="radio" name="studiare_o_lavorare_si_no" value="No"> No</label>
+      </td>
+      <td>
+        <label><input type="radio" name="studiare_o_lavorare_val" value="1" required> 1 – Poco utile</label><br>
+        <label><input type="radio" name="studiare_o_lavorare_val" value="2"> 2 – Sufficientemente utile</label><br>
+        <label><input type="radio" name="studiare_o_lavorare_val" value="3"> 3 – Abbastanza utile</label><br>
+        <label><input type="radio" name="studiare_o_lavorare_val" value="4"> 4 – Molto utile</label>
+      </td>
+    </tr>
+    <tr>
+      <td>Sai come prendi le tue decisioni?</td>
+      <td>
+        <label><input type="radio" name="decisioni_si_no" value="Sì" required> Sì</label><br>
+        <label><input type="radio" name="decisioni_si_no" value="No"> No</label>
+      </td>
+      <td>
+        <label><input type="radio" name="decisioni_val" value="1" required> 1 – Poco utile</label><br>
+        <label><input type="radio" name="decisioni_val" value="2"> 2 – Sufficientemente utile</label><br>
+        <label><input type="radio" name="decisioni_val" value="3"> 3 – Abbastanza utile</label><br>
+        <label><input type="radio" name="decisioni_val" value="4"> 4 – Molto utile</label>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
         <h4 style="margin-top:2em;">Prova a rispondere brevemente alle domande poste all’interno del riquadro sottostante.</h4>
         <label>Cosa hai imparato in più su di te?<br /><textarea name="cosa_imparato_te" rows="3" style="width:100%"></textarea></label><br /><br />
