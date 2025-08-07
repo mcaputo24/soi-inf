@@ -21,6 +21,14 @@ import {
 } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
 window.addEventListener('DOMContentLoaded', () => {
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      console.log('🔁 Logout richiesto manualmente');
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+  }
   const fase3Btn = document.getElementById('show-fase3-btn');
   if (fase3Btn) {
     fase3Btn.addEventListener('click', showFase3);
@@ -49,17 +57,6 @@ async function initializeFase1Form() {
   }
 }
   initializeFase1Form();
-
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', async (e) => {
-    e.preventDefault(); // protegge da submit
-    console.log('🔁 Logout richiesto manualmente');
-    await signOut(auth);
-    window.location.href = 'index.html';
-  });
-}
-
 
 async function showFase3() {
   console.log('✅ Bottone Fase 3 cliccato');
