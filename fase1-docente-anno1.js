@@ -1,5 +1,7 @@
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
 import { auth } from './firebase-init.js';
+signOut(getAuth());
+
 
 onAuthStateChanged(auth, user => {
   if (!user) {
@@ -47,8 +49,6 @@ async function initializeFase1Form() {
   }
 }
   initializeFase1Form();
-import { signOut } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
-import { auth } from './firebase-init.js';
 
 const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
