@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fase 4 – Rielaborazione generale esperienze</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style-form.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo SOI" />
+    <h1>Sistema di Orientamento Integrato</h1>
+  </header>
+
+  <main>
+    <form id="fase4-form">
+      <div class="card">
+        <h2>Scheda – Rielaborazione generale delle esperienze</h2>
+
+        <h3>Dati anagrafici</h3>
+        <label>Nome: <input type="text" name="nome" required /></label><br /><br />
+        <label>Cognome: <input type="text" name="cognome" required /></label><br /><br />
+        <label>Classe: <input type="text" name="classe" required /></label><br /><br />
+        <label>Data: <input type="date" name="data" required /></label>
+
+        <hr />
+
+        <h3>SEZIONE 1 – VALUTAZIONE DELLE ESPERIENZE IN CHIAVE AUTO-ORIENTATIVA</h3>
+        <p>Questa scheda ti offre l’opportunità di riflettere sulle esperienze orientative realizzate nel corso dell’anno...</p>
+        <ul>
+          <li>Che tipo di esperienza hai fatto?...</li>
+          <li>Dove sei stato?... Che tipo di lavoro hai visto?... Cosa hai fatto?... Chi hai incontrato?...</li>
+        </ul>
+        <p>Ora attraverso le domande di seguito proposte rifletti sulle esperienze svolte...</p>
+
+        <table class="responsive-table" border="1" style="margin-top: 1em;">
+          <thead>
+            <tr>
+              <th>Domanda</th>
+              <th>Sì/No</th>
+              <th>Quanto? (1–4)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hai capito meglio come sei fatto?</td>
+              <td><input type="text" name="capito_chi_sei_si_no" /></td>
+              <td><input type="number" min="1" max="4" name="capito_chi_sei_val" /></td>
+            </tr>
+            <tr>
+              <td>Stai scoprendo cosa ti piace di più?</td>
+              <td><input type="text" name="cosa_ti_piace_si_no" /></td>
+              <td><input type="number" min="1" max="4" name="cosa_ti_piace_val" /></td>
+            </tr>
+            <tr>
+              <td>Preferisci continuare a studiare o lavorare?</td>
+              <td><input type="text" name="studiare_o_lavorare_si_no" /></td>
+              <td><input type="number" min="1" max="4" name="studiare_o_lavorare_val" /></td>
+            </tr>
+            <tr>
+              <td>Sai come prendi le tue decisioni?</td>
+              <td><input type="text" name="decisioni_si_no" /></td>
+              <td><input type="number" min="1" max="4" name="decisioni_val" /></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin-top:2em;">Prova a rispondere brevemente alle domande poste all’interno del riquadro sottostante.</h4>
+        <label>Cosa hai imparato in più su di te?<br /><textarea name="cosa_imparato_te" rows="3" style="width:100%"></textarea></label><br /><br />
+        <label>Cosa è emerso di rilevante dalla partecipazione?<br /><textarea name="emerso_rilevante" rows="3" style="width:100%"></textarea></label><br /><br />
+        <label>Quali sono le tue qualità e cosa vorresti migliorare?<br /><textarea name="qualita_e_migliorare" rows="3" style="width:100%"></textarea></label><br /><br />
+        <label>A cosa ti può servire quello che hai imparato?<br /><textarea name="utilita_futura" rows="3" style="width:100%"></textarea></label>
+
+        <hr />
+        <h3>SEZIONE 2 – EVENTUALI DOCUMENTI ALLEGATI</h3>
+        <p>Riporta qui di seguito gli eventuali documenti rilasciati in esito all’attività svolta, come ad esempio: progetto formativo, attestato di partecipazione, relazione dell’attività, PowerPoint di presentazione dell’attività, etc.</p>
+        <textarea name="documenti_allegati" rows="4" style="width:100%"></textarea>
+
+        <hr />
+        <button type="submit">📩 Salva</button>
+        <button type="button" id="download-pdf-btn">📄 Scarica PDF</button>
+      </div>
+    </form>
+  </main>
+
+  <script type="module" src="fase4-anno2.js"></script>
+</body>
+</html>
