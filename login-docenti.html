@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Login Docenti</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style-docente.css">
   <script type="module" src="firebase-init.js"></script>
   <script type="module">
     import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
@@ -30,23 +29,103 @@
       });
     });
   </script>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    header img {
+      max-width: 150px;
+      height: auto;
+    }
+
+    header h1 {
+      margin-top: 1rem;
+      color: #2c3e50;
+      font-size: 1.8rem;
+    }
+
+    .login-card {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #6f42c1; /* stesso colore "Accesso Docente" in index */
+      color: white;
+      border: none;
+      padding: 0.9rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #5a379d;
+      transform: translateY(-1px);
+    }
+
+    #message {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-  <main style="max-width: 400px; margin: 100px auto; text-align: center;">
+  <header>
+    <img src="logo.png" alt="Logo SOI">
     <h1>Accesso Docenti</h1>
+  </header>
+
+  <main class="login-card">
     <form id="login-form">
       <div>
-        <label for="email">Email</label><br>
+        <label for="email">Email</label>
         <input type="email" name="email" id="email" required>
       </div>
-      <div style="margin-top: 15px;">
-        <label for="password">Password</label><br>
+      <div>
+        <label for="password">Password</label>
         <input type="password" name="password" id="password" required>
       </div>
-      <div style="margin-top: 20px;">
-        <button type="submit">Accedi</button>
-      </div>
-      <div id="message" style="margin-top: 15px;"></div>
+      <button type="submit">Accedi</button>
+      <div id="message"></div>
     </form>
   </main>
 </body>
