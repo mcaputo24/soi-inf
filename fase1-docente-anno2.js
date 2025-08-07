@@ -150,7 +150,7 @@ async function handlePhase3Submit(e) {
 }
 
 async function fetchAllStudentEvaluations() {
-  const snapshot = await getDocs(collection(db, 'fase2-docente-anno1'));
+  const snapshot = await getDocs(collection(db, 'fase2-docente-anno2'));
   return snapshot.docs.map(doc => doc.data());
 }
 
