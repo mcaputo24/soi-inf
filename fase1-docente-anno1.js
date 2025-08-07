@@ -47,6 +47,16 @@ async function initializeFase1Form() {
   }
 }
   initializeFase1Form();
+import { signOut } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
+import { auth } from './firebase-init.js';
+
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    await signOut(auth);
+    window.location.href = 'index.html'; // ⬅️ Cambia qui se usi un altro file
+  });
+}
 
 async function showFase3() {
   console.log('✅ Bottone Fase 3 cliccato');
