@@ -15,6 +15,29 @@ window.addEventListener('DOMContentLoaded', () => {
     fase3Btn.addEventListener('click', showFase3);
   }
 });
+// Recupera e riempi i campi della Fase 1 con i dati salvati
+async function initializeFase1Form() {
+  try {
+    const docRef = doc(db, 'fase1-docente-anno1', 'griglia-classe');
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const dati = docSnap.data();
+      Object.entries(dati).forEach(([key, value]) => {
+        const field = document.querySelector(`[name="${key}"]`);
+        if (field) {
+          field.value = value;
+        }
+      });
+      console.log('✅ Dati fase 1 caricati');
+    } else {
+      console.log('ℹ️ Nessun dato salvato per la fase 1');
+    }
+  } catch (error) {
+    console.error('❌ Errore nel caricamento dati fase 1:', error);
+  }
+}
+  initializeFase1Form();
 
 async function showFase3() {
   console.log('✅ Bottone Fase 3 cliccato');
