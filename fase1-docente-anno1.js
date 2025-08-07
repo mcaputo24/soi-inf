@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (fase3Btn) {
     fase3Btn.addEventListener('click', showFase3);
   }
+initializeFase1Form();
 });
 // Recupera e riempi i campi della Fase 1 con i dati salvati
 async function initializeFase1Form() {
@@ -56,8 +57,7 @@ async function initializeFase1Form() {
     console.error('❌ Errore nel caricamento dati fase 1:', error);
   }
 }
-  initializeFase1Form();
-
+  
 async function showFase3() {
   console.log('✅ Bottone Fase 3 cliccato');
   try {
