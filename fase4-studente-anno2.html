@@ -7,113 +7,241 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="style-form.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Uniformare lo stile con index.html */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #ffffff;
+      border-bottom: 2px solid #ddd;
+    }
+    header img.logo {
+      max-height: 80px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    h1 {
+      color: #2c3e50;
+      margin: 0;
+    }
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2, h3, h4 {
+      color: #2c3e50;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .styled-table {
+      border-collapse: collapse;
+      margin-top: 15px;
+      width: 100%;
+      border: 1px solid #ddd;
+    }
+    .styled-table th, .styled-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    .styled-table th {
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+    }
+    .styled-table td label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: normal;
+    }
+    .button-group {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-primary, .btn-secondary {
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background-color: #565e64;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo SOI" />
+    <img src="logo.png" alt="Logo SOI" class="logo" />
     <h1>Sistema di Orientamento Integrato</h1>
   </header>
 
   <main>
-    <form id="fase4-form">
-      <div class="card">
-        <h2>Scheda – Rielaborazione generale delle esperienze</h2>
+    <form id="fase4-form" class="card">
+      <h2>SCHEDA – RIELABORAZIONE GENERALE per gli STUDENTI</h2>
 
-        <h3>Dati anagrafici</h3>
-        <label>Nome: <input type="text" name="nome" required /></label><br /><br />
-        <label>Cognome: <input type="text" name="cognome" required /></label><br /><br />
-        <label>Classe: <input type="text" name="classe" required /></label><br /><br />
-        <label>Data: <input type="date" name="data" required /></label>
+      <h3>Dati anagrafici</h3>
+      <label>Nome: <input type="text" name="nome" required /></label>
+      <label>Cognome: <input type="text" name="cognome" required /></label>
+      <label>Classe: <input type="text" name="classe" required /></label>
+      <label>Data: <input type="date" name="data" required /></label>
 
-        <hr />
+      <hr>
 
-        <h3>SEZIONE 1 – VALUTAZIONE DELLE ESPERIENZE IN CHIAVE AUTO-ORIENTATIVA</h3>
-        <p>Questa scheda ti offre l’opportunità di riflettere sulle esperienze orientative realizzate nel corso dell’anno...</p>
-        <ul>
-          <li>Che tipo di esperienza hai fatto?...</li>
-          <li>Dove sei stato?... Che tipo di lavoro hai visto?... Cosa hai fatto?... Chi hai incontrato?...</li>
-        </ul>
-        <p>Ora attraverso le domande di seguito proposte rifletti sulle esperienze svolte...</p>
+      <h3>SEZIONE 1 – VALUTAZIONE DELLE ESPERIENZE IN CHIAVE AUTO-ORIENTATIVA</h3>
+      <p>
+        Questa scheda ti offre l’opportunità di riflettere sulle esperienze orientative realizzate nel corso dell’anno. 
+        Consultando la “raccolta” delle schede Sintesi dell’esperienza delle singole esperienze già compilate, fai una riflessione: 
+        non devi pensare se l'esperienza è stata bella o brutta, ma piuttosto a cosa hai imparato e cosa hai scoperto di te stesso grazie a queste esperienze.
+      </p>
+      <ul>
+        <li>Che tipo di esperienza hai fatto? Hai partecipato a eventi, laboratori, visite in aziende, presentazioni...?</li>
+        <li>Dove sei stato? Era un museo, un sito archeologico, un teatro, un'associazione che tutela gli animali, il Comune della tua città/paese...?</li>
+        <li>Che tipo di lavoro hai visto? Lavoro d'ufficio al computer, attività pratiche con le mani, vendita ai clienti, lavoro all'aperto...?</li>
+        <li>Cosa hai fatto e cosa hai imparato? Quali attività hai provato a fare? Cosa hai scoperto di saper fare bene? Quali nuove competenze hai sviluppato?</li>
+        <li>Chi hai incontrato? Persone che ti hanno raccontato il loro lavoro, insegnanti di corsi speciali, lavoratori di aziende...?</li>
+        <li>Come funzionava il posto dove sei stato? Le persone lavoravano a contatto con il pubblico o "dietro le quinte"? Lavoravano in gruppo o da soli?</li>
+      </ul>
+      <p>
+        Ora attraverso le domande di seguito proposte rifletti sulle esperienze svolte. Lo scopo dell’attività è aiutarti a sviluppare 
+        la capacità di muoverti in modo autonomo, ossia quella che viene chiamata la “capacità di auto-orientamento” per imparare a conoscere te stesso 
+        e capire autonomamente cosa ti piace e cosa vuoi fare da grande.
+      </p>
+      <p>
+        Per ciascuna domanda pensa se l’attività ti è stata di aiuto. Se hai risposto sì, indica quanto ti è stata utile 
+        (dove 1 equivale a “poco utile”, 2 a “sufficientemente utile”, 3 a “abbastanza utile” e 4 a “molto utile”).
+      </p>
 
-        <table class="responsive-table" border="1" style="margin-top: 1em;">
-  <thead>
-    <tr>
-      <th>Domanda</th>
-      <th>Sì/No</th>
-      <th>Quanto? (1–4)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Hai capito meglio come sei fatto?</td>
-      <td>
-        <label><input type="radio" name="capito_chi_sei_si_no" value="Sì" required> Sì</label><br>
-        <label><input type="radio" name="capito_chi_sei_si_no" value="No"> No</label>
-      </td>
-      <td>
-        <label><input type="radio" name="capito_chi_sei_val" value="1" required> 1 – Poco utile</label><br>
-        <label><input type="radio" name="capito_chi_sei_val" value="2"> 2 – Sufficientemente utile</label><br>
-        <label><input type="radio" name="capito_chi_sei_val" value="3"> 3 – Abbastanza utile</label><br>
-        <label><input type="radio" name="capito_chi_sei_val" value="4"> 4 – Molto utile</label>
-      </td>
-    </tr>
-    <tr>
-      <td>Stai scoprendo cosa ti piace di più?</td>
-      <td>
-        <label><input type="radio" name="cosa_ti_piace_si_no" value="Sì" required> Sì</label><br>
-        <label><input type="radio" name="cosa_ti_piace_si_no" value="No"> No</label>
-      </td>
-      <td>
-        <label><input type="radio" name="cosa_ti_piace_val" value="1" required> 1 – Poco utile</label><br>
-        <label><input type="radio" name="cosa_ti_piace_val" value="2"> 2 – Sufficientemente utile</label><br>
-        <label><input type="radio" name="cosa_ti_piace_val" value="3"> 3 – Abbastanza utile</label><br>
-        <label><input type="radio" name="cosa_ti_piace_val" value="4"> 4 – Molto utile</label>
-      </td>
-    </tr>
-    <tr>
-      <td>Preferisci continuare a studiare o lavorare?</td>
-      <td>
-        <label><input type="radio" name="studiare_o_lavorare_si_no" value="Sì" required> Sì</label><br>
-        <label><input type="radio" name="studiare_o_lavorare_si_no" value="No"> No</label>
-      </td>
-      <td>
-        <label><input type="radio" name="studiare_o_lavorare_val" value="1" required> 1 – Poco utile</label><br>
-        <label><input type="radio" name="studiare_o_lavorare_val" value="2"> 2 – Sufficientemente utile</label><br>
-        <label><input type="radio" name="studiare_o_lavorare_val" value="3"> 3 – Abbastanza utile</label><br>
-        <label><input type="radio" name="studiare_o_lavorare_val" value="4"> 4 – Molto utile</label>
-      </td>
-    </tr>
-    <tr>
-      <td>Sai come prendi le tue decisioni?</td>
-      <td>
-        <label><input type="radio" name="decisioni_si_no" value="Sì" required> Sì</label><br>
-        <label><input type="radio" name="decisioni_si_no" value="No"> No</label>
-      </td>
-      <td>
-        <label><input type="radio" name="decisioni_val" value="1" required> 1 – Poco utile</label><br>
-        <label><input type="radio" name="decisioni_val" value="2"> 2 – Sufficientemente utile</label><br>
-        <label><input type="radio" name="decisioni_val" value="3"> 3 – Abbastanza utile</label><br>
-        <label><input type="radio" name="decisioni_val" value="4"> 4 – Molto utile</label>
-      </td>
-    </tr>
-  </tbody>
-</table>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Domanda</th>
+            <th>Sì / No</th>
+            <th>Quanto utile? (1–4)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hai capito meglio come sei fatto?</td>
+            <td>
+              <label><input type="radio" name="capito_chi_sei_si_no" value="Sì" required> Sì</label>
+              <label><input type="radio" name="capito_chi_sei_si_no" value="No"> No</label>
+            </td>
+            <td>
+              <label><input type="radio" name="capito_chi_sei_val" value="1" required> 1 – Poco utile</label>
+              <label><input type="radio" name="capito_chi_sei_val" value="2"> 2 – Sufficientemente utile</label>
+              <label><input type="radio" name="capito_chi_sei_val" value="3"> 3 – Abbastanza utile</label>
+              <label><input type="radio" name="capito_chi_sei_val" value="4"> 4 – Molto utile</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Stai scoprendo cosa ti piace di più?</td>
+            <td>
+              <label><input type="radio" name="cosa_ti_piace_si_no" value="Sì" required> Sì</label>
+              <label><input type="radio" name="cosa_ti_piace_si_no" value="No"> No</label>
+            </td>
+            <td>
+              <label><input type="radio" name="cosa_ti_piace_val" value="1" required> 1 – Poco utile</label>
+              <label><input type="radio" name="cosa_ti_piace_val" value="2"> 2 – Sufficientemente utile</label>
+              <label><input type="radio" name="cosa_ti_piace_val" value="3"> 3 – Abbastanza utile</label>
+              <label><input type="radio" name="cosa_ti_piace_val" value="4"> 4 – Molto utile</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Preferisci continuare a studiare o lavorare?</td>
+            <td>
+              <label><input type="radio" name="studiare_o_lavorare_si_no" value="Sì" required> Sì</label>
+              <label><input type="radio" name="studiare_o_lavorare_si_no" value="No"> No</label>
+            </td>
+            <td>
+              <label><input type="radio" name="studiare_o_lavorare_val" value="1" required> 1 – Poco utile</label>
+              <label><input type="radio" name="studiare_o_lavorare_val" value="2"> 2 – Sufficientemente utile</label>
+              <label><input type="radio" name="studiare_o_lavorare_val" value="3"> 3 – Abbastanza utile</label>
+              <label><input type="radio" name="studiare_o_lavorare_val" value="4"> 4 – Molto utile</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Sai come prendi le tue decisioni?</td>
+            <td>
+              <label><input type="radio" name="decisioni_si_no" value="Sì" required> Sì</label>
+              <label><input type="radio" name="decisioni_si_no" value="No"> No</label>
+            </td>
+            <td>
+              <label><input type="radio" name="decisioni_val" value="1" required> 1 – Poco utile</label>
+              <label><input type="radio" name="decisioni_val" value="2"> 2 – Sufficientemente utile</label>
+              <label><input type="radio" name="decisioni_val" value="3"> 3 – Abbastanza utile</label>
+              <label><input type="radio" name="decisioni_val" value="4"> 4 – Molto utile</label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+      <h4 style="margin-top: 20px;">Prova a rispondere brevemente:</h4>
+      <label>Cosa hai imparato in più su di te rispetto a prima? (cosa ti piace, cosa diresti di te)
+        <textarea name="cosa_imparato_te" rows="3"></textarea>
+      </label>
+      <label>Cosa è emerso di rilevante per te dalla partecipazione alle attività? (Elenca ciò che ti è piaciuto maggiormente e che ha reso l’attività utile o interessante)
+        <textarea name="emerso_rilevante" rows="3"></textarea>
+      </label>
+      <label>Quali sono le tue qualità (punti di forza) e le parti di te che vorresti migliorare?
+        <textarea name="qualita_e_migliorare" rows="3"></textarea>
+      </label>
+      <label>A cosa ti può servire quello che hai imparato quando sarai grande? (Prova a scrivere come ti può aiutare pensandoti nel futuro)
+        <textarea name="utilita_futura" rows="3"></textarea>
+      </label>
 
-        <h4 style="margin-top:2em;">Prova a rispondere brevemente alle domande poste all’interno del riquadro sottostante.</h4>
-        <label>Cosa hai imparato in più su di te?<br /><textarea name="cosa_imparato_te" rows="3" style="width:100%"></textarea></label><br /><br />
-        <label>Cosa è emerso di rilevante dalla partecipazione?<br /><textarea name="emerso_rilevante" rows="3" style="width:100%"></textarea></label><br /><br />
-        <label>Quali sono le tue qualità e cosa vorresti migliorare?<br /><textarea name="qualita_e_migliorare" rows="3" style="width:100%"></textarea></label><br /><br />
-        <label>A cosa ti può servire quello che hai imparato?<br /><textarea name="utilita_futura" rows="3" style="width:100%"></textarea></label>
+      <hr>
+      <h3>SEZIONE 2 – EVENTUALI DOCUMENTI ALLEGATI</h3>
+      <textarea name="documenti_allegati" rows="4"></textarea>
 
-        <hr />
-        <h3>SEZIONE 2 – EVENTUALI DOCUMENTI ALLEGATI</h3>
-        <p>Riporta qui di seguito gli eventuali documenti rilasciati in esito all’attività svolta, come ad esempio: progetto formativo, attestato di partecipazione, relazione dell’attività, PowerPoint di presentazione dell’attività, etc.</p>
-        <textarea name="documenti_allegati" rows="4" style="width:100%"></textarea>
-
-        <hr />
-        <button type="submit">📩 Salva</button>
-        <button type="button" id="download-pdf-btn">📄 Scarica PDF</button>
+      <div class="button-group">
+        <a href="index.html" class="btn-secondary">⬅ Torna alla pagina principale</a>
+        <button type="submit" class="btn-primary">📩 Salva</button>
+        <button type="button" id="download-pdf-btn" class="btn-primary">📄 Scarica PDF</button>
       </div>
     </form>
   </main>
