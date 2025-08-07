@@ -1,6 +1,13 @@
 // 🔁 Aggiungi questo blocco IN FONDO al file fase1-docente-anno1.js
 
-import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+import {
+  getDoc,
+  getDocs,
+  doc,
+  setDoc,
+  collection
+} from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+
 
 window.addEventListener('DOMContentLoaded', () => {
   const fase3Btn = document.getElementById('show-fase3-btn');
