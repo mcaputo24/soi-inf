@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style-form.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    /* Uniformare lo stile con index.html */
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f4f8;
@@ -41,8 +40,17 @@
       padding: 25px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    h2, h3, h4 {
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+      font-size: 1.6em;
+    }
+    h3 {
+      text-align: center;
       color: #2c3e50;
+      margin-top: 30px;
+      font-size: 1.3em;
     }
     label {
       display: block;
@@ -60,15 +68,23 @@
     textarea {
       resize: vertical;
     }
+    ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+    ul li {
+      margin-bottom: 8px;
+    }
     .styled-table {
       border-collapse: collapse;
       margin-top: 15px;
       width: 100%;
+      font-size: 15px;
       border: 1px solid #ddd;
     }
     .styled-table th, .styled-table td {
       border: 1px solid #ddd;
-      padding: 8px;
+      padding: 10px;
       vertical-align: top;
       text-align: left;
     }
@@ -76,6 +92,10 @@
       background-color: #007bff;
       color: white;
       text-align: center;
+      font-size: 1em;
+    }
+    .styled-table tr:nth-child(even) {
+      background-color: #f9f9f9;
     }
     .styled-table td label {
       display: block;
@@ -83,20 +103,23 @@
       font-weight: normal;
     }
     .button-group {
-      margin-top: 20px;
+      margin-top: 25px;
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
     }
     .btn-primary, .btn-secondary {
-      padding: 10px 15px;
-      border-radius: 6px;
-      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
       text-decoration: none;
       border: none;
       cursor: pointer;
       display: inline-block;
       text-align: center;
+      transition: background-color 0.3s, transform 0.2s;
     }
     .btn-primary {
       background-color: #007bff;
@@ -104,6 +127,7 @@
     }
     .btn-primary:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
     }
     .btn-secondary {
       background-color: #6c757d;
@@ -111,6 +135,7 @@
     }
     .btn-secondary:hover {
       background-color: #565e64;
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -130,30 +155,22 @@
       <label>Classe: <input type="text" name="classe" required /></label>
       <label>Data: <input type="date" name="data" required /></label>
 
-      <hr>
-
       <h3>SEZIONE 1 – VALUTAZIONE DELLE ESPERIENZE IN CHIAVE AUTO-ORIENTATIVA</h3>
       <p>
         Questa scheda ti offre l’opportunità di riflettere sulle esperienze orientative realizzate nel corso dell’anno. 
-        Consultando la “raccolta” delle schede Sintesi dell’esperienza delle singole esperienze già compilate, fai una riflessione: 
-        non devi pensare se l'esperienza è stata bella o brutta, ma piuttosto a cosa hai imparato e cosa hai scoperto di te stesso grazie a queste esperienze.
+        Consultando la “raccolta” delle schede Sintesi dell’esperienza già compilate, fai una riflessione: 
+        non devi pensare se l'esperienza è stata bella o brutta, ma cosa hai imparato e scoperto di te stesso.
       </p>
       <ul>
-        <li>Che tipo di esperienza hai fatto? Hai partecipato a eventi, laboratori, visite in aziende, presentazioni...?</li>
-        <li>Dove sei stato? Era un museo, un sito archeologico, un teatro, un'associazione che tutela gli animali, il Comune della tua città/paese...?</li>
-        <li>Che tipo di lavoro hai visto? Lavoro d'ufficio al computer, attività pratiche con le mani, vendita ai clienti, lavoro all'aperto...?</li>
-        <li>Cosa hai fatto e cosa hai imparato? Quali attività hai provato a fare? Cosa hai scoperto di saper fare bene? Quali nuove competenze hai sviluppato?</li>
-        <li>Chi hai incontrato? Persone che ti hanno raccontato il loro lavoro, insegnanti di corsi speciali, lavoratori di aziende...?</li>
-        <li>Come funzionava il posto dove sei stato? Le persone lavoravano a contatto con il pubblico o "dietro le quinte"? Lavoravano in gruppo o da soli?</li>
+        <li>Che tipo di esperienza hai fatto?</li>
+        <li>Dove sei stato?</li>
+        <li>Che tipo di lavoro hai visto?</li>
+        <li>Cosa hai fatto e cosa hai imparato?</li>
+        <li>Chi hai incontrato?</li>
+        <li>Come funzionava il posto dove sei stato?</li>
       </ul>
       <p>
-        Ora attraverso le domande di seguito proposte rifletti sulle esperienze svolte. Lo scopo dell’attività è aiutarti a sviluppare 
-        la capacità di muoverti in modo autonomo, ossia quella che viene chiamata la “capacità di auto-orientamento” per imparare a conoscere te stesso 
-        e capire autonomamente cosa ti piace e cosa vuoi fare da grande.
-      </p>
-      <p>
-        Per ciascuna domanda pensa se l’attività ti è stata di aiuto. Se hai risposto sì, indica quanto ti è stata utile 
-        (dove 1 equivale a “poco utile”, 2 a “sufficientemente utile”, 3 a “abbastanza utile” e 4 a “molto utile”).
+        Ora rifletti sulle esperienze svolte. Per ogni domanda, indica se ti è stata di aiuto e quanto (1 = poco utile, 4 = molto utile).
       </p>
 
       <table class="styled-table">
@@ -220,21 +237,20 @@
         </tbody>
       </table>
 
-      <h4 style="margin-top: 20px;">Prova a rispondere brevemente:</h4>
+      <h3>Prova a rispondere brevemente:</h3>
       <label>Cosa hai imparato in più su di te rispetto a prima? (cosa ti piace, cosa diresti di te)
         <textarea name="cosa_imparato_te" rows="3"></textarea>
       </label>
-      <label>Cosa è emerso di rilevante per te dalla partecipazione alle attività? (Elenca ciò che ti è piaciuto maggiormente e che ha reso l’attività utile o interessante)
+      <label>Cosa è emerso di rilevante per te dalla partecipazione alle attività? (Elenca ciò che ti è piaciuto maggiormente)
         <textarea name="emerso_rilevante" rows="3"></textarea>
       </label>
       <label>Quali sono le tue qualità (punti di forza) e le parti di te che vorresti migliorare?
         <textarea name="qualita_e_migliorare" rows="3"></textarea>
       </label>
-      <label>A cosa ti può servire quello che hai imparato quando sarai grande? (Prova a scrivere come ti può aiutare pensandoti nel futuro)
+      <label>A cosa ti può servire quello che hai imparato quando sarai grande? (Prova a scrivere come ti può aiutare nel futuro)
         <textarea name="utilita_futura" rows="3"></textarea>
       </label>
 
-      <hr>
       <h3>SEZIONE 2 – EVENTUALI DOCUMENTI ALLEGATI</h3>
       <textarea name="documenti_allegati" rows="4"></textarea>
 
