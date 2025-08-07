@@ -1,15 +1,5 @@
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
-import { auth } from './firebase-init.js';
-
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.href = 'login-docenti.html';
-  }
-});
-
-// 🔁 Aggiunta migliorata per modale Fase 3
-
-import { db } from './firebase-init.js';
+import { auth, db } from './firebase-init.js';
 import {
   getDoc,
   getDocs,
@@ -17,6 +7,12 @@ import {
   doc,
   collection
 } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = 'login-docenti.html';
+  }
+});
 
 window.addEventListener('DOMContentLoaded', () => {
   const logoutBtn = document.getElementById('logout-btn');
@@ -27,35 +23,36 @@ window.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'index.html';
     });
   }
+
   const fase3Btn = document.getElementById('show-fase3-btn');
   if (fase3Btn) {
     fase3Btn.addEventListener('click', showFase3);
   }
-initializeFase1Form();
+
+  initializeFase1Form();
 });
-// Recupera e riempi i campi della Fase 1 con i dati salvati
+
 async function initializeFase1Form() {
   try {
     const docRef = doc(db, 'fase1-docente-anno2', 'griglia-classe');
     const docSnap = await getDoc(docRef);
-
     if (docSnap.exists()) {
       const dati = docSnap.data();
       Object.entries(dati).forEach(([key, value]) => {
-        const field = document.querySelector(`[name="${key}"]`);
+        const field = document.querySelector(`[name="\${key}"]`);
         if (field) {
           field.value = value;
         }
       });
-      console.log('✅ Dati fase 1 caricati');
+      console.log('✅ Dati fase 1 caricati (anno 2)');
     } else {
-      console.log('ℹ️ Nessun dato salvato per la fase 1');
+      console.log('ℹ️ Nessun dato salvato per la fase 1 anno 2');
     }
   } catch (error) {
-    console.error('❌ Errore nel caricamento dati fase 1:', error);
+    console.error('❌ Errore nel caricamento dati fase 1 anno 2:', error);
   }
 }
-  
+
 async function showFase3() {
   console.log('✅ Bottone Fase 3 cliccato');
   try {
@@ -71,7 +68,7 @@ async function showFase3() {
 
     showPhase3Modal(testo, sintesi, datiSalvati);
   } catch (e) {
-    console.error('❌ Errore nel caricamento Fase 3:', e);
+    console.error('❌ Errore nel caricamento Fase 3 anno 2:', e);
   }
 }
 
@@ -79,9 +76,8 @@ function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
 
-  const sezioni = ['scheda1_', 'scheda2_', 'scheda3_', 'scheda4_'];
+  const sezioni = ['scheda1_', 'scheda2_', 'scheda3_', 'scheda4_', 'scheda5_'];
   const dimensioni = ['autoconsapevolezza','conoscenza_lavoro','processo_decisionale','visione_futura','organizzazione'];
-  const extraKeys = ['scheda4_tipo_scuola', 'scheda5_autoconsapevolezza', 'scheda5_conoscenza_lavoro', 'scheda5_processo_decisionale', 'scheda5_visione_futura', 'scheda5_organizzazione'];
 
   modal.innerHTML = `
     <div class="modal-content">
@@ -106,12 +102,12 @@ function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
               const label = dim.replace(/_/g, ' ');
               const chiaveSintesi = `sintesi_${dim}`;
               const chiaveNote = `note_${dim}`;
-              const osservazioni = sezioni.map(prefix => fase1Data[`${prefix}${dim}`]).filter(Boolean).join('<br>') + (fase1Data[`scheda5_${dim}`] ? `<br><strong>Scheda 5:</strong> ${fase1Data[`scheda5_${dim}`]}` : '');
+              const osservazioni = sezioni.map(prefix => fase1Data[`${prefix}${dim}`]).filter(Boolean).join('<br>');
 
               return `
                 <tr>
                   <td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">${label.charAt(0).toUpperCase() + label.slice(1)}</td>
-                  <td style="border: 1px solid #ccc; padding: 8px; font-size: 13px;">${osservazioni || '(nessuna osservazione)'}</td>
+                  <td style="border: 1px solid #ccc; padding: 8px;">${osservazioni || '(nessuna osservazione)'}</td>
                   <td style="border: 1px solid #ccc; padding: 8px;">
                     <textarea name="${chiaveNote}" rows="2" style="width: 100%;">${datiSalvati[chiaveNote] || ''}</textarea>
                   </td>
@@ -156,7 +152,6 @@ async function fetchAllStudentEvaluations() {
 
 function calculateDimensionSummary(records) {
   const dimensioni = ['autoconsapevolezza','conoscenza_lavoro','processo_decisionale','visione_futura','organizzazione'];
-  const extraKeys = ['scheda4_tipo_scuola', 'scheda5_autoconsapevolezza', 'scheda5_conoscenza_lavoro', 'scheda5_processo_decisionale', 'scheda5_visione_futura', 'scheda5_organizzazione'];
   const conteggi = Object.fromEntries(dimensioni.map(d => [d, { presente: 0, potenziare: 0 }]));
 
   records.forEach(risposte => {
