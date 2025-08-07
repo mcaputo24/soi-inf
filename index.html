@@ -35,19 +35,29 @@
     ul {
       list-style: none;
       padding: 0;
-      max-width: 500px;
       margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      max-width: 600px;
+    }
+
+    @media screen and (min-width: 768px) {
+      ul {
+        grid-template-columns: 1fr 1fr;
+        max-width: 800px;
+      }
     }
 
     li {
-      margin: 10px 0;
+      margin: 0;
     }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
+      padding: 0.8rem;
+      font-size: 0.95rem;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -61,7 +71,6 @@
       transform: translateY(-1px);
     }
 
-    /* Colori distinti */
     .btn-f1-a1 { background-color: #007bff; }
     .btn-f1-a2 { background-color: #28a745; }
     .btn-f1-a3 { background-color: #fd7e14; }
