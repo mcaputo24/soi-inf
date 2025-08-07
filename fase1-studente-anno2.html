@@ -2,67 +2,258 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fase 1 - Studente Anno II</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="firebase-init.js"></script>
-  <script type="module" src="script-anno2.js"></script>
+  <link rel="stylesheet" href="style-form.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    #cy {
+      width: 100%;
+      height: 400px;
+      border: 1px solid #ccc;
+      margin: 20px 0;
+    }
+    table.flag-summary {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    table.flag-summary th, table.flag-summary td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo">
-    <h1>FASE 1 - STUDENTE ANNO II</h1>
+    <img src="logo.png" alt="Logo SOI">
+    <h1>Sistema di Orientamento Integrato</h1>
   </header>
 
   <main>
-    <!-- Schede da 1 a 4 come nel primo anno -->
-    <!-- Aggiunta nuova domanda nella scheda 4 -->
+<div class="card">
+    <h2>Dati anagrafici</h2>
+    <form>
+      <label>Nome: <input type="text" name="nome" required></label><br><br>
+      <label>Cognome: <input type="text" name="cognome" required></label><br><br>
+      <label>Classe: <input type="text" name="classe" required></label><br><br>
+      <label>Data: <input type="date" name="data" required></label>
 
-    <section id="scheda4">
+      <hr>
+</div>
+<div class="card">
+  <h2>Scheda 1 – Mappa di descrizione di sé</h2>
+
+  <p>Elenca dieci aggettivi che ritieni essere i più adatti per descriverti:</p>
+  <ol>
+    <li><input type="text" name="agg1"></li>
+    <li><input type="text" name="agg2"></li>
+    <li><input type="text" name="agg3"></li>
+    <li><input type="text" name="agg4"></li>
+    <li><input type="text" name="agg5"></li>
+    <li><input type="text" name="agg6"></li>
+    <li><input type="text" name="agg7"></li>
+    <li><input type="text" name="agg8"></li>
+    <li><input type="text" name="agg9"></li>
+    <li><input type="text" name="agg10"></li>
+  </ol>
+
+  <p>Utilizza alcuni aggettivi per costruire la tua mappa concettuale. Guarda l'esempio qui sotto:</p>
+  <img src="mappa-esempio.png" alt="Esempio mappa" style="max-width: 100%; height: auto;">
+
+  <p><strong>Crea la tua mappa concettuale interattiva:</strong></p>
+  <div id="cy" style="height: 500px; border: 1px solid #ccc; margin-bottom: 20px;"></div>
+  <div id="controls-content"></div>
+
+  <p style="font-size: 14px; color: gray">
+    Clicca su un aggettivo per collegare attività o contesti. Puoi selezionare i tuoi aggettivi anche dal blocco sopra.
+  </p>
+
+  <hr>
+</div>
+
+<div class="scheda1-riflessioni" style="text-align: center; margin-top: 30px;">
+  <p><strong>Nella tabella sottostante trovi alcuni aggettivi che potresti usare per descriverti.</strong></p>
+  <img src="aggettivi.png" alt="Tabella aggettivi" style="max-width: 100%; height: auto; margin: 20px 0;">
+  <p><strong>Prova a pensare alle tue caratteristiche personali.</strong></p>
+
+  <div style="margin-top: 20px; text-align: left;">
+    <label for="scheda1_attivita_preferite"><strong>1) Tra le attività che hai descritto nella mappa, scegli le due che ti piacciono di più e prova a dire perché.</strong></label><br>
+    <textarea name="scheda1_attivita_preferite" id="scheda1_attivita_preferite" rows="4" style="width: 100%; margin-top: 10px;"></textarea>
+  </div>
+
+  <div style="margin-top: 20px; text-align: left;">
+    <label for="scheda1_preferenze_scolastiche"><strong>2) E rispetto alla scuola, cosa ti piace? Ci sono materie o argomenti che ti piacciono e che ti piacerebbe approfondire?</strong></label><br>
+    <textarea name="scheda1_preferenze_scolastiche" id="scheda1_preferenze_scolastiche" rows="4" style="width: 100%; margin-top: 10px;"></textarea>
+  </div>
+</div>
+
+<div class="card">
+      <h2>Scheda 2 – Un pensiero sul lavoro</h2>
+      <label>Secondo te, cos'è il lavoro?<br><textarea name="cos_e_lavoro" rows="4" style="width: 100%;"></textarea></label><br><br>
+      <label>Perché le persone lavorano?<br><textarea name="perche_lavoro" rows="4" style="width: 100%;"></textarea></label><br><br>
+      <label>Se nessuno lavorasse, cosa succederebbe?<br><textarea name="senza_lavoro" rows="4" style="width: 100%;"></textarea></label><br><br>
+      <label>Se penso al lavoro, mi sento...<br><textarea name="emozioni_lavoro" rows="2" style="width: 100%;"></textarea></label>
+
+      <hr>
+</div>
+<div class="card">
+  <h2>Scheda 3 – Modi di lavorare</h2>
+
+  <p>
+    Esistono quattro principali modi diversi di lavorare. Quasi tutte le professioni si svolgono lavorando un po' in ciascun modo, ma in genere prevale uno stile.
+  </p>
+
+  <ul class="work-modes">
+    <li>
+      <strong>Con la GENTE</strong>: quando si hanno frequenti o continui rapporti con molte persone (con i clienti, i pazienti, gli allievi...). Star bene con la gente ed avere facilità di rapporti con le persone è una caratteristica indispensabile per tanti professionisti diversi: gli insegnanti, i negozianti, i medici, i parrucchieri...
+    </li>
+    <li>
+      <strong>Con i DATI</strong>: quando si ha a che fare con la registrazione, il calcolo, l'elaborazione di dati statistici, dati anagrafici, dati di mercato, calcoli numerici... Lavorano con i dati soprattutto gli impiegati amministrativi, i ragionieri, i segretari, i ricercatori di mercato, gli economisti...
+    </li>
+    <li>
+      <strong>Con le IDEE</strong>: quando si producono concetti astratti, idee artistiche, scientifiche... o si riflette su di esse. In tutte le professioni si deve in qualche modo lavorare col cervello e quindi con le idee, ma certi lavori richiedono una capacità particolarmente sviluppata di riflettere, ragionare, inventare: è il caso, per esempio degli artisti, degli scienziati, dei filosofi...
+    </li>
+    <li>
+      <strong>Con le COSE</strong>: quando si debbono manipolare dei materiali o degli oggetti per produrre o riparare manufatti (materiali come il legno, il ferro, la stoffa... oggetti come l'automobile, la televisione...). Lavorano soprattutto con le cose gli agricoltori o gli artigiani come i sarti, i fabbri, i ceramisti, gli orafi...
+    </li>
+  </ul>
+
+  <p>
+    Ora, prova a compilare il questionario indicando quali modalità senti più tue (ti potrebbero piacere di più, pensando a come sei fatto).
+  </p>
+
+  <p><strong>QUESTIONARIO DI AUTOVALUTAZIONE</strong></p>
+  <p>Metti un flag alle affermazioni che descrivono chi sei e i tuoi interessi, in base ai quattro principali modi di lavorare.</p>
+</div>
+
+      <fieldset id="checkbox-area">
+        <!-- checkbox generate dinamicamente da JS -->
+      </fieldset>
+      <table class="flag-summary">
+        <thead>
+          <tr>
+            <th>Lavorare con la GENTE</th>
+            <th>Lavorare con le IDEE</th>
+            <th>Lavorare con i DATI</th>
+            <th>Lavorare con le COSE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="sum-gente">0</td>
+            <td id="sum-idee">0</td>
+            <td id="sum-dati">0</td>
+            <td id="sum-cose">0</td>
+          </tr>
+        </tbody>
+      </table>
+
+<div class="reflection-question">
+  <p><strong>Adesso, prova a riflettere, rispondendo a questa domanda:</strong></p>
+  <label for="scheda3_riflessione">Cosa hai capito di te? Quale potrebbe essere la modalità di lavorare migliore per te? (In pratica: come ti piacerebbe lavorare?)</label>
+  <textarea name="scheda3_riflessione" id="scheda3_riflessione" rows="4" style="width: 100%; margin-top: 10px;"></textarea>
+</div>
+
+      <hr>
+</div>
+<div class="card">
       <h2>Scheda 4 – Tutte le possibili strade</h2>
+      <p>Quale o quali lavori ti piacerebbe fare da grande?<br><textarea name="lavori_preferiti" rows="3" style="width: 100%;"></textarea></p>
+      <p>Come ti immagini mentre svolgi uno di questi lavori?<br><textarea name="immaginazione_lavoro" rows="3" style="width: 100%;"></textarea></p>
+      <p>Perché pensi che questo lavoro faccia per te?<br><textarea name="motivazioni_lavoro" rows="4" style="width: 100%;"></textarea></p>
+      <p>Quali desideri, sogni, obiettivi pensi di poter realizzare con questo lavoro?<br><textarea name="obiettivi" rows="4" style="width: 100%;"></textarea></p>
+      <p>C'è qualcuno che ammiri o che ti ispira per il suo lavoro o modo di vivere?<br><textarea name="ispirazioni" rows="2" style="width: 100%;"></textarea></p>
+<p><strong>ADESSO - Come mi preparo al mio futuro?</strong></p>
+<p>Ora serve un ultimo sforzo per riflettere su come puoi arrivare a svolgere il lavoro che ti piace. Un primo tentativo di riflessione...</p>
+<p><strong>Qual è il modo di studiare che funziona meglio per te?</strong></p>
+<p>Prova a pensare a quando ti senti davvero coinvolto e riesci a capire meglio le cose (senza sforzo e fatica).</p>
+<p>Quando studi da solo oppure quando ascolti qualcuno che spiega? Quando studi da solo oppure in gruppo? Leggendo sui libri oppure su altri supporti? Studi meglio facendo esercizi o con l’applicazione pratica, magari nei laboratori? etc.</p>
+<p><textarea name="modo_studiare" rows="4" style="width: 100%;"></textarea></p>
 
-      <!-- Domande già esistenti -->
+</div>
 
-      <label for="tipo_scuola">E quale potrebbe essere il tipo di scuola più adatta a te dopo la terza media?</label><br>
-      <textarea name="tipo_scuola" id="tipo_scuola" rows="4" style="width: 100%;"></textarea><br><br>
+<div class="card">
+  <h2>Scheda 5 – Come ti senti di fronte alla scelta?</h2>
+  <p>Come ti vedi adesso pensando che al termine della scuola media dovrai scegliere cosa fare dopo?
+  <br>Prova a riflettere, scegliendo l’opzione che senti più vicina a te in questo momento.</p>
 
-      <p>Qui di seguito, a tale scopo, ti riportiamo un’immagine per riflettere sui possibili percorsi formativi che potresti considerare più giusti per te, ora che hai più conoscenza delle tue caratteristiche, attitudini, interessi e preferenze nel modo di studiare e di immaginare il tuo lavoro.</p>
+  <label><input type="checkbox" name="scelta_disinteressato"> Disinteressato perché (ci penserò più avanti?)<br><textarea name="scelta_disinteressato_testo" rows="2" style="width: 100%;"></textarea></label><br><br>
+  <label><input type="checkbox" name="scelta_curioso"> Curioso perché (voglio informazioni?)<br><textarea name="scelta_curioso_testo" rows="2" style="width: 100%;"></textarea></label><br><br>
+  <label><input type="checkbox" name="scelta_sicuro"> Sicuro perché (ho già deciso?)<br><textarea name="scelta_sicuro_testo" rows="2" style="width: 100%;"></textarea></label><br><br>
+  <label><input type="checkbox" name="scelta_confuso"> Confuso perché (ho idee diverse?)<br><textarea name="scelta_confuso_testo" rows="2" style="width: 100%;"></textarea></label><br><br>
+  <label><input type="checkbox" name="scelta_tranquillo"> Tranquillo perché (sarò ben consigliato?)<br><textarea name="scelta_tranquillo_testo" rows="2" style="width: 100%;"></textarea></label><br><br>
+  <label><input type="checkbox" name="scelta_supportato"> Supportato perché (deciderò insieme ai miei genitori?)<br><textarea name="scelta_supportato_testo" rows="2" style="width: 100%;"></textarea></label><br><br>
 
-      <div style="text-align: center;">
-        <img src="scheda4.jpeg" alt="Percorsi formativi" style="max-width: 100%; height: auto;">
-      </div>
-    </section>
+  <p><strong>Al termine di questo percorso di orientamento, cosa racconteresti di te che prima non conoscevi?</strong></p>
+  <textarea name="scelta_finale_riflessione" rows="4" style="width: 100%;"></textarea>
+</div>
 
-    <!-- Nuova scheda 5 -->
-    <section id="scheda5">
-      <h2>Scheda 5 – Come ti senti di fronte alla scelta?</h2>
+<br><br>
+<button type="button" id="save-submit-btn">Salva e Scarica PDF</button>
 
-      <p>Come ti vedi adesso pensando che al termine della scuola media dovrai scegliere cosa fare dopo?<br>
-      Prova a riflettere, scegliendo l’opzione che senti più vicina a te in questo momento.</p>
-
-      <ul>
-        <li><input type="checkbox" id="disinteressato"><label for="disinteressato"> Disinteressato perché</label><br>
-        <textarea name="disinteressato_testo" rows="2" style="width: 100%;"></textarea></li>
-
-        <li><input type="checkbox" id="curioso"><label for="curioso"> Curioso perché</label><br>
-        <textarea name="curioso_testo" rows="2" style="width: 100%;"></textarea></li>
-
-        <li><input type="checkbox" id="sicuro"><label for="sicuro"> Sicuro perché</label><br>
-        <textarea name="sicuro_testo" rows="2" style="width: 100%;"></textarea></li>
-
-        <li><input type="checkbox" id="confuso"><label for="confuso"> Confuso perché</label><br>
-        <textarea name="confuso_testo" rows="2" style="width: 100%;"></textarea></li>
-
-        <li><input type="checkbox" id="tranquillo"><label for="tranquillo"> Tranquillo perché</label><br>
-        <textarea name="tranquillo_testo" rows="2" style="width: 100%;"></textarea></li>
-
-        <li><input type="checkbox" id="supportato"><label for="supportato"> Supportato perché</label><br>
-        <textarea name="supportato_testo" rows="2" style="width: 100%;"></textarea></li>
-      </ul>
-
-      <label for="scoperta_finale">Al termine di questo percorso di orientamento, cosa racconteresti di te che prima non conoscevi?</label><br>
-      <textarea name="scoperta_finale" id="scoperta_finale" rows="4" style="width: 100%;"></textarea>
-    </section>
-
+    </form>
   </main>
+
+  <script type="module">
+    // Mappa interattiva
+    const cy = cytoscape({
+      container: document.getElementById('cy'),
+      elements: [],
+      style: [{ selector: 'node', style: { 'label': 'data(label)', 'background-color': '#007bff', 'color': '#fff' } },
+              { selector: 'edge', style: { 'width': 2, 'line-color': '#999' } }],
+      layout: { name: 'grid' }
+    });
+    
+    cy.on('tap', function(event) {
+      if (event.target === cy) {
+        const id = 'n' + cy.elements().length;
+        cy.add({ group: 'nodes', data: { id: id, label: prompt('Etichetta nodo?') }, position: event.position });
+      } else if (event.target.isNode()) {
+        const selected = cy.$(':selected');
+        if (selected.length === 1 && selected[0] !== event.target) {
+          cy.add({ group: 'edges', data: { source: selected[0].id(), target: event.target.id() } });
+        }
+        event.target.select();
+      }
+    });
+
+    const checkboxArea = document.getElementById('checkbox-area');
+    const sumFields = {
+      gente: document.getElementById('sum-gente'),
+      idee: document.getElementById('sum-idee'),
+      dati: document.getElementById('sum-dati'),
+      cose: document.getElementById('sum-cose')
+    };
+
+    Object.entries(categorie).forEach(([cat, frasi]) => {
+      frasi.forEach((testo, index) => {
+        const id = `${cat}-${index}`;
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.id = id;
+        input.dataset.cat = cat;
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(' ' + testo));
+        checkboxArea.appendChild(label);
+        checkboxArea.appendChild(document.createElement('br'));
+      });
+    });
+
+    checkboxArea.addEventListener('change', () => {
+      const counts = { gente: 0, idee: 0, dati: 0, cose: 0 };
+      checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        if (cb.checked) counts[cb.dataset.cat]++;
+      });
+      Object.entries(counts).forEach(([cat, val]) => sumFields[cat].textContent = val);
+    });
+  </script>
+<script type="module" src="script-anno2.js"></script>
 </body>
 </html>

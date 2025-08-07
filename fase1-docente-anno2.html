@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,12 +12,46 @@
   <header>
     <img src="logo.png" alt="Logo">
     <h1>FASE 1 - GRIGLIA DI OSSERVAZIONE DELLA CLASSE (per gruppo classe) - ANNO II</h1>
+    <button id="logout-btn" type="button">Esci</button>
   </header>
 
   <main>
+    <p style="max-width: 800px; margin: 0 auto 30px; font-size: 16px; line-height: 1.5;">
+      Nella tabella seguente è possibile inserire in modo sintetico le annotazioni più rilevanti prese durante
+      l’osservazione degli studenti nella compilazione delle schede, nella fase di restituzione in plenaria
+      al termine della rilevazione e/o successivamente alla realizzazione del laboratorio.
+    </p>
+
+    <div style="text-align: center; margin-bottom: 30px;">
+      <a href="fase2-docente-anno2.html" class="nav-button">Vai alla Fase 2 (Sintesi individuale per studente)</a>
+      <button type="button" id="show-fase3-btn" class="nav-button" style="margin-left: 10px;">Vai alla Fase 3 (Sintesi generale di classe)</button>
+    </div>
+
     <form id="fase1-docente-form">
-      <!-- Schede 1-4 (come nel primo anno) -->
-      <!-- Scheda 4: aggiunta nuova domanda -->
+
+      <div class="card">
+        <h2>Scheda 1 – Mappa di descrizione di sé</h2>
+        <label>Autoconsapevolezza:<br><textarea name="scheda1_autoconsapevolezza" rows="3"></textarea></label><br>
+        <label>Processo decisionale:<br><textarea name="scheda1_processo_decisionale" rows="3"></textarea></label><br>
+        <label>Visione futura:<br><textarea name="scheda1_visione_futura" rows="3"></textarea></label><br>
+        <label>Organizzazione:<br><textarea name="scheda1_organizzazione" rows="3"></textarea></label>
+      </div>
+
+      <div class="card">
+        <h2>Scheda 2 – Un pensiero sul lavoro</h2>
+        <label>Autoconsapevolezza:<br><textarea name="scheda2_autoconsapevolezza" rows="3"></textarea></label><br>
+        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda2_conoscenza_lavoro" rows="3"></textarea></label><br>
+        <label>Visione futura:<br><textarea name="scheda2_visione_futura" rows="3"></textarea></label><br>
+        <label>Organizzazione:<br><textarea name="scheda2_organizzazione" rows="3"></textarea></label>
+      </div>
+
+      <div class="card">
+        <h2>Scheda 3 – Modi di lavorare</h2>
+        <label>Autoconsapevolezza:<br><textarea name="scheda3_autoconsapevolezza" rows="3"></textarea></label><br>
+        <label>Processo decisionale:<br><textarea name="scheda3_processo_decisionale" rows="3"></textarea></label><br>
+        <label>Visione futura:<br><textarea name="scheda3_visione_futura" rows="3"></textarea></label><br>
+        <label>Organizzazione:<br><textarea name="scheda3_organizzazione" rows="3"></textarea></label>
+      </div>
 
       <div class="card">
         <h2>Scheda 4 – Tutte le possibili strade</h2>
@@ -28,7 +63,6 @@
         <label>Scelta tipo scuola dopo la terza media:<br><textarea name="scheda4_tipo_scuola" rows="3"></textarea></label>
       </div>
 
-      <!-- Scheda 5 -->
       <div class="card">
         <h2>Scheda 5 – Come ti senti di fronte alla scelta?</h2>
         <label>Autoconsapevolezza:<br><textarea name="scheda5_autoconsapevolezza" rows="3"></textarea></label><br>
