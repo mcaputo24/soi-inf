@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fase 3 – Sintesi dell’esperienza</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-form.css">
+  <style>
+    .responsive-table td {
+      padding: 8px;
+      vertical-align: top;
+    }
+    @media screen and (max-width: 768px) {
+      .responsive-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo SOI">
+    <h1>Sistema di Orientamento Integrato</h1>
+  </header>
+
+  <main>
+    <form id="fase3-form">
+      <div class="card">
+        <h2>Scheda – Sintesi dell’esperienza</h2>
+
+        <h3>Dati anagrafici</h3>
+        <label>Nome: <input type="text" name="sintesi_nome" required></label><br><br>
+        <label>Cognome: <input type="text" name="sintesi_cognome" required></label><br><br>
+        <label>Classe: <input type="text" name="sintesi_classe" required></label><br><br>
+        <label>Data: <input type="date" name="sintesi_data" required></label>
+
+        <hr>
+
+        <h3>PRESENTAZIONE</h3>
+        <p>In questo “diario” potrai annotare le attività e le esperienze che svolgerai nell’ambito dell’orientamento durante tutto il tuo anno scolastico. Se lo compili con continuità e al termine di ogni singola attività o esperienza, ti permetterà di:</p>
+        <ul>
+          <li>tenere traccia delle attività ed esperienze fatte</li>
+          <li>riflettere sul tuo percorso formativo</li>
+          <li>non perdere le informazioni delle singole esperienze, per poterle utilizzare in qualsiasi momento</li>
+        </ul>
+        <p>Ogni attività di orientamento che realizzerai a scuola prevede la compilazione di una scheda suddivisa in più sezioni pensate appositamente per aiutarti a tenere traccia delle informazioni e per aiutarti a sviluppare la capacità di muoverti in modo autonomo, ossia quella che viene chiamata la “capacità di auto-orientamento” per imparare a conoscere te stesso e capire autonomamente cosa ti piace e cosa vuoi fare da grande. Le sezioni sono:</p>
+        <ul>
+          <li><strong>INFORMAZIONI GENERALI</strong>: informazioni come nome dell’attività, tipo, obiettivi, durata, luogo e soggetti coinvolti.</li>
+          <li><strong>DESCRIZIONE SINTETICA DELL’ATTIVITÀ</strong>: per tenere traccia degli aspetti più significativi e riflettere sul proprio percorso.</li>
+          <li><strong>EVENTUALI DOCUMENTI ALLEGATI</strong>: per ricordare dove hai salvato attestati, relazioni, presentazioni, ecc.</li>
+        </ul>
+        <p><strong>Ricordati che la scheda dovrà essere replicata nella sua interezza, dalla sezione 1 – informazioni generali alla sezione 3 – eventuali documenti allegati, per ogni singola esperienza fatta!</strong></p>
+
+        <hr>
+
+        <div class="experience-entry">
+          <h3>SEZIONE 1 – INFORMAZIONI GENERALI</h3>
+          <table class="responsive-table">
+            <tr><td>Data:</td><td><input type="date" name="data_attivita[]"></td></tr>
+            <tr><td>Anno scolastico:</td><td><input type="text" name="anno_scolastico[]"></td></tr>
+            <tr><td>Nome del progetto o ente ospitante:</td><td><input type="text" name="nome_progetto[]"></td></tr>
+            <tr><td>Tipo di attività:</td><td><input type="text" name="tipo_attivita[]"></td></tr>
+            <tr><td>Obiettivo principale:</td><td><textarea name="obiettivo[]"></textarea></td></tr>
+            <tr><td>Numero ore:</td><td><input type="number" name="ore[]"></td></tr>
+            <tr><td>Modalità di svolgimento:</td><td><input type="text" name="modalita[]"></td></tr>
+          </table>
+
+          <h3>SEZIONE 2 – DESCRIZIONE SINTETICA DELL’ATTIVITÀ</h3>
+          <label>Attività svolte / osservate:<br><textarea name="attivita_descrizione[]" rows="3" style="width:100%"></textarea></label><br><br>
+          <label>Cosa ti ha colpito di più?<br><textarea name="colpito[]" rows="2" style="width:100%"></textarea></label><br><br>
+          <label>Principali insegnamenti o scoperte:<br><textarea name="insegnamenti[]" rows="2" style="width:100%"></textarea></label>
+
+          <h3>SEZIONE 3 – EVENTUALI DOCUMENTI ALLEGATI</h3>
+          <label>Documenti rilasciati (attestati, presentazioni, ecc.):<br><textarea name="documenti[]" rows="2" style="width:100%"></textarea></label>
+        </div>
+
+        <hr>
+        <button type="button" id="aggiungi-esperienza-btn">➕ Aggiungi un’altra esperienza</button><br><br>
+        <button type="submit">📩 Invia e Salva</button>
+      </div>
+    </form>
+  </main>
+<script type="module" src="fase3-anno1.js"></script>
+
+  <script>
+    document.getElementById('aggiungi-esperienza-btn').addEventListener('click', () => {
+      const entry = document.querySelector('.experience-entry');
+      const clone = entry.cloneNode(true);
+      clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
+      entry.parentNode.insertBefore(clone, document.getElementById('aggiungi-esperienza-btn'));
+    });
+  </script>
+</body>
+</html>
