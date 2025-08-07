@@ -52,11 +52,14 @@ async function initializeFase1Form() {
 
 const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
-  logoutBtn.addEventListener('click', async () => {
+  logoutBtn.addEventListener('click', async (e) => {
+    e.preventDefault(); // protegge da submit
+    console.log('🔁 Logout richiesto manualmente');
     await signOut(auth);
-    window.location.href = 'index.html'; // ⬅️ Cambia qui se usi un altro file
+    window.location.href = 'index.html';
   });
 }
+
 
 async function showFase3() {
   console.log('✅ Bottone Fase 3 cliccato');
