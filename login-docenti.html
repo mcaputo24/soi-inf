@@ -75,8 +75,13 @@
       color: #2c3e50;
     }
 
-    input {
+    .login-card input,
+    .login-card button {
       width: 100%;
+      box-sizing: border-box; /* larghezza identica */
+    }
+
+    input {
       padding: 0.8rem;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -92,7 +97,6 @@
       border-radius: 12px;
       cursor: pointer;
       font-weight: bold;
-      width: 100%;
       font-size: 1rem;
       transition: background-color 0.3s ease, transform 0.2s;
     }
