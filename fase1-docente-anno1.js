@@ -10,7 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function showFase3() {
-  try {
+console.log('✅ Bottone Fase 3 cliccato');  
+try {
     const fase1Doc = await getDoc(doc(db, 'fase1-docente-anno1', 'griglia-classe'));
     const valutazioni = await fetchAllStudentEvaluations();
     const sintesi = calculateDimensionSummary(valutazioni);
