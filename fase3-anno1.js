@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const { jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf.jsPDF;
     const doc = new jsPDF();
     let y = 10;
 
