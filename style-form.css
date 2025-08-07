@@ -225,3 +225,124 @@ ul.work-modes li {
   background-color: #007bff;
   color: white;
 }
+/* ✅ Struttura base della pagina */
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: #222;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+/* ✅ Card centrale */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ✅ Titoli */
+.card h2, .card h3, .card h4 {
+  color: #2c3e50;
+  margin-top: 1.5em;
+}
+
+/* ✅ Tabelle */
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.responsive-table th,
+.responsive-table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.responsive-table th {
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+}
+
+/* ✅ Radio button */
+.responsive-table input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+.responsive-table label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ✅ Textarea */
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-family: inherit;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+/* ✅ Input */
+input[type="text"], input[type="date"], input[type="number"] {
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 4px;
+}
+
+/* ✅ Pulsanti */
+button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 1rem 0.5rem 0 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* ✅ Responsive su mobile */
+@media screen and (max-width: 768px) {
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .responsive-table td {
+    margin-bottom: 1rem;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+}
