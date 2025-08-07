@@ -1,5 +1,7 @@
 // 🔁 Aggiungi questo blocco IN FONDO al file fase1-docente-anno1.js
 
+import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+
 // --- Bottone Fase 3 ---
 document.getElementById('show-fase3-btn')?.addEventListener('click', async () => {
   try {
@@ -37,17 +39,19 @@ function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
             </tr>
           </thead>
           <tbody>
-            ${['autoconsapevolezza','conoscenza del mondo del lavoro','processo decisionale','visione futura','organizzazione'].map(dim => `
+            ${['autoconsapevolezza','conoscenza del mondo del lavoro','processo decisionale','visione futura','organizzazione'].map(dim => {
+              const chiave = `sintesi_${dim.replace(/ /g, '_')}`;
+              return `
               <tr>
                 <td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">${dim.charAt(0).toUpperCase() + dim.slice(1)}</td>
                 <td style="border: 1px solid #ccc; padding: 8px;">
                   ${fase1Data[dim] || '(nessuna osservazione)'}
                 </td>
                 <td style="border: 1px solid #ccc; padding: 8px;">
-                  <strong>${sintesi[dim] || '(calcolo non disponibile)'}</strong>
+                  <input type="text" name="${chiave}" value="${datiSalvati[chiave] || sintesi[dim] || ''}" style="width: 100%;">
                 </td>
               </tr>
-            `).join('')}
+            `}).join('')}
           </tbody>
         </table>
         <br>
@@ -66,10 +70,10 @@ function showPhase3Modal(fase1Data, sintesi, datiSalvati) {
 // --- Salvataggio dati Fase 3 ---
 async function handlePhase3Submit(e) {
   e.preventDefault();
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form).entries());
   try {
-    await setDoc(doc(db, 'fase3-docente-anno1', 'sintesi-classe'), {
-      savedAt: new Date()
-    });
+    await setDoc(doc(db, 'fase3-docente-anno1', 'sintesi-classe'), data);
     alert('Sintesi salvata correttamente');
     document.body.removeChild(document.querySelector('.modal'));
   } catch (e) {
