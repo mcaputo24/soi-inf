@@ -1,3 +1,12 @@
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
+import { auth } from './firebase-init.js';
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = 'login-docenti.html';
+  }
+});
+
 // 🔁 Aggiunta migliorata per modale Fase 3
 
 import { db } from './firebase-init.js';

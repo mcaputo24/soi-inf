@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Docenti</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style-docente.css">
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module">
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
+    import { auth } from './firebase-init.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('login-form');
+      const messageBox = document.getElementById('message');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = form.email.value.trim();
+        const password = form.password.value.trim();
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = 'fase1-docente-anno1.html';
+        } catch (error) {
+          console.error('Login error:', error);
+          messageBox.textContent = 'Credenziali non valide. Riprova.';
+          messageBox.style.color = 'red';
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <main style="max-width: 400px; margin: 100px auto; text-align: center;">
+    <h1>Accesso Docenti</h1>
+    <form id="login-form">
+      <div>
+        <label for="email">Email</label><br>
+        <input type="email" name="email" id="email" required>
+      </div>
+      <div style="margin-top: 15px;">
+        <label for="password">Password</label><br>
+        <input type="password" name="password" id="password" required>
+      </div>
+      <div style="margin-top: 20px;">
+        <button type="submit">Accedi</button>
+      </div>
+      <div id="message" style="margin-top: 15px;"></div>
+    </form>
+  </main>
+</body>
+</html>
