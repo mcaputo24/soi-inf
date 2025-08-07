@@ -1,7 +1,5 @@
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js';
 import { auth } from './firebase-init.js';
-signOut(getAuth());
-
 
 onAuthStateChanged(auth, user => {
   if (!user) {
