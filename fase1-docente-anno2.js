@@ -63,7 +63,7 @@ async function showFase3() {
     const fase1Doc = await getDoc(fase1Ref);
     const valutazioni = await fetchAllStudentEvaluations();
     const sintesi = calculateDimensionSummary(valutazioni);
-    const fase3Ref = doc(db, 'fase3-docente-anno1', 'sintesi-classe');
+    const fase3Ref = doc(db, 'fase3-docente-anno2', 'sintesi-classe');
     const savedData = await getDoc(fase3Ref);
 
     const testo = fase1Doc.exists() ? fase1Doc.data() : {};
@@ -140,7 +140,7 @@ async function handlePhase3Submit(e) {
   const form = e.target;
   const data = Object.fromEntries(new FormData(form).entries());
   try {
-    await setDoc(doc(db, 'fase3-docente-anno1', 'sintesi-classe'), data);
+    await setDoc(doc(db, 'fase3-docente-anno2', 'sintesi-classe'), data);
     alert('Sintesi salvata correttamente');
     document.body.removeChild(document.querySelector('.modal-overlay'));
   } catch (e) {
