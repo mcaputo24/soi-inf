@@ -67,3 +67,16 @@ a {
 /* ----- LOGIN BOX ----- */
 .login-box {
   max-width: 400
+.anagrafica-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.anagrafica-grid label {
+  flex: 1 1 200px;
+}
+.anagrafica-grid input {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
