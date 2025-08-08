@@ -6,6 +6,29 @@
   <title>Fase 1 - Studente Anno I</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="style-form.css">
+<style>
+  .aggettivi-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding-left: 0;
+  }
+  .aggettivi-list li {
+    flex: 1 1 calc(50% - 10px); /* due colonne su desktop */
+    min-width: 150px;
+  }
+  .aggettivi-list input {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  @media (max-width: 768px) {
+    .aggettivi-list li {
+      flex: 1 1 100%; /* una colonna su mobile */
+    }
+  }
+</style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -37,6 +60,9 @@
 
   <main>
 <div class="card">
+    <h1>Rilevazione dei bisogni di orientamento per gli studenti del I anno</h1>
+  </div>
+<div class="card">
     <h2>Dati anagrafici</h2>
     <form>
       <label>Nome: <input type="text" name="nome" required></label><br><br>
@@ -48,20 +74,26 @@
 </div>
 <div class="card">
   <h2>Scheda 1 – Mappa di descrizione di sé</h2>
+<p>
+    Le mappe sono rappresentazioni grafiche (come fossero disegni) che ci aiutano a vedere meglio le singole tessere che compongono il puzzle e come si incastrano tra loro. 
+    Sono delle strategie che ci permettono di organizzare le cose che conosciamo. 
+    Prova a fare una mappa di te stesso (in pratica una bella fotografia di te stesso).
+  </p>
 
   <p>Elenca dieci aggettivi che ritieni essere i più adatti per descriverti:</p>
-  <ol>
-    <li><input type="text" name="agg1"></li>
-    <li><input type="text" name="agg2"></li>
-    <li><input type="text" name="agg3"></li>
-    <li><input type="text" name="agg4"></li>
-    <li><input type="text" name="agg5"></li>
-    <li><input type="text" name="agg6"></li>
-    <li><input type="text" name="agg7"></li>
-    <li><input type="text" name="agg8"></li>
-    <li><input type="text" name="agg9"></li>
-    <li><input type="text" name="agg10"></li>
-  </ol>
+<ol class="aggettivi-list">
+  <li><input type="text" name="agg1"></li>
+  <li><input type="text" name="agg2"></li>
+  <li><input type="text" name="agg3"></li>
+  <li><input type="text" name="agg4"></li>
+  <li><input type="text" name="agg5"></li>
+  <li><input type="text" name="agg6"></li>
+  <li><input type="text" name="agg7"></li>
+  <li><input type="text" name="agg8"></li>
+  <li><input type="text" name="agg9"></li>
+  <li><input type="text" name="agg10"></li>
+</ol>
+
 
   <p>Utilizza alcuni aggettivi per costruire la tua mappa concettuale. Guarda l'esempio qui sotto:</p>
   <img src="mappa-esempio.png" alt="Esempio mappa" style="max-width: 100%; height: auto;">
