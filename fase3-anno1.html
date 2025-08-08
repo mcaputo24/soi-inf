@@ -101,7 +101,6 @@
     display: inline-block;
     text-align: center;
     transition: background-color 0.3s, transform 0.2s;
-    min-width: 220px;
   }
   .btn-primary {
     background-color: #007bff;
@@ -180,13 +179,13 @@
 
         <h3>SEZIONE 2 - DESCRIZIONE SINTETICA DELL’ATTIVITÀ</h3>
         <p style="text-align:center;">Elabora una breve sintesi dell’attività o esperienza, riportando ciò che ritieni veramente importante ricordare.</p>
-        <label>Attività svolte / osservate
+        <label>Attività svolte / osservate (Fai una breve descrizione dell’attività)
           <textarea name="attivita_descrizione[]" rows="3"></textarea>
         </label>
-        <label>Cosa ti ha colpito di più?
+        <label>Cosa ti ha colpito di più? (Descrivi un aspetto che ti ha particolarmente interessato o sorpreso durante l'attività)
           <textarea name="colpito[]" rows="2"></textarea>
         </label>
-        <label>Quali sono stati i principali insegnamenti o scoperte?
+        <label>Quali sono stati i principali insegnamenti o scoperte? (Descrivi cosa hai imparato durante l'attività che prima non conoscevi o che ti ha fatto riflettere)
           <textarea name="insegnamenti[]" rows="2"></textarea>
         </label>
 
@@ -199,12 +198,10 @@
       </div>
 
       <div class="button-group">
-  <button type="button" id="aggiungi-esperienza-btn" class="btn-secondary">➕ Aggiungi un’altra esperienza</button>
-  <a href="index.html" class="btn-secondary">⬅ Torna alla pagina principale</a>
-  <button type="submit" class="btn-primary">📩 Invia e Salva</button>
-  <button type="button" id="download-pdf-btn" class="btn-primary">📄 Scarica PDF con tutte le esperienze</button>
-</div>
-
+        <button type="button" id="aggiungi-esperienza-btn" class="btn-secondary">Aggiungi un’altra esperienza</button>
+        <a href="index.html" class="btn-secondary">Torna alla pagina principale</a>
+        <button type="submit" class="btn-primary">Invia e Salva</button>
+      </div>
     </div>
   </form>
 </main>
