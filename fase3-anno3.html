@@ -129,7 +129,7 @@
 <main>
   <form id="fase3-form">
     <div class="card">
-      <h2>Scheda - Sintesi dell’esperienza per gli studenti del I anno</h2>
+      <h2>Scheda - Sintesi dell’esperienza per gli studenti del III anno</h2>
 
       <h3>Dati anagrafici</h3>
       <label>Nome: <input type="text" name="sintesi_nome" required></label>
@@ -188,6 +188,10 @@
         <label>Quali sono stati i principali insegnamenti o scoperte? (Descrivi cosa hai imparato durante l'attività che prima non conoscevi o che ti ha fatto riflettere)
           <textarea name="insegnamenti[]" rows="2"></textarea>
         </label>
+<label>A cosa ti può servire quello che hai imparato?
+  <br><small>Descrivi se hai trovato le informazioni utili e per quale motivo</small>
+  <textarea name="utilita_imparato[]" rows="2" style="width:100%"></textarea>
+</label>
 
         <h3>SEZIONE 3 - EVENTUALI DOCUMENTI ALLEGATI</h3>
         <p style="text-align:center;">
@@ -206,7 +210,7 @@
   </form>
 </main>
 
-<script type="module" src="fase3-anno1.js"></script>
+<script type="module" src="fase3-anno3.js"></script>
 <script>
   document.getElementById('aggiungi-esperienza-btn').addEventListener('click', () => {
     const entry = document.querySelector('.experience-entry');
