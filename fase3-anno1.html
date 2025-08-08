@@ -2,97 +2,218 @@
 <html lang="it">
 <head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fase 3 – Sintesi dell’esperienza</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="style-form.css">
-  <style>
-    .responsive-table td {
-      padding: 8px;
-      vertical-align: top;
-    }
-    @media screen and (max-width: 768px) {
-      .responsive-table td {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fase 3 – Sintesi dell’esperienza</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style-form.css">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    text-align: center;
+    padding: 20px;
+    background: #ffffff;
+    border-bottom: 2px solid #ddd;
+  }
+  header img {
+    max-height: 80px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+  h1 {
+    color: #2c3e50;
+    margin: 0;
+  }
+  main {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h2, h3 {
+    text-align: center;
+  }
+  h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 1.6em;
+  }
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  input[type="text"], input[type="date"], input[type="number"], textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  textarea {
+    resize: vertical;
+  }
+  .responsive-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+  }
+  .responsive-table td {
+    padding: 8px;
+    vertical-align: top;
+    border: 1px solid #ddd;
+  }
+  .responsive-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .responsive-table td:first-child {
+    font-weight: bold;
+    width: 35%;
+    background-color: #eef4ff;
+  }
+  .button-group {
+    margin-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  .btn-secondary:hover {
+    background-color: #565e64;
+    transform: scale(1.05);
+  }
+</style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo SOI">
-    <h1>Sistema di Orientamento Integrato</h1>
-  </header>
+<header>
+  <img src="logo.png" alt="Logo SOI">
+  <h1>Sistema di Orientamento Integrato</h1>
+</header>
 
-  <main>
-    <form id="fase3-form">
-      <div class="card">
-        <h2>Scheda – Sintesi dell’esperienza</h2>
+<main>
+  <form id="fase3-form">
+    <div class="card">
+      <h2>Scheda - Sintesi dell’esperienza per gli studenti</h2>
 
-        <h3>Dati anagrafici</h3>
-        <label>Nome: <input type="text" name="sintesi_nome" required></label><br><br>
-        <label>Cognome: <input type="text" name="sintesi_cognome" required></label><br><br>
-        <label>Classe: <input type="text" name="sintesi_classe" required></label><br><br>
-        <label>Data: <input type="date" name="sintesi_data" required></label>
+      <h3>Dati anagrafici</h3>
+      <label>Nome: <input type="text" name="sintesi_nome" required></label>
+      <label>Cognome: <input type="text" name="sintesi_cognome" required></label>
+      <label>Classe: <input type="text" name="sintesi_classe" required></label>
+      <label>Data: <input type="date" name="sintesi_data" required></label>
 
-        <hr>
+      <h3>PRESENTAZIONE</h3>
+      <p>
+        In questo “diario” potrai annotare le attività e le esperienze che svolgerai nell’ambito dell’orientamento durante tutto il tuo anno scolastico. 
+        Se lo compili con continuità e al termine di ogni singola attività o esperienza, ti permetterà di:
+      </p>
+      <ul>
+        <li>tenere traccia delle attività ed esperienze fatte</li>
+        <li>riflettere sul tuo percorso formativo</li>
+        <li>non perdere le informazioni delle singole esperienze, per poterle utilizzare in qualsiasi momento</li>
+      </ul>
+      <p>
+        Ogni attività di orientamento che realizzerai a scuola prevede la compilazione di una scheda suddivisa in più sezioni pensate appositamente per 
+        aiutarti a sviluppare la “capacità di auto-orientamento”. Le sezioni sono:
+      </p>
+      <ul>
+        <li><strong>INFORMAZIONI GENERALI</strong>: nome del progetto, tipo di attività, obiettivi, durata, modalità e soggetti coinvolti.</li>
+        <li><strong>DESCRIZIONE SINTETICA DELL’ATTIVITÀ</strong>: per annotare gli aspetti più significativi e riflettere sul percorso.</li>
+        <li><strong>EVENTUALI DOCUMENTI ALLEGATI</strong>: elenco di eventuali documenti rilasciati alla fine dell’attività.</li>
+      </ul>
 
-        <h3>PRESENTAZIONE</h3>
-        <p>In questo “diario” potrai annotare le attività e le esperienze che svolgerai nell’ambito dell’orientamento durante tutto il tuo anno scolastico. Se lo compili con continuità e al termine di ogni singola attività o esperienza, ti permetterà di:</p>
-        <ul>
-          <li>tenere traccia delle attività ed esperienze fatte</li>
-          <li>riflettere sul tuo percorso formativo</li>
-          <li>non perdere le informazioni delle singole esperienze, per poterle utilizzare in qualsiasi momento</li>
-        </ul>
-        <p>Ogni attività di orientamento che realizzerai a scuola prevede la compilazione di una scheda suddivisa in più sezioni pensate appositamente per aiutarti a tenere traccia delle informazioni e per aiutarti a sviluppare la capacità di muoverti in modo autonomo, ossia quella che viene chiamata la “capacità di auto-orientamento” per imparare a conoscere te stesso e capire autonomamente cosa ti piace e cosa vuoi fare da grande. Le sezioni sono:</p>
-        <ul>
-          <li><strong>INFORMAZIONI GENERALI</strong>: informazioni come nome dell’attività, tipo, obiettivi, durata, luogo e soggetti coinvolti.</li>
-          <li><strong>DESCRIZIONE SINTETICA DELL’ATTIVITÀ</strong>: per tenere traccia degli aspetti più significativi e riflettere sul proprio percorso.</li>
-          <li><strong>EVENTUALI DOCUMENTI ALLEGATI</strong>: per ricordare dove hai salvato attestati, relazioni, presentazioni, ecc.</li>
-        </ul>
-        <p><strong>Ricordati che la scheda dovrà essere replicata nella sua interezza, dalla sezione 1 – informazioni generali alla sezione 3 – eventuali documenti allegati, per ogni singola esperienza fatta!</strong></p>
+      <div class="experience-entry">
+        <h3>SEZIONE 1 - INFORMAZIONI GENERALI</h3>
+        <p style="text-align:center;">
+          Riporta nella tabella sottostante le informazioni di carattere generale che ti permetteranno di ricordare in modo preciso e puntuale 
+          ogni singola attività o esperienza di orientamento svolta durante il tuo percorso scolastico.
+        </p>
+        <table class="responsive-table">
+          <tr><td>Data</td><td><input type="date" name="data_attivita[]"></td></tr>
+          <tr><td>Anno scolastico</td><td><input type="text" name="anno_scolastico[]"></td></tr>
+          <tr><td>Nome del Progetto/Attività di orientamento/Ente ospitante</td>
+              <td><input type="text" name="nome_progetto[]" placeholder="Scrivi il nome del progetto o attività o dell’ente visitato"></td></tr>
+          <tr><td>Tipo di attività</td>
+              <td><input type="text" name="tipo_attivita[]" placeholder="Es. laboratorio, incontro individuale, simulazioni"></td></tr>
+          <tr><td>Obiettivo principale dell'attività</td>
+              <td><textarea name="obiettivo[]" rows="2" placeholder="Descrivi lo scopo dell'attività orientativa"></textarea></td></tr>
+          <tr><td>Numero ore</td><td><input type="number" name="ore[]"></td></tr>
+          <tr><td>Modalità di svolgimento</td>
+              <td><input type="text" name="modalita[]" placeholder="Es. online, in presenza, di gruppo"></td></tr>
+        </table>
 
-        <hr>
+        <h3>SEZIONE 2 - DESCRIZIONE SINTETICA DELL’ATTIVITÀ</h3>
+        <p style="text-align:center;">Elabora una breve sintesi dell’attività o esperienza, riportando ciò che ritieni veramente importante ricordare.</p>
+        <label>Attività svolte / osservate
+          <textarea name="attivita_descrizione[]" rows="3"></textarea>
+        </label>
+        <label>Cosa ti ha colpito di più?
+          <textarea name="colpito[]" rows="2"></textarea>
+        </label>
+        <label>Quali sono stati i principali insegnamenti o scoperte?
+          <textarea name="insegnamenti[]" rows="2"></textarea>
+        </label>
 
-        <div class="experience-entry">
-          <h3>SEZIONE 1 – INFORMAZIONI GENERALI</h3>
-          <table class="responsive-table">
-            <tr><td>Data:</td><td><input type="date" name="data_attivita[]"></td></tr>
-            <tr><td>Anno scolastico:</td><td><input type="text" name="anno_scolastico[]"></td></tr>
-            <tr><td>Nome del progetto o ente ospitante:</td><td><input type="text" name="nome_progetto[]"></td></tr>
-            <tr><td>Tipo di attività:</td><td><input type="text" name="tipo_attivita[]"></td></tr>
-            <tr><td>Obiettivo principale:</td><td><textarea name="obiettivo[]"></textarea></td></tr>
-            <tr><td>Numero ore:</td><td><input type="number" name="ore[]"></td></tr>
-            <tr><td>Modalità di svolgimento:</td><td><input type="text" name="modalita[]"></td></tr>
-          </table>
-
-          <h3>SEZIONE 2 – DESCRIZIONE SINTETICA DELL’ATTIVITÀ</h3>
-          <label>Attività svolte / osservate:<br><textarea name="attivita_descrizione[]" rows="3" style="width:100%"></textarea></label><br><br>
-          <label>Cosa ti ha colpito di più?<br><textarea name="colpito[]" rows="2" style="width:100%"></textarea></label><br><br>
-          <label>Principali insegnamenti o scoperte:<br><textarea name="insegnamenti[]" rows="2" style="width:100%"></textarea></label>
-
-          <h3>SEZIONE 3 – EVENTUALI DOCUMENTI ALLEGATI</h3>
-          <label>Documenti rilasciati (attestati, presentazioni, ecc.):<br><textarea name="documenti[]" rows="2" style="width:100%"></textarea></label>
-        </div>
-
-        <hr>
-        <button type="button" id="aggiungi-esperienza-btn">➕ Aggiungi un’altra esperienza</button><br><br>
-        <button type="submit">📩 Invia e Salva</button>
+        <h3>SEZIONE 3 - EVENTUALI DOCUMENTI ALLEGATI</h3>
+        <p style="text-align:center;">
+          Riporta qui di seguito gli eventuali documenti rilasciati in esito all’attività svolta, come ad esempio: progetto formativo, attestato di partecipazione, 
+          relazione dell’attività, PowerPoint di presentazione, ecc.
+        </p>
+        <textarea name="documenti[]" rows="2"></textarea>
       </div>
-    </form>
-  </main>
-<script type="module" src="fase3-anno1.js"></script>
 
-  <script>
-    document.getElementById('aggiungi-esperienza-btn').addEventListener('click', () => {
-      const entry = document.querySelector('.experience-entry');
-      const clone = entry.cloneNode(true);
-      clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
-      entry.parentNode.insertBefore(clone, document.getElementById('aggiungi-esperienza-btn'));
-    });
-  </script>
+      <div class="button-group">
+        <button type="button" id="aggiungi-esperienza-btn" class="btn-secondary">➕ Aggiungi un’altra esperienza</button>
+        <a href="index.html" class="btn-secondary">⬅ Torna alla pagina principale</a>
+        <button type="submit" class="btn-primary">📩 Invia e Salva</button>
+      </div>
+    </div>
+  </form>
+</main>
+
+<script type="module" src="fase3-anno1.js"></script>
+<script>
+  document.getElementById('aggiungi-esperienza-btn').addEventListener('click', () => {
+    const entry = document.querySelector('.experience-entry');
+    const clone = entry.cloneNode(true);
+    clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
+    entry.parentNode.insertBefore(clone, document.querySelector('.button-group'));
+  });
+</script>
 </body>
 </html>
