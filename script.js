@@ -1,10 +1,32 @@
-// Inizializzazione della mappa con Cytoscape
+// ==========================
+// script.js (versione pulita)
+// ==========================
+
+// Inizializzazione Firestore
 import { db } from './firebase-init.js';
-import { collection, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+import {
+  collection, doc, setDoc, getDoc
+} from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
+// -------------------------------------
+// Utility: recupero/creazione studentId
+// -------------------------------------
+function getResumeStudentId() {
+  const hash = window.location.hash || '';
+  const parts = hash.split('/');
+  const idx = parts.findIndex(p => p === 'continua'); // URL tipo #/studente/continua/<id>
+  if (idx !== -1 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1]);
+  return null;
+}
+const studentId =
+  getResumeStudentId() ||
+  localStorage.getItem('studentId') ||
+  (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
+localStorage.setItem('studentId', studentId);
 
-
-// Conteggio dinamico checkbox Scheda 3
+// -------------------------------------------
+// Conteggio dinamico checkbox (Scheda 3)
+// -------------------------------------------
 const categorie = {
   gente: [
     'Nelle interrogazioni orali ti esprimi con disinvoltura',
@@ -98,9 +120,13 @@ if (checkboxArea) {
     checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
       if (cb.checked) counts[cb.dataset.cat]++;
     });
-    Object.entries(counts).forEach(([cat, val]) => sumFields[cat].textContent = val);
+    Object.entries(counts).forEach(([cat, val]) => (sumFields[cat].textContent = val));
   });
 }
+
+// -------------------------------------------
+// Mappa concettuale (Cytoscape)
+// -------------------------------------------
 function initializeConceptMap() {
   if (window.conceptMapInitialized || !document.getElementById('cy')) return;
   window.conceptMapInitialized = true;
@@ -208,7 +234,6 @@ function initializeConceptMap() {
       const children = selectedNode.outgoers('node');
       selectedNode.union(children).remove();
       renderBaseControls();
-  window.cyInstance = cy;
     }
   }
 
@@ -240,7 +265,7 @@ function initializeConceptMap() {
     }
   }
 
-  cy.on('tap', 'node', function(evt) {
+  cy.on('tap', 'node', function (evt) {
     const node = evt.target;
     if (node.id() !== 'io_sono') {
       renderDetailControls(node);
@@ -251,7 +276,9 @@ function initializeConceptMap() {
   window.cyInstance = cy;
 }
 
-// SALVATAGGIO e PDF
+// --------------------------
+// SALVATAGGIO + PDF
+// --------------------------
 const saveBtn = document.getElementById('save-submit-btn');
 if (saveBtn) {
   saveBtn.addEventListener('click', async () => {
@@ -259,21 +286,20 @@ if (saveBtn) {
     const data = Object.fromEntries(new FormData(form).entries());
 
     const checkboxCounts = {
-      gente: parseInt(sumFields.gente.textContent),
-      idee: parseInt(sumFields.idee.textContent),
-      dati: parseInt(sumFields.dati.textContent),
-      cose: parseInt(sumFields.cose.textContent)
+      gente: parseInt(sumFields.gente.textContent) || 0,
+      idee: parseInt(sumFields.idee.textContent) || 0,
+      dati: parseInt(sumFields.dati.textContent) || 0,
+      cose: parseInt(sumFields.cose.textContent) || 0
     };
 
-    // --- Estrazione mappa UNA VOLTA SOLA ---
-    const edgesForDB = [];   // oggetti { from, to } per il DB
-    const edgesForPDF = [];  // stringhe "from → to" per il PDF
-    let cyElements = [];     // snapshot completo per ricaricare identico
+    // Estrazione mappa
+    const edgesForDB = [];    // [{from,to}]
+    const edgesForPDF = [];   // ["from → to"]
+    let cyElements = [];      // snapshot completo nodi + edge
 
     if (window.conceptMapInitialized && window.cyInstance) {
       const cy = window.cyInstance;
 
-      // per DB (retro-compatibilità) + per PDF
       cy.edges().forEach(edge => {
         const src = cy.getElementById(edge.data('source')).data('label');
         const dst = cy.getElementById(edge.data('target')).data('label');
@@ -281,39 +307,39 @@ if (saveBtn) {
         edgesForPDF.push(`${src} → ${dst}`);
       });
 
-      // snapshot 1:1 (nodi + posizioni + classi + edge)
       cyElements = cy.elements().jsons();
     }
 
-    // --- Salvataggio su Firestore ---
+    // Salvataggio su Firestore
     try {
       const payload = {
         ...data,
         checkboxCounts,
-        conceptMap: edgesForDB,  // retro-compatibilità
-        cyElements,              // ricarica fedele
+        conceptMap: edgesForDB, // retro-compatibilità
+        cyElements,             // ricarica fedele
         timestamp: new Date()
       };
 
-      // documento stabile con studentId
       await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
       console.log('Dati salvati per studentId:', studentId);
     } catch (e) {
       console.error('Errore salvataggio Firebase:', e);
     }
 
-    // --- PDF ---
+    // PDF
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
     let y = 10;
     pdf.setFontSize(12);
 
     for (const [key, value] of Object.entries(data)) {
-      pdf.text(`${key}: ${value}`, 10, y); y += 8;
+      pdf.text(`${key}: ${value}`, 10, y);
+      y += 8;
     }
     pdf.text('Risposte checkbox:', 10, y); y += 8;
     for (const [cat, val] of Object.entries(checkboxCounts)) {
-      pdf.text(`${cat}: ${val}`, 10, y); y += 8;
+      pdf.text(`${cat}: ${val}`, 10, y);
+      y += 8;
     }
 
     if (edgesForPDF.length > 0) {
@@ -325,29 +351,16 @@ if (saveBtn) {
   });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  initializeConceptMap();
-});
-// --- Utility per estrarre studentId dall'URL tipo #/studente/continua/<id> ---
-function getResumeStudentId() {
-  const hash = window.location.hash || '';
-  const parts = hash.split('/');
-  const idx = parts.findIndex(p => p === 'continua');
-  if (idx !== -1 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1]);
-  return null;
-}
-
-// --- Carica dati studente e ricostruisce mappa + form ---
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
-
-async function preloadStudentData(studentId) {
+// --------------------------
+// Preload dati studente
+// --------------------------
+async function preloadStudentData(id) {
   try {
-    const snap = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
+    const snap = await getDoc(doc(db, 'fase1-studente-anno1', id));
     if (!snap.exists()) return;
-
     const saved = snap.data();
 
-    // 2a. Prefill form (solo se i name combaciano con quelli della pagina)
+    // Prefill form
     const form = document.querySelector('form');
     if (form) {
       Object.entries(saved).forEach(([k, v]) => {
@@ -356,7 +369,7 @@ async function preloadStudentData(studentId) {
       });
     }
 
-    // 2b. Ripristina checkbox counts (se vuoi anche spuntare le checkbox, aggiungi mapping 1:1)
+    // Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
       sumFields.gente.textContent = saved.checkboxCounts.gente ?? 0;
       sumFields.idee.textContent  = saved.checkboxCounts.idee  ?? 0;
@@ -364,25 +377,21 @@ async function preloadStudentData(studentId) {
       sumFields.cose.textContent  = saved.checkboxCounts.cose  ?? 0;
     }
 
-    // 2c. RICARICA MAPPA
+    // Ricostruzione mappa
     if (window.conceptMapInitialized && window.cyInstance) {
       const cy = window.cyInstance;
-      // Pulisci tutto tranne "IO SONO" (id=io_sono)
       cy.elements().not('#io_sono').remove();
 
       if (Array.isArray(saved.cyElements) && saved.cyElements.length) {
-        // Caso "perfetto": abbiamo snapshot completo
         cy.add(saved.cyElements);
         cy.layout({ name: 'preset' }).run(); // rispetta posizioni salvate
       } else if (Array.isArray(saved.conceptMap) && saved.conceptMap.length) {
-        // Fallback: ricostruzione da coppie (from,to) usando etichette
         const idFromLabel = (label) => 'n_' + label.toLowerCase()
           .replace(/\s+/g, '_')
           .replace(/[^\w\-]/g, '')
           .slice(0, 40);
 
         const ensureNode = (label) => {
-          // se è "IO SONO" usa quello esistente
           if (label.trim().toUpperCase() === 'IO SONO') return cy.$('#io_sono');
           const id = idFromLabel(label);
           let node = cy.$(`#${id}`);
@@ -392,29 +401,29 @@ async function preloadStudentData(studentId) {
           return node;
         };
 
-        // Crea nodi/edge
         saved.conceptMap.forEach(({ from, to }) => {
           const src = ensureNode(from);
           const dst = ensureNode(to);
-          // evita duplicati edge
           if (cy.$(`edge[source = "${src.id()}"][target = "${dst.id()}"]`).empty()) {
             cy.add({ group: 'edges', data: { source: src.id(), target: dst.id() } });
           }
         });
 
-        // Layout automatico se non abbiamo posizioni
         cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
       }
     }
-
   } catch (err) {
     console.error('Errore caricamento dati studente:', err);
   }
 }
 
-// --- Avvio ricarica se c'è uno studentId (via URL o localStorage) ---
-const resumeId = getResumeStudentId() || localStorage.getItem('studentId');
-if (resumeId) {
-  // aspetta che la mappa sia inizializzata
-  window.addEventListener('load', () => preloadStudentData(resumeId));
-}
+// --------------------------
+// Avvio
+// --------------------------
+window.addEventListener('DOMContentLoaded', () => {
+  initializeConceptMap();
+});
+
+// Aspetta che tutto sia pronto e poi pre-carica dati
+const resumeId = studentId; // abbiamo già deciso l'id in alto
+window.addEventListener('load', () => preloadStudentData(resumeId));
