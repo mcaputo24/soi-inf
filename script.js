@@ -1,15 +1,15 @@
 // ==========================
-// script.js (versione pulita)
+// script.js (con B→G integrati)
 // ==========================
 
 // Inizializzazione Firestore
 import { db } from './firebase-init.js';
 import {
-  collection, doc, setDoc, getDoc
+  doc, setDoc, getDoc
 } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
 // -------------------------------------
-// Utility: recupero/creazione studentId
+// [B] Utility: gestione studentId + resumeUrl
 // -------------------------------------
 function getResumeStudentId() {
   const hash = window.location.hash || '';
@@ -23,6 +23,25 @@ const studentId =
   localStorage.getItem('studentId') ||
   (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
 localStorage.setItem('studentId', studentId);
+
+// Link di ripresa (stessa pagina + anchor)
+const resumeUrl = `${location.origin}${location.pathname}#/studente/continua/${encodeURIComponent(studentId)}`;
+
+// Mostra link se esiste un box dedicato nell'HTML
+function renderResumeLinkBox() {
+  const box = document.getElementById('resume-link-box');
+  if (!box) return;
+  box.innerHTML = `
+    <p><strong>Riprendi più tardi:</strong></p>
+    <input type="text" readonly value="${resumeUrl}" style="width:100%; font-size:12px">
+    <button type="button" id="copy-resume-link">Copia link</button>
+  `;
+  document.getElementById('copy-resume-link')?.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(resumeUrl); alert('Link copiato negli appunti.'); }
+    catch { alert('Copia non riuscita. Copia il testo a mano.'); }
+  });
+}
+renderResumeLinkBox();
 
 // -------------------------------------------
 // Conteggio dinamico checkbox (Scheda 3)
@@ -248,6 +267,7 @@ function initializeConceptMap() {
       ]);
       cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
       input.value = '';
+      saveDraftDebounced({ alsoUpdateMap: true }); // autosave su modifica mappa
     }
   }
 
@@ -262,6 +282,7 @@ function initializeConceptMap() {
       ]);
       cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
       renderDetailControls(selectedNode);
+      saveDraftDebounced({ alsoUpdateMap: true }); // autosave su modifica mappa
     }
   }
 
@@ -272,87 +293,111 @@ function initializeConceptMap() {
     }
   });
 
+  // autosave su cambi strutturali/posizioni
+  const mapChanged = () => saveDraftDebounced({ alsoUpdateMap: true });
+  cy.on('add remove position', mapChanged);
+
   renderBaseControls();
   window.cyInstance = cy;
 }
 
 // --------------------------
-// SALVATAGGIO + PDF
+// [C] Funzione di salvataggio bozza (riusabile) + debounce
 // --------------------------
-const saveBtn = document.getElementById('save-submit-btn');
-if (saveBtn) {
-  saveBtn.addEventListener('click', async () => {
+function debounce(fn, wait = 600) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+}
+
+async function saveDraft({ alsoUpdateMap = true } = {}) {
+  try {
     const form = document.querySelector('form');
     const data = Object.fromEntries(new FormData(form).entries());
 
     const checkboxCounts = {
-      gente: parseInt(sumFields.gente.textContent) || 0,
-      idee: parseInt(sumFields.idee.textContent) || 0,
-      dati: parseInt(sumFields.dati.textContent) || 0,
-      cose: parseInt(sumFields.cose.textContent) || 0
+      gente: parseInt(sumFields.gente?.textContent || '0', 10),
+      idee: parseInt(sumFields.idee?.textContent || '0', 10),
+      dati: parseInt(sumFields.dati?.textContent || '0', 10),
+      cose: parseInt(sumFields.cose?.textContent || '0', 10)
     };
 
-    // Estrazione mappa
-    const edgesForDB = [];    // [{from,to}]
-    const edgesForPDF = [];   // ["from → to"]
-    let cyElements = [];      // snapshot completo nodi + edge
-
-    if (window.conceptMapInitialized && window.cyInstance) {
-      const cy = window.cyInstance;
-
-      cy.edges().forEach(edge => {
-        const src = cy.getElementById(edge.data('source')).data('label');
-        const dst = cy.getElementById(edge.data('target')).data('label');
-        edgesForDB.push({ from: src, to: dst });
-        edgesForPDF.push(`${src} → ${dst}`);
-      });
-
-      cyElements = cy.elements().jsons();
+    let cyElements = [];
+    if (alsoUpdateMap && window.conceptMapInitialized && window.cyInstance) {
+      cyElements = window.cyInstance.elements().jsons();
     }
 
-    // Salvataggio su Firestore
-    try {
-      const payload = {
-        ...data,
-        checkboxCounts,
-        conceptMap: edgesForDB, // retro-compatibilità
-        cyElements,             // ricarica fedele
-        timestamp: new Date()
-      };
+    const payload = {
+      ...data,
+      checkboxCounts,
+      ...(cyElements.length ? { cyElements } : {}),
+      resumeUrl,
+      updatedAt: new Date()
+    };
 
-      await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
-      console.log('Dati salvati per studentId:', studentId);
-    } catch (e) {
-      console.error('Errore salvataggio Firebase:', e);
-    }
-
-    // PDF
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-    let y = 10;
-    pdf.setFontSize(12);
-
-    for (const [key, value] of Object.entries(data)) {
-      pdf.text(`${key}: ${value}`, 10, y);
-      y += 8;
-    }
-    pdf.text('Risposte checkbox:', 10, y); y += 8;
-    for (const [cat, val] of Object.entries(checkboxCounts)) {
-      pdf.text(`${cat}: ${val}`, 10, y);
-      y += 8;
-    }
-
-    if (edgesForPDF.length > 0) {
-      pdf.text('Mappa Concettuale:', 10, y); y += 8;
-      edgesForPDF.forEach(riga => { pdf.text('- ' + riga, 10, y); y += 8; });
-    }
-
-    pdf.save('questionario_fase1_anno1.pdf');
-  });
+    await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
+    console.log('Bozza salvata', studentId);
+  } catch (e) {
+    console.error('Errore salvataggio bozza:', e);
+  }
 }
+const saveDraftDebounced = debounce(saveDraft, 700);
+
+// Autosave su input/textarea/select
+document.querySelectorAll('input, textarea, select').forEach(el => {
+  el.addEventListener('input', () => saveDraftDebounced({ alsoUpdateMap: false }));
+});
 
 // --------------------------
-// Preload dati studente
+// [D] Pulsanti: Salva + Scarica PDF
+// (richiedono nell'HTML i bottoni #save-draft-btn e #download-pdf-btn)
+// --------------------------
+document.getElementById('save-draft-btn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('save-draft-btn');
+  btn.disabled = true; btn.textContent = 'Salvataggio...';
+  await saveDraft({ alsoUpdateMap: true });
+  btn.disabled = false; btn.textContent = 'Salva';
+  alert('Bozza salvata.');
+});
+
+document.getElementById('download-pdf-btn')?.addEventListener('click', async () => {
+  await saveDraft({ alsoUpdateMap: true });
+
+  const form = document.querySelector('form');
+  const data = Object.fromEntries(new FormData(form).entries());
+  const counts = {
+    gente: sumFields.gente?.textContent || '0',
+    idee: sumFields.idee?.textContent || '0',
+    dati: sumFields.dati?.textContent || '0',
+    cose: sumFields.cose?.textContent || '0'
+  };
+
+  const edgesForPDF = [];
+  if (window.conceptMapInitialized && window.cyInstance) {
+    const cy = window.cyInstance;
+    cy.edges().forEach(edge => {
+      const src = cy.getElementById(edge.data('source')).data('label');
+      const dst = cy.getElementById(edge.data('target')).data('label');
+      edgesForPDF.push(`${src} → ${dst}`);
+    });
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y = 10;
+  pdf.setFontSize(12);
+
+  for (const [k, v] of Object.entries(data)) { pdf.text(`${k}: ${v}`, 10, y); y += 8; }
+  pdf.text('Risposte checkbox:', 10, y); y += 8;
+  for (const [k, v] of Object.entries(counts)) { pdf.text(`${k}: ${v}`, 10, y); y += 8; }
+  if (edgesForPDF.length) {
+    pdf.text('Mappa Concettuale:', 10, y); y += 8;
+    edgesForPDF.forEach(r => { pdf.text('- ' + r, 10, y); y += 8; });
+  }
+  pdf.save('questionario_fase1_anno1.pdf');
+});
+
+// --------------------------
+// [E] Preload dati studente
 // --------------------------
 async function preloadStudentData(id) {
   try {
@@ -395,9 +440,7 @@ async function preloadStudentData(id) {
           if (label.trim().toUpperCase() === 'IO SONO') return cy.$('#io_sono');
           const id = idFromLabel(label);
           let node = cy.$(`#${id}`);
-          if (node.empty()) {
-            node = cy.add({ group: 'nodes', data: { id, label } });
-          }
+          if (node.empty()) node = cy.add({ group: 'nodes', data: { id, label } });
           return node;
         };
 
@@ -412,18 +455,36 @@ async function preloadStudentData(id) {
         cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
       }
     }
+
+    // assicura persistenza del resumeUrl (utile se l’hai aggiunto dopo)
+    await setDoc(doc(db, 'fase1-studente-anno1', studentId), { resumeUrl }, { merge: true });
+    renderResumeLinkBox();
   } catch (err) {
     console.error('Errore caricamento dati studente:', err);
   }
 }
 
 // --------------------------
-// Avvio
+// [F] Avvio
 // --------------------------
 window.addEventListener('DOMContentLoaded', () => {
   initializeConceptMap();
 });
 
-// Aspetta che tutto sia pronto e poi pre-carica dati
-const resumeId = studentId; // abbiamo già deciso l'id in alto
-window.addEventListener('load', () => preloadStudentData(resumeId));
+// Precarica sempre col nostro studentId
+window.addEventListener('load', () => preloadStudentData(studentId));
+
+// --------------------------
+// [G] (Opzionale) Accordion a blocchi
+// Richiede in HTML bottoni .accordion-btn e pannelli .accordion-panel
+// --------------------------
+document.querySelectorAll('.accordion-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = document.querySelector(btn.dataset.target);
+    const isOpen = panel.style.display === 'block';
+    if (isOpen) saveDraftDebounced({ alsoUpdateMap: true }); // salva alla chiusura
+    panel.style.display = isOpen ? 'none' : 'block';
+  });
+});
+document.querySelectorAll('.accordion-panel').forEach(p => p.style.display = 'none');
+document.querySelector('#scheda1')?.style.display = 'block';
