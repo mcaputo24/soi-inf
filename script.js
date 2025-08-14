@@ -392,105 +392,107 @@ if (pdfBtn) pdfBtn.addEventListener('click', generaSoloPDF);
 
 
 // --------------------------
-// Preload dati studente
+// Preload dati studente (con DOMContentLoaded)
 // --------------------------
-async function preloadStudentData(id) {
-  try {
-    const snap = await getDoc(doc(db, 'fase1-studente-anno1', id));
-    if (!snap.exists()) return;
-    const saved = snap.data();
-    console.log('Dati recuperati da Firebase:', saved);
+function avviaPreloadQuandoDOMPronto(id) {
+  window.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const snap = await getDoc(doc(db, 'fase1-studente-anno1', id));
+      if (!snap.exists()) return;
+      const saved = snap.data();
+      console.log('Dati recuperati da Firebase:', saved);
 
-    // Prefill form (input, textarea, select) — compatibile con tutti i tipi di input
-    const form = document.querySelector('form');
-    if (form) {
+      // Prefill form (input, textarea, select) — compatibile con tutti i tipi di input
+      const form = document.querySelector('form');
+      if (form) {
 
-      const fillFields = () => {
-        Object.entries(saved).forEach(([k, v]) => {
-          const el = form.querySelector(`[name="${k}"]`);
-          if (el) {
-            if (el.type === 'checkbox' || el.type === 'radio') {
-              el.checked = Boolean(v);
+        const fillFields = () => {
+          Object.entries(saved).forEach(([k, v]) => {
+            const el = form.querySelector(`[name="${k}"]`);
+            if (el) {
+              if (el.type === 'checkbox' || el.type === 'radio') {
+                el.checked = Boolean(v);
+              } else {
+                el.value = v ?? '';
+              }
+              console.log(`✅ Campo "${k}" valorizzato con:`, v);
             } else {
-              el.value = v ?? '';
+              console.warn(`⚠️ Campo "${k}" NON trovato nel DOM (retry)`);
             }
-            console.log(`✅ Campo "${k}" valorizzato con:`, v);
-          } else {
-            console.warn(`⚠️ Campo "${k}" NON trovato nel DOM (retry)`);
-          }
-        });
-      };
-
-      // Primo tentativo dopo 0,3 secondi
-      setTimeout(fillFields, 300);
-
-      // Secondo tentativo dopo 1 secondo per eventuali campi renderizzati in ritardo
-      setTimeout(fillFields, 1000);
-    }
-
-    // ✅ Ripristina conteggi checkbox
-    if (saved.checkboxCounts) {
-      sumFields.gente.textContent = saved.checkboxCounts.gente ?? 0;
-      sumFields.idee.textContent  = saved.checkboxCounts.idee  ?? 0;
-      sumFields.dati.textContent  = saved.checkboxCounts.dati  ?? 0;
-      sumFields.cose.textContent  = saved.checkboxCounts.cose  ?? 0;
-
-      // Spunta le checkbox in base ai valori salvati
-      if (checkboxArea) {
-        checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-          cb.checked = false;
-        });
-        Object.keys(saved.checkboxCounts).forEach(cat => {
-          const count = saved.checkboxCounts[cat];
-          if (count > 0 && categorie[cat]) {
-            const boxes = checkboxArea.querySelectorAll(`input[data-cat="${cat}"]`);
-            boxes.forEach((box, idx) => {
-              if (idx < count) box.checked = true;
-            });
-          }
-        });
-      }
-    }
-
-    // ✅ Ricostruzione mappa
-    if (window.conceptMapInitialized && window.cyInstance) {
-      const cy = window.cyInstance;
-      cy.elements().not('#io_sono').remove();
-
-      if (Array.isArray(saved.cyElements) && saved.cyElements.length) {
-        cy.add(saved.cyElements);
-        cy.layout({ name: 'preset' }).run(); // posizioni salvate
-      } else if (Array.isArray(saved.conceptMap) && saved.conceptMap.length) {
-        const idFromLabel = (label) => 'n_' + label.toLowerCase()
-          .replace(/\s+/g, '_')
-          .replace(/[^\w\-]/g, '')
-          .slice(0, 40);
-
-        const ensureNode = (label) => {
-          if (label.trim().toUpperCase() === 'IO SONO') return cy.$('#io_sono');
-          const id = idFromLabel(label);
-          let node = cy.$(`#${id}`);
-          if (node.empty()) {
-            node = cy.add({ group: 'nodes', data: { id, label } });
-          }
-          return node;
+          });
         };
 
-        saved.conceptMap.forEach(({ from, to }) => {
-          const src = ensureNode(from);
-          const dst = ensureNode(to);
-          if (cy.$(`edge[source = "${src.id()}"][target = "${dst.id()}"]`).empty()) {
-            cy.add({ group: 'edges', data: { source: src.id(), target: dst.id() } });
-          }
-        });
+        // Primo tentativo dopo 0,3 secondi
+        setTimeout(fillFields, 300);
 
-        cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
+        // Secondo tentativo dopo 1 secondo per eventuali campi renderizzati in ritardo
+        setTimeout(fillFields, 1000);
       }
-    }
 
-  } catch (err) {
-    console.error('Errore caricamento dati studente:', err);
-  }
+      // ✅ Ripristina conteggi checkbox
+      if (saved.checkboxCounts) {
+        sumFields.gente.textContent = saved.checkboxCounts.gente ?? 0;
+        sumFields.idee.textContent  = saved.checkboxCounts.idee  ?? 0;
+        sumFields.dati.textContent  = saved.checkboxCounts.dati  ?? 0;
+        sumFields.cose.textContent  = saved.checkboxCounts.cose  ?? 0;
+
+        // Spunta le checkbox in base ai valori salvati
+        if (checkboxArea) {
+          checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+          });
+          Object.keys(saved.checkboxCounts).forEach(cat => {
+            const count = saved.checkboxCounts[cat];
+            if (count > 0 && categorie[cat]) {
+              const boxes = checkboxArea.querySelectorAll(`input[data-cat="${cat}"]`);
+              boxes.forEach((box, idx) => {
+                if (idx < count) box.checked = true;
+              });
+            }
+          });
+        }
+      }
+
+      // ✅ Ricostruzione mappa
+      if (window.conceptMapInitialized && window.cyInstance) {
+        const cy = window.cyInstance;
+        cy.elements().not('#io_sono').remove();
+
+        if (Array.isArray(saved.cyElements) && saved.cyElements.length) {
+          cy.add(saved.cyElements);
+          cy.layout({ name: 'preset' }).run(); // posizioni salvate
+        } else if (Array.isArray(saved.conceptMap) && saved.conceptMap.length) {
+          const idFromLabel = (label) => 'n_' + label.toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/[^\w\-]/g, '')
+            .slice(0, 40);
+
+          const ensureNode = (label) => {
+            if (label.trim().toUpperCase() === 'IO SONO') return cy.$('#io_sono');
+            const id = idFromLabel(label);
+            let node = cy.$(`#${id}`);
+            if (node.empty()) {
+              node = cy.add({ group: 'nodes', data: { id, label } });
+            }
+            return node;
+          };
+
+          saved.conceptMap.forEach(({ from, to }) => {
+            const src = ensureNode(from);
+            const dst = ensureNode(to);
+            if (cy.$(`edge[source = "${src.id()}"][target = "${dst.id()}"]`).empty()) {
+              cy.add({ group: 'edges', data: { source: src.id(), target: dst.id() } });
+            }
+          });
+
+          cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
+        }
+      }
+
+    } catch (err) {
+      console.error('Errore caricamento dati studente:', err);
+    }
+  });
 }
 
 
@@ -519,6 +521,6 @@ window.addEventListener('DOMContentLoaded', () => {
   initializeConceptMap();
 });
 
-// Aspetta che tutto sia pronto e poi pre-carica dati
+// Aspetta che il DOM sia pronto e poi pre-carica dati
 const resumeId = studentId; // abbiamo già deciso l'id in alto
-window.addEventListener('load', () => preloadStudentData(resumeId));
+avviaPreloadQuandoDOMPronto(resumeId);
