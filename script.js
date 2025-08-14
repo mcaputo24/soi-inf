@@ -400,18 +400,17 @@ async function preloadStudentData(id) {
     if (!snap.exists()) return;
     const saved = snap.data();
 
-    // Prefill form (input, textarea, select)
-    const form = document.querySelector('form');
-    if (form) {
-      Object.entries(saved).forEach(([k, v]) => {
-        const el = form.querySelector(`[name="${k}"]`);
-        if (el) {
-          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
-            el.value = v;
-          }
-        }
-      });
+    // Prefill form (input, textarea, select) - compatibile con valori null o mancanti
+const form = document.querySelector('form');
+if (form) {
+  Object.entries(saved).forEach(([k, v]) => {
+    const el = form.querySelector(`[name="${k}"]`);
+    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) {
+      el.value = (v !== undefined && v !== null) ? v : '';
     }
+  });
+}
+
 
     // Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
