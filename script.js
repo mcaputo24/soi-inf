@@ -400,15 +400,17 @@ async function preloadStudentData(id) {
     if (!snap.exists()) return;
     const saved = snap.data();
 
-    // Prefill form (input, textarea, select) — forza anche campi vuoti
+    // Prefill form (input, textarea, select) — include campi vuoti e null
 const form = document.querySelector('form');
 if (form) {
   form.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
     if (saved.hasOwnProperty(el.name)) {
-      el.value = saved[el.name] || ''; // assegna anche se stringa vuota
+      const val = saved[el.name];
+      el.value = (val !== undefined && val !== null) ? val : '';
     }
   });
 }
+
 
 
 
