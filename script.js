@@ -399,64 +399,68 @@ async function preloadStudentData(id) {
     const snap = await getDoc(doc(db, 'fase1-studente-anno1', id));
     if (!snap.exists()) return;
     const saved = snap.data();
-console.log('Dati recuperati da Firebase:', saved);
 
+    // Funzione interna per riempire i campi quando pronti
+    function fillFormFieldsWhenReady(savedData) {
+      const form = document.querySelector('form');
+      if (!form) return;
 
-    // Prefill form (input, textarea, select) — senza filtrare solo stringhe
-// Prefill form — compatibile con tutti i tipi di input e con log di debug
-const form = document.querySelector('form');
-if (form) {
-  // piccolo ritardo per essere sicuri che tutti gli elementi siano nel DOM
-  setTimeout(() => {
-    Object.entries(saved).forEach(([k, v]) => {
-      const el = form.querySelector(`[name="${k}"]`);
-      if (el) {
-        if (el.type === 'checkbox' || el.type === 'radio') {
-          el.checked = Boolean(v);
-        } else {
-          el.value = v ?? '';
+      const interval = setInterval(() => {
+        let allFound = true;
+
+        Object.entries(savedData).forEach(([k, v]) => {
+          const el = form.querySelector(`[name="${k}"]`);
+          if (el) {
+            if (el.type === 'checkbox' || el.type === 'radio') {
+              el.checked = Boolean(v);
+            } else {
+              el.value = v ?? '';
+            }
+            console.log(`✅ Campo "${k}" trovato e valorizzato con:`, v);
+          } else {
+            console.warn(`⚠️ Campo "${k}" NON trovato nel DOM`);
+            allFound = false;
+          }
+        });
+
+        if (allFound) {
+          clearInterval(interval);
+          console.log("✅ Tutti i campi sono stati valorizzati.");
         }
-        console.log(`✅ Campo "${k}" trovato e valorizzato con:`, v);
-      } else {
-        console.warn(`⚠️ Campo "${k}" NON trovato nel DOM`);
-      }
-    });
-  }, 200); // 0,2 secondi di ritardo
-}
+      }, 300); // ogni 0,3 secondi
+    }
 
-    // ✅ Ripristina conteggi checkbox
+    // Avvia riempimento campi testuali quando pronti
+    fillFormFieldsWhenReady(saved);
+
+    // Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
       sumFields.gente.textContent = saved.checkboxCounts.gente ?? 0;
       sumFields.idee.textContent  = saved.checkboxCounts.idee  ?? 0;
       sumFields.dati.textContent  = saved.checkboxCounts.dati  ?? 0;
       sumFields.cose.textContent  = saved.checkboxCounts.cose  ?? 0;
 
-      // Spunta le checkbox in base ai valori salvati (se vuoi questo)
+      // Ripristina anche i singoli checkbox
       if (checkboxArea) {
-        checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-          cb.checked = false;
-        });
-        Object.keys(saved.checkboxCounts).forEach(cat => {
-          const count = saved.checkboxCounts[cat];
-          if (count > 0 && categorie[cat]) {
-            // Spunta le prime "count" checkbox della categoria
-            const boxes = checkboxArea.querySelectorAll(`input[data-cat="${cat}"]`);
-            boxes.forEach((box, idx) => {
-              if (idx < count) box.checked = true;
-            });
-          }
+        Object.entries(categorie).forEach(([cat, frasi]) => {
+          frasi.forEach((_, index) => {
+            const cb = document.getElementById(`${cat}-${index}`);
+            if (cb) {
+              cb.checked = (saved[`${cat}-${index}`] === true);
+            }
+          });
         });
       }
     }
 
-    // ✅ Ricostruzione mappa
+    // Ricostruzione mappa
     if (window.conceptMapInitialized && window.cyInstance) {
       const cy = window.cyInstance;
       cy.elements().not('#io_sono').remove();
 
       if (Array.isArray(saved.cyElements) && saved.cyElements.length) {
         cy.add(saved.cyElements);
-        cy.layout({ name: 'preset' }).run(); // posizioni salvate
+        cy.layout({ name: 'preset' }).run();
       } else if (Array.isArray(saved.conceptMap) && saved.conceptMap.length) {
         const idFromLabel = (label) => 'n_' + label.toLowerCase()
           .replace(/\s+/g, '_')
@@ -488,6 +492,7 @@ if (form) {
     console.error('Errore caricamento dati studente:', err);
   }
 }
+
 
 
 function showSaveMessage() {
