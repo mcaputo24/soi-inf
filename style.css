@@ -80,3 +80,38 @@ a {
   padding: 5px;
   box-sizing: border-box;
 }
+.form-actions {
+  display: flex;
+  gap: 10px; /* distanza tra pulsanti */
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Pulsante Salva */
+#save-btn {
+  background-color: #4CAF50; /* verde */
+  color: white;
+}
+
+#save-btn:hover {
+  background-color: #45a049;
+}
+
+/* Pulsante PDF */
+#pdf-btn {
+  background-color: #2196F3; /* blu */
+  color: white;
+}
+
+#pdf-btn:hover {
+  background-color: #0b7dda;
+}

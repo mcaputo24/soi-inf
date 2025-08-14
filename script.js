@@ -24,25 +24,6 @@ const studentId =
   (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
 localStorage.setItem('studentId', studentId);
 
-// Genera link di ripresa e salvalo su Firestore per l'area docente
-const resumeLink = `${window.location.origin}${window.location.pathname}#/continua/${encodeURIComponent(studentId)}`;
-
-// Salvataggio asincrono, non blocca il resto
-(async () => {
-  try {
-    await setDoc(doc(db, 'resumeLinks', studentId), {
-      studentId,
-      link: resumeLink,
-      createdAt: new Date()
-    }, { merge: true });
-    console.log("Link di ripresa salvato:", resumeLink);
-  } catch (err) {
-    console.error("Errore salvataggio link di ripresa:", err);
-  }
-})();
-
-
-
 // -------------------------------------------
 // Conteggio dinamico checkbox (Scheda 3)
 // -------------------------------------------
@@ -96,6 +77,23 @@ const categorie = {
     'Ami la natura e ti piacerebbe lavorare con le piante o gli animali'
   ]
 };
+
+// Genera link di ripresa e salvalo su Firestore per l'area docente
+const resumeLink = `${window.location.origin}${window.location.pathname}#/continua/${encodeURIComponent(studentId)}`;
+
+// Salvataggio asincrono, non blocca il resto
+(async () => {
+  try {
+    await setDoc(doc(db, 'resumeLinks', studentId), {
+      studentId,
+      link: resumeLink,
+      createdAt: new Date()
+    }, { merge: true });
+    console.log("Link di ripresa salvato:", resumeLink);
+  } catch (err) {
+    console.error("Errore salvataggio link di ripresa:", err);
+  }
+})();
 
 const checkboxArea = document.getElementById('checkbox-area');
 const sumFields = {
@@ -296,12 +294,13 @@ function initializeConceptMap() {
 }
 
 // --------------------------
-// SALVATAGGIO + PDF
+// SALVATAGGIO e PDF separati
 // --------------------------
 const saveBtn = document.getElementById('save-btn');
 const pdfBtn = document.getElementById('pdf-btn');
 
-async function salvaSuFirebase(generaPdf = false) {
+// Funzione per SALVARE SOLO su Firebase
+async function salvaSoloFirebase() {
   const form = document.querySelector('form');
   const data = Object.fromEntries(new FormData(form).entries());
 
@@ -312,25 +311,19 @@ async function salvaSuFirebase(generaPdf = false) {
     cose: parseInt(sumFields.cose.textContent) || 0
   };
 
-  // --- Estrazione mappa (INVARIATA) ---
   const edgesForDB = [];
-  const edgesForPDF = [];
   let cyElements = [];
 
   if (window.conceptMapInitialized && window.cyInstance) {
     const cy = window.cyInstance;
-
     cy.edges().forEach(edge => {
       const src = cy.getElementById(edge.data('source')).data('label');
       const dst = cy.getElementById(edge.data('target')).data('label');
       edgesForDB.push({ from: src, to: dst });
-      edgesForPDF.push(`${src} → ${dst}`);
     });
-
     cyElements = cy.elements().jsons();
   }
 
-  // --- Salvataggio su Firestore ---
   try {
     const payload = {
       ...data,
@@ -342,44 +335,60 @@ async function salvaSuFirebase(generaPdf = false) {
 
     await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
     console.log('Dati salvati per studentId:', studentId);
-
-    // Messaggio conferma
     alert("✅ Dati salvati correttamente!");
-
   } catch (e) {
     console.error('Errore salvataggio Firebase:', e);
     alert("❌ Errore durante il salvataggio!");
   }
+}
 
-  // --- PDF opzionale ---
-  if (generaPdf) {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-    let y = 10;
-    pdf.setFontSize(12);
+// Funzione per GENERARE SOLO il PDF
+function generaSoloPDF() {
+  const form = document.querySelector('form');
+  const data = Object.fromEntries(new FormData(form).entries());
 
-    for (const [key, value] of Object.entries(data)) {
-      pdf.text(`${key}: ${value}`, 10, y);
-      y += 8;
-    }
-    pdf.text('Risposte checkbox:', 10, y); y += 8;
-    for (const [cat, val] of Object.entries(checkboxCounts)) {
-      pdf.text(`${cat}: ${val}`, 10, y);
-      y += 8;
-    }
+  const checkboxCounts = {
+    gente: parseInt(sumFields.gente.textContent) || 0,
+    idee: parseInt(sumFields.idee.textContent) || 0,
+    dati: parseInt(sumFields.dati.textContent) || 0,
+    cose: parseInt(sumFields.cose.textContent) || 0
+  };
 
-    if (edgesForPDF.length > 0) {
-      pdf.text('Mappa Concettuale:', 10, y); y += 8;
-      edgesForPDF.forEach(riga => { pdf.text('- ' + riga, 10, y); y += 8; });
-    }
-
-    pdf.save('questionario_fase1_anno1.pdf');
+  const edgesForPDF = [];
+  if (window.conceptMapInitialized && window.cyInstance) {
+    const cy = window.cyInstance;
+    cy.edges().forEach(edge => {
+      const src = cy.getElementById(edge.data('source')).data('label');
+      const dst = cy.getElementById(edge.data('target')).data('label');
+      edgesForPDF.push(`${src} → ${dst}`);
+    });
   }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y = 10;
+  pdf.setFontSize(12);
+
+  for (const [key, value] of Object.entries(data)) {
+    pdf.text(`${key}: ${value}`, 10, y);
+    y += 8;
+  }
+  pdf.text('Risposte checkbox:', 10, y); y += 8;
+  for (const [cat, val] of Object.entries(checkboxCounts)) {
+    pdf.text(`${cat}: ${val}`, 10, y);
+    y += 8;
+  }
+  if (edgesForPDF.length > 0) {
+    pdf.text('Mappa Concettuale:', 10, y); y += 8;
+    edgesForPDF.forEach(riga => { pdf.text('- ' + riga, 10, y); y += 8; });
+  }
+
+  pdf.save('questionario_fase1_anno1.pdf');
 }
 
 // --- Listener pulsanti ---
-if (saveBtn) saveBtn.addEventListener('click', () => salvaSuFirebase(false));
-if (pdfBtn) pdfBtn.addEventListener('click', () => salvaSuFirebase(true));
+if (saveBtn) saveBtn.addEventListener('click', salvaSoloFirebase);
+if (pdfBtn) pdfBtn.addEventListener('click', generaSoloPDF);
 
 
 // --------------------------
