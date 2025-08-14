@@ -403,16 +403,26 @@ console.log('Dati recuperati da Firebase:', saved);
 
 
     // Prefill form (input, textarea, select) — senza filtrare solo stringhe
+// Prefill form — compatibile con tutti i tipi di input e con log di debug
 const form = document.querySelector('form');
 if (form) {
-  Object.entries(saved).forEach(([k, v]) => {
-    const el = form.querySelector(`[name="${k}"]`);
-    if (el) {
-      el.value = (v !== undefined && v !== null) ? String(v) : '';
-    }
-  });
+  // piccolo ritardo per essere sicuri che tutti gli elementi siano nel DOM
+  setTimeout(() => {
+    Object.entries(saved).forEach(([k, v]) => {
+      const el = form.querySelector(`[name="${k}"]`);
+      if (el) {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          el.checked = Boolean(v);
+        } else {
+          el.value = v ?? '';
+        }
+        console.log(`✅ Campo "${k}" trovato e valorizzato con:`, v);
+      } else {
+        console.warn(`⚠️ Campo "${k}" NON trovato nel DOM`);
+      }
+    });
+  }, 200); // 0,2 secondi di ritardo
 }
-
 
     // ✅ Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
