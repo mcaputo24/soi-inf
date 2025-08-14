@@ -436,6 +436,23 @@ async function preloadStudentData(id) {
   }
 }
 
+function showSaveMessage() {
+  const msg = document.createElement('div');
+  msg.textContent = "Dati salvati";
+  msg.style.position = "fixed";
+  msg.style.bottom = "20px";
+  msg.style.right = "20px";
+  msg.style.background = "#4CAF50";
+  msg.style.color = "#fff";
+  msg.style.padding = "10px 15px";
+  msg.style.borderRadius = "5px";
+  msg.style.fontSize = "14px";
+  msg.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 2000);
+}
+
+
 // --------------------------
 // Avvio
 // --------------------------
