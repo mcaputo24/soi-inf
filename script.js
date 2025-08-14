@@ -399,6 +399,8 @@ async function preloadStudentData(id) {
     const snap = await getDoc(doc(db, 'fase1-studente-anno1', id));
     if (!snap.exists()) return;
     const saved = snap.data();
+console.log('Dati recuperati da Firebase:', saved);
+
 
     // Prefill form (input, textarea, select) — senza filtrare solo stringhe
 const form = document.querySelector('form');
@@ -504,9 +506,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Aspetta che tutto sia pronto e poi pre-carica dati
 const resumeId = studentId; // abbiamo già deciso l'id in alto
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    preloadStudentData(resumeId);
-  }, 500); // mezzo secondo di ritardo
-});
-
+window.addEventListener('load', () => preloadStudentData(resumeId));
