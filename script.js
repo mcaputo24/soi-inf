@@ -400,16 +400,17 @@ async function preloadStudentData(id) {
     if (!snap.exists()) return;
     const saved = snap.data();
 
-    // ✅ Prefill form (input, textarea, select) includendo campi vuoti/null
-    const form = document.querySelector('form');
-    if (form) {
-      form.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
-        if (saved.hasOwnProperty(el.name)) {
-          const val = saved[el.name];
-          el.value = (val !== undefined && val !== null) ? val : '';
-        }
-      });
+    // Prefill form (input, textarea, select) — senza filtrare solo stringhe
+const form = document.querySelector('form');
+if (form) {
+  Object.entries(saved).forEach(([k, v]) => {
+    const el = form.querySelector(`[name="${k}"]`);
+    if (el) {
+      el.value = (v !== undefined && v !== null) ? String(v) : '';
     }
+  });
+}
+
 
     // ✅ Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
