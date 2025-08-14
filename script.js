@@ -298,9 +298,10 @@ function initializeConceptMap() {
 // --------------------------
 // SALVATAGGIO + PDF
 // --------------------------
-const saveBtn = document.getElementById('save-submit-btn');
-if (saveBtn) {
-  saveBtn.addEventListener('click', async () => {
+const saveBtn = document.getElementById('save-btn');
+const pdfBtn = document.getElementById('pdf-btn');
+
+async function salvaSuFirebase(generaPdf = false) {
   const form = document.querySelector('form');
   const data = Object.fromEntries(new FormData(form).entries());
 
@@ -311,29 +312,47 @@ if (saveBtn) {
     cose: parseInt(sumFields.cose.textContent) || 0
   };
 
+  // --- Estrazione mappa (INVARIATA) ---
+  const edgesForDB = [];
+  const edgesForPDF = [];
   let cyElements = [];
+
   if (window.conceptMapInitialized && window.cyInstance) {
-    cyElements = window.cyInstance.elements().jsons();
+    const cy = window.cyInstance;
+
+    cy.edges().forEach(edge => {
+      const src = cy.getElementById(edge.data('source')).data('label');
+      const dst = cy.getElementById(edge.data('target')).data('label');
+      edgesForDB.push({ from: src, to: dst });
+      edgesForPDF.push(`${src} → ${dst}`);
+    });
+
+    cyElements = cy.elements().jsons();
   }
 
-  const payload = {
-    ...data,
-    checkboxCounts,
-    cyElements,
-    updatedAt: new Date()
-  };
-
+  // --- Salvataggio su Firestore ---
   try {
+    const payload = {
+      ...data,
+      checkboxCounts,
+      conceptMap: edgesForDB,
+      cyElements,
+      timestamp: new Date()
+    };
+
     await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
-    console.log("Dati salvati");
-    showSaveMessage(); // <-- qui usiamo la funzione del punto 2
-  } catch (err) {
-    console.error("Errore salvataggio:", err);
+    console.log('Dati salvati per studentId:', studentId);
+
+    // Messaggio conferma
+    alert("✅ Dati salvati correttamente!");
+
+  } catch (e) {
+    console.error('Errore salvataggio Firebase:', e);
+    alert("❌ Errore durante il salvataggio!");
   }
-});
 
-
-    // PDF
+  // --- PDF opzionale ---
+  if (generaPdf) {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
     let y = 10;
@@ -355,8 +374,13 @@ if (saveBtn) {
     }
 
     pdf.save('questionario_fase1_anno1.pdf');
-  });
+  }
 }
+
+// --- Listener pulsanti ---
+if (saveBtn) saveBtn.addEventListener('click', () => salvaSuFirebase(false));
+if (pdfBtn) pdfBtn.addEventListener('click', () => salvaSuFirebase(true));
+
 
 // --------------------------
 // Preload dati studente
