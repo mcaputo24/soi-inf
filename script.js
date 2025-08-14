@@ -24,6 +24,25 @@ const studentId =
   (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
 localStorage.setItem('studentId', studentId);
 
+// Genera link di ripresa e salvalo su Firestore per l'area docente
+const resumeLink = `${window.location.origin}${window.location.pathname}#/continua/${encodeURIComponent(studentId)}`;
+
+// Salvataggio asincrono, non blocca il resto
+(async () => {
+  try {
+    await setDoc(doc(db, 'resumeLinks', studentId), {
+      studentId,
+      link: resumeLink,
+      createdAt: new Date()
+    }, { merge: true });
+    console.log("Link di ripresa salvato:", resumeLink);
+  } catch (err) {
+    console.error("Errore salvataggio link di ripresa:", err);
+  }
+})();
+
+
+
 // -------------------------------------------
 // Conteggio dinamico checkbox (Scheda 3)
 // -------------------------------------------
