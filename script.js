@@ -504,4 +504,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Aspetta che tutto sia pronto e poi pre-carica dati
 const resumeId = studentId; // abbiamo già deciso l'id in alto
-window.addEventListener('load', () => preloadStudentData(resumeId));
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    preloadStudentData(resumeId);
+  }, 500); // mezzo secondo di ritardo
+});
+
