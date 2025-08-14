@@ -392,7 +392,7 @@ if (pdfBtn) pdfBtn.addEventListener('click', generaSoloPDF);
 
 
 // --------------------------
-// Preload dati studente
+// Preload dati studente (aggiornata)
 // --------------------------
 async function preloadStudentData(id) {
   try {
@@ -400,12 +400,16 @@ async function preloadStudentData(id) {
     if (!snap.exists()) return;
     const saved = snap.data();
 
-    // Prefill form
+    // Prefill form (input, textarea, select)
     const form = document.querySelector('form');
     if (form) {
       Object.entries(saved).forEach(([k, v]) => {
         const el = form.querySelector(`[name="${k}"]`);
-        if (el && typeof v === 'string') el.value = v;
+        if (el) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+            el.value = v;
+          }
+        }
       });
     }
 
@@ -456,6 +460,7 @@ async function preloadStudentData(id) {
     console.error('Errore caricamento dati studente:', err);
   }
 }
+
 
 function showSaveMessage() {
   const msg = document.createElement('div');
