@@ -399,30 +399,34 @@ async function preloadStudentData(id) {
     const snap = await getDoc(doc(db, 'fase1-studente-anno1', id));
     if (!snap.exists()) return;
     const saved = snap.data();
-console.log('Dati recuperati da Firebase:', saved);
+    console.log('Dati recuperati da Firebase:', saved);
 
+    // Prefill form (input, textarea, select) — compatibile con tutti i tipi di input
+    const form = document.querySelector('form');
+    if (form) {
 
-    // Prefill form (input, textarea, select) — senza filtrare solo stringhe
-// Prefill form — compatibile con tutti i tipi di input e con log di debug
-const form = document.querySelector('form');
-if (form) {
-  // piccolo ritardo per essere sicuri che tutti gli elementi siano nel DOM
-  setTimeout(() => {
-    Object.entries(saved).forEach(([k, v]) => {
-      const el = form.querySelector(`[name="${k}"]`);
-      if (el) {
-        if (el.type === 'checkbox' || el.type === 'radio') {
-          el.checked = Boolean(v);
-        } else {
-          el.value = v ?? '';
-        }
-        console.log(`✅ Campo "${k}" trovato e valorizzato con:`, v);
-      } else {
-        console.warn(`⚠️ Campo "${k}" NON trovato nel DOM`);
-      }
-    });
-  }, 200); // 0,2 secondi di ritardo
-}
+      const fillFields = () => {
+        Object.entries(saved).forEach(([k, v]) => {
+          const el = form.querySelector(`[name="${k}"]`);
+          if (el) {
+            if (el.type === 'checkbox' || el.type === 'radio') {
+              el.checked = Boolean(v);
+            } else {
+              el.value = v ?? '';
+            }
+            console.log(`✅ Campo "${k}" valorizzato con:`, v);
+          } else {
+            console.warn(`⚠️ Campo "${k}" NON trovato nel DOM (retry)`);
+          }
+        });
+      };
+
+      // Primo tentativo dopo 0,3 secondi
+      setTimeout(fillFields, 300);
+
+      // Secondo tentativo dopo 1 secondo per eventuali campi renderizzati in ritardo
+      setTimeout(fillFields, 1000);
+    }
 
     // ✅ Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
@@ -431,7 +435,7 @@ if (form) {
       sumFields.dati.textContent  = saved.checkboxCounts.dati  ?? 0;
       sumFields.cose.textContent  = saved.checkboxCounts.cose  ?? 0;
 
-      // Spunta le checkbox in base ai valori salvati (se vuoi questo)
+      // Spunta le checkbox in base ai valori salvati
       if (checkboxArea) {
         checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
           cb.checked = false;
@@ -439,7 +443,6 @@ if (form) {
         Object.keys(saved.checkboxCounts).forEach(cat => {
           const count = saved.checkboxCounts[cat];
           if (count > 0 && categorie[cat]) {
-            // Spunta le prime "count" checkbox della categoria
             const boxes = checkboxArea.querySelectorAll(`input[data-cat="${cat}"]`);
             boxes.forEach((box, idx) => {
               if (idx < count) box.checked = true;
@@ -484,10 +487,12 @@ if (form) {
         cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
       }
     }
+
   } catch (err) {
     console.error('Errore caricamento dati studente:', err);
   }
 }
+
 
 
 function showSaveMessage() {
