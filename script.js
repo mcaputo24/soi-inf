@@ -392,7 +392,7 @@ if (pdfBtn) pdfBtn.addEventListener('click', generaSoloPDF);
 
 
 // --------------------------
-// Preload dati studente (aggiornata)
+// Preload dati studente
 // --------------------------
 async function preloadStudentData(id) {
   try {
@@ -400,36 +400,50 @@ async function preloadStudentData(id) {
     if (!snap.exists()) return;
     const saved = snap.data();
 
-    // Prefill form (input, textarea, select) — include campi vuoti e null
-const form = document.querySelector('form');
-if (form) {
-  form.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
-    if (saved.hasOwnProperty(el.name)) {
-      const val = saved[el.name];
-      el.value = (val !== undefined && val !== null) ? val : '';
+    // ✅ Prefill form (input, textarea, select) includendo campi vuoti/null
+    const form = document.querySelector('form');
+    if (form) {
+      form.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
+        if (saved.hasOwnProperty(el.name)) {
+          const val = saved[el.name];
+          el.value = (val !== undefined && val !== null) ? val : '';
+        }
+      });
     }
-  });
-}
 
-
-
-
-    // Ripristina conteggi checkbox
+    // ✅ Ripristina conteggi checkbox
     if (saved.checkboxCounts) {
       sumFields.gente.textContent = saved.checkboxCounts.gente ?? 0;
       sumFields.idee.textContent  = saved.checkboxCounts.idee  ?? 0;
       sumFields.dati.textContent  = saved.checkboxCounts.dati  ?? 0;
       sumFields.cose.textContent  = saved.checkboxCounts.cose  ?? 0;
+
+      // Spunta le checkbox in base ai valori salvati (se vuoi questo)
+      if (checkboxArea) {
+        checkboxArea.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+        });
+        Object.keys(saved.checkboxCounts).forEach(cat => {
+          const count = saved.checkboxCounts[cat];
+          if (count > 0 && categorie[cat]) {
+            // Spunta le prime "count" checkbox della categoria
+            const boxes = checkboxArea.querySelectorAll(`input[data-cat="${cat}"]`);
+            boxes.forEach((box, idx) => {
+              if (idx < count) box.checked = true;
+            });
+          }
+        });
+      }
     }
 
-    // Ricostruzione mappa
+    // ✅ Ricostruzione mappa
     if (window.conceptMapInitialized && window.cyInstance) {
       const cy = window.cyInstance;
       cy.elements().not('#io_sono').remove();
 
       if (Array.isArray(saved.cyElements) && saved.cyElements.length) {
         cy.add(saved.cyElements);
-        cy.layout({ name: 'preset' }).run(); // rispetta posizioni salvate
+        cy.layout({ name: 'preset' }).run(); // posizioni salvate
       } else if (Array.isArray(saved.conceptMap) && saved.conceptMap.length) {
         const idFromLabel = (label) => 'n_' + label.toLowerCase()
           .replace(/\s+/g, '_')
