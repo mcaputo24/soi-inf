@@ -301,49 +301,37 @@ function initializeConceptMap() {
 const saveBtn = document.getElementById('save-submit-btn');
 if (saveBtn) {
   saveBtn.addEventListener('click', async () => {
-    const form = document.querySelector('form');
-    const data = Object.fromEntries(new FormData(form).entries());
+  const form = document.querySelector('form');
+  const data = Object.fromEntries(new FormData(form).entries());
 
-    const checkboxCounts = {
-      gente: parseInt(sumFields.gente.textContent) || 0,
-      idee: parseInt(sumFields.idee.textContent) || 0,
-      dati: parseInt(sumFields.dati.textContent) || 0,
-      cose: parseInt(sumFields.cose.textContent) || 0
-    };
+  const checkboxCounts = {
+    gente: parseInt(sumFields.gente.textContent) || 0,
+    idee: parseInt(sumFields.idee.textContent) || 0,
+    dati: parseInt(sumFields.dati.textContent) || 0,
+    cose: parseInt(sumFields.cose.textContent) || 0
+  };
 
-    // Estrazione mappa
-    const edgesForDB = [];    // [{from,to}]
-    const edgesForPDF = [];   // ["from → to"]
-    let cyElements = [];      // snapshot completo nodi + edge
+  let cyElements = [];
+  if (window.conceptMapInitialized && window.cyInstance) {
+    cyElements = window.cyInstance.elements().jsons();
+  }
 
-    if (window.conceptMapInitialized && window.cyInstance) {
-      const cy = window.cyInstance;
+  const payload = {
+    ...data,
+    checkboxCounts,
+    cyElements,
+    updatedAt: new Date()
+  };
 
-      cy.edges().forEach(edge => {
-        const src = cy.getElementById(edge.data('source')).data('label');
-        const dst = cy.getElementById(edge.data('target')).data('label');
-        edgesForDB.push({ from: src, to: dst });
-        edgesForPDF.push(`${src} → ${dst}`);
-      });
+  try {
+    await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
+    console.log("Dati salvati");
+    showSaveMessage(); // <-- qui usiamo la funzione del punto 2
+  } catch (err) {
+    console.error("Errore salvataggio:", err);
+  }
+});
 
-      cyElements = cy.elements().jsons();
-    }
-
-    // Salvataggio su Firestore
-    try {
-      const payload = {
-        ...data,
-        checkboxCounts,
-        conceptMap: edgesForDB, // retro-compatibilità
-        cyElements,             // ricarica fedele
-        timestamp: new Date()
-      };
-
-      await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
-      console.log('Dati salvati per studentId:', studentId);
-    } catch (e) {
-      console.error('Errore salvataggio Firebase:', e);
-    }
 
     // PDF
     const { jsPDF } = window.jspdf;
