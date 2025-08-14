@@ -24,19 +24,6 @@ const studentId =
   (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
 localStorage.setItem('studentId', studentId);
 
-// --- Salva il link di ripresa su Firestore (per uso docente) ---
-import { setDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
-
-const resumeLink = `${window.location.origin}${window.location.pathname}#/continua/${encodeURIComponent(studentId)}`;
-
-// Salviamo in una collezione dedicata
-await setDoc(doc(db, 'resumeLinks', studentId), {
-  studentId,
-  link: resumeLink,
-  createdAt: new Date()
-}, { merge: true });
-
-
 // -------------------------------------------
 // Conteggio dinamico checkbox (Scheda 3)
 // -------------------------------------------
