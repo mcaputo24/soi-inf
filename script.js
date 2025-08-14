@@ -400,16 +400,16 @@ async function preloadStudentData(id) {
     if (!snap.exists()) return;
     const saved = snap.data();
 
-    // Prefill form (input, textarea, select) - compatibile con valori null o mancanti
+    // Prefill form (input, textarea, select) — forza anche campi vuoti
 const form = document.querySelector('form');
 if (form) {
-  Object.entries(saved).forEach(([k, v]) => {
-    const el = form.querySelector(`[name="${k}"]`);
-    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) {
-      el.value = (v !== undefined && v !== null) ? v : '';
+  form.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
+    if (saved.hasOwnProperty(el.name)) {
+      el.value = saved[el.name] || ''; // assegna anche se stringa vuota
     }
   });
 }
+
 
 
     // Ripristina conteggi checkbox
