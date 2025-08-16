@@ -66,9 +66,9 @@
 <div class="card">
     <h1>Rilevazione dei bisogni di orientamento per gli studenti del I anno</h1>
   </div>
+<form>
 <div class="card">
   <h2>Dati anagrafici</h2>
-  <form>
     <div class="anagrafica-grid">
       <label>Nome:<br><input type="text" name="nome" required></label>
       <label>Cognome:<br><input type="text" name="cognome" required></label>
@@ -76,7 +76,7 @@
       <label>Data:<br><input type="date" name="data" required></label>
     </div>
     <hr>
-
+</div>
 <div class="card">
   <h2>Scheda 1 – Mappa di descrizione di sé</h2>
 </div>
@@ -135,7 +135,7 @@
   <hr>
 </div>
 
-<div class="scheda1-riflessioni" style="text-align: center; margin-top: 30px;">
+<div class="card scheda1-riflessioni" style="text-align: center; margin-top: 30px;">
   <p><strong>Nella tabella sottostante trovi alcuni aggettivi che potresti usare per descriverti.</strong></p>
   <img src="aggettivi.png" alt="Tabella aggettivi" style="max-width: 100%; height: auto; margin: 20px 0;">
   <p><strong>Prova a pensare alle tue caratteristiche personali.</strong></p>
@@ -240,11 +240,8 @@
   <button id="save-btn" type="button">Salva</button>
   <button id="pdf-btn" type="button">Scarica PDF</button>
 </div>
-
-    </form>
-</div>
-
-  </main>
+ </form>
+</main>
 
   <script type="module">
     // Mappa interattiva
