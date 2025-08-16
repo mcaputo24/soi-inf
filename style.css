@@ -154,3 +154,9 @@ main h2 {
   font-weight: bold;
   margin: 25px 0 15px 0; /* spazio sopra e sotto */
 }
+.scheda1-mappa-titolo {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4em;   /* un po' più grande */
+  margin: 30px 0 20px 0; /* spazio sopra e sotto */
+}
