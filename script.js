@@ -8,22 +8,6 @@ import {
   collection, doc, setDoc, getDoc
 } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
-// -------------------------------------
-// Utility: recupero/creazione studentId
-// -------------------------------------
-function getResumeStudentId() {
-  const hash = window.location.hash || '';
-  const parts = hash.split('/');
-  const idx = parts.findIndex(p => p === 'continua'); // URL tipo #/studente/continua/<id>
-  if (idx !== -1 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1]);
-  return null;
-}
-const studentId =
-  getResumeStudentId() ||
-  localStorage.getItem('studentId') ||
-  (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
-localStorage.setItem('studentId', studentId);
-
 // -------------------------------------------
 // Conteggio dinamico checkbox (Scheda 3)
 // -------------------------------------------
@@ -77,6 +61,24 @@ const categorie = {
     'Ami la natura e ti piacerebbe lavorare con le piante o gli animali'
   ]
 };
+
+// -------------------------------------
+// Utility: recupero/creazione studentId
+// -------------------------------------
+function getResumeStudentId() {
+  const hash = window.location.hash || '';
+  const parts = hash.split('/');
+  const idx = parts.findIndex(p => p === 'continua'); // URL tipo #/studente/continua/<id>
+  if (idx !== -1 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1]);
+  return null;
+}
+const studentId =
+  getResumeStudentId() ||
+  localStorage.getItem('studentId') ||
+  (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
+localStorage.setItem('studentId', studentId);
+
+
 
 // Genera link di ripresa e salvalo su Firestore per l'area docente
 const resumeLink = `${window.location.origin}${window.location.pathname}#/continua/${encodeURIComponent(studentId)}`;
