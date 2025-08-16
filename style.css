@@ -144,3 +144,13 @@ main h2 {
   font-weight: bold;
   margin: 20px 0;
 }
+.scheda1-istruzioni {
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+.scheda1-esempio {
+  text-align: center;
+  font-weight: bold;
+  margin: 25px 0 15px 0; /* spazio sopra e sotto */
+}
