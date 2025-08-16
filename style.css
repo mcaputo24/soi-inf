@@ -123,3 +123,10 @@ main h2 {
 .card h2 {
   text-align: center !important;
 }
+.card h1,
+.card h2 {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
