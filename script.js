@@ -62,6 +62,8 @@ const categorie = {
   ]
 };
 
+window.categorie = categorie;
+
 // -------------------------------------
 // Utility: recupero/creazione studentId
 // -------------------------------------
