@@ -166,3 +166,9 @@ main h2 {
   font-size: 1.2em;   /* leggermente più piccolo del titolo mappa */
   margin: 25px 0 20px 0; /* distanziato sopra e sotto */
 }
+.scheda1-domanda {
+  text-align: left;         /* restano allineate a sinistra per leggibilità */
+  font-weight: bold;
+  font-size: 1.1em;
+  margin: 25px 0 10px 0;    /* spaziatura sopra e sotto */
+}
