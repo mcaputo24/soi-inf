@@ -134,3 +134,13 @@ main h2 {
 .scheda-title {
   text-align: center;
 }
+.scheda1-intro {
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+.scheda1-aggettivi-titolo {
+  text-align: center;
+  font-weight: bold;
+  margin: 20px 0;
+}
