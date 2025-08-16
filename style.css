@@ -115,3 +115,7 @@ a {
 #pdf-btn:hover {
   background-color: #0b7dda;
 }
+main h1,
+main h2 {
+  text-align: center;
+}
