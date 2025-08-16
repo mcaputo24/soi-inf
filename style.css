@@ -119,3 +119,7 @@ main h1,
 main h2 {
   text-align: center !important;
 }
+.card h1,
+.card h2 {
+  text-align: center !important;
+}
