@@ -160,3 +160,9 @@ main h2 {
   font-size: 1.4em;   /* un po' più grande */
   margin: 30px 0 20px 0; /* spazio sopra e sotto */
 }
+.scheda1-tabella-aggettivi {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;   /* leggermente più piccolo del titolo mappa */
+  margin: 25px 0 20px 0; /* distanziato sopra e sotto */
+}
