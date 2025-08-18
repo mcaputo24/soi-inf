@@ -399,6 +399,7 @@ function generaSoloPDF() {
 
 // --- Listener pulsanti ---
 if (saveBtn) saveBtn.addEventListener('click', salvaSoloFirebase);
+// Pulsante PDF (versione con paginazione CORRETTA)
 if (pdfBtn) {
   pdfBtn.addEventListener('click', (event) => {
     event.preventDefault();
@@ -433,17 +434,19 @@ if (pdfBtn) {
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       
-      let heightLeft = pdfHeight;
       let position = 0;
-      const pageHeight = pdf.internal.pageSize.getHeight();
+      let heightLeft = pdfHeight;
 
+      // 3. Aggiungi la prima pagina
       pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
       heightLeft -= pageHeight;
 
+      // 4. Aggiungi le pagine successive (LOGICA CORRETTA)
       while (heightLeft > 0) {
-        position = -heightLeft; // La posizione y dell'immagine deve essere negativa
+        position -= pageHeight; // Sposta la "visuale" dell'immagine in alto di una pagina
         pdf.addPage();
         pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
         heightLeft -= pageHeight;
@@ -455,7 +458,7 @@ if (pdfBtn) {
       alert("❌ Si è verificato un errore durante la creazione del PDF.");
       console.error("Errore durante la generazione del PDF:", error);
     }).finally(() => {
-      // 4. Ripristina il pulsante e il cursore
+      // 5. Ripristina il pulsante e il cursore
       document.body.style.cursor = 'default';
       pdfBtn.textContent = 'Scarica PDF';
       pdfBtn.disabled = false;
