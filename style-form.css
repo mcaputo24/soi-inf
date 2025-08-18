@@ -252,6 +252,7 @@ ul.work-modes li:nth-child(4) { background-color: var(--pastel-green); }
   background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+  margin-bottom: 30px; /* <-- AGGIUNGI QUESTA RIGA */
 }
 .reflection-question p {
   font-weight: bold;
