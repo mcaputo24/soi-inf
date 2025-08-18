@@ -359,3 +359,43 @@ button:hover {
   padding: 5px;
   box-sizing: border-box;
 }
+.scheda1-istruzioni {
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+.scheda1-esempio {
+  text-align: center;
+  font-weight: bold;
+  margin: 25px 0 15px 0; /* spazio sopra e sotto */
+}
+/* Stile box per Scheda 3 */
+ul.work-modes {
+  padding-left: 0;
+  margin: 20px 0;
+  list-style: none;
+}
+
+ul.work-modes li {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  font-size: 16px;
+  text-align: left;
+}
+
+/* Colori pastello diversi per ogni box */
+ul.work-modes li:nth-child(1) {
+  background-color: #eaf7fc; /* azzurro pastello */
+}
+ul.work-modes li:nth-child(2) {
+  background-color: #fef6e4; /* beige pastello */
+}
+ul.work-modes li:nth-child(3) {
+  background-color: #f3f0ff; /* lilla pastello */
+}
+ul.work-modes li:nth-child(4) {
+  background-color: #e9f8ef; /* verde pastello */
+}
