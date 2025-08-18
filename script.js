@@ -510,7 +510,7 @@ function avviaPreloadQuandoDOMPronto(id) {
 
 function showSaveMessage() {
   const msg = document.createElement('div');
-  msg.textContent = "Dati salvati";
+  msg.textContent = "✅ Dati salvati correttamente!";
   msg.style.position = "fixed";
   msg.style.bottom = "20px";
   msg.style.right = "20px";
@@ -520,9 +520,20 @@ function showSaveMessage() {
   msg.style.borderRadius = "5px";
   msg.style.fontSize = "14px";
   msg.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
+  msg.style.zIndex = "9999";
+
+  // Bottone di chiusura
+  const closeBtn = document.createElement("span");
+  closeBtn.textContent = " ✖";
+  closeBtn.style.cursor = "pointer";
+  closeBtn.style.marginLeft = "10px";
+  closeBtn.style.fontWeight = "bold";
+  closeBtn.onclick = () => msg.remove();
+
+  msg.appendChild(closeBtn);
   document.body.appendChild(msg);
-  setTimeout(() => msg.remove(), 2000);
 }
+
 
 
 // --------------------------
@@ -539,7 +550,7 @@ avviaPreloadQuandoDOMPronto(resumeId);
 document.getElementById("save-btn").addEventListener("click", () => {
   saveData()  // <-- qui resta la tua funzione di salvataggio su Firebase
     .then(() => {
-      alert("✅ Dati salvati correttamente!");
+      showSaveMessage(); // <-- box verde fisso
     })
     .catch(err => {
       console.error("Errore durante il salvataggio", err);
