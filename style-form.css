@@ -484,3 +484,11 @@ ul.work-modes li:nth-child(4) {
   font-size: 1.1em;
   margin-bottom: 10px;
 }
+/* Uniforma tutta la Scheda 3 dentro la larghezza della card */
+#checkbox-area,
+.flag-summary,
+.reflection-question {
+  max-width: 900px;   /* stessa larghezza delle card */
+  margin: 20px auto;  /* centrato e con margine sopra e sotto */
+  display: block;
+}
