@@ -1,20 +1,45 @@
-/* ----- RESET BASE ----- */
+/* === STILE SEMPLIFICATO E CORRETTO === */
+
+/* --- 1. VARIABILI GLOBALI E RESET --- */
+:root {
+  --color-primary: #1d3557;
+  --color-background: #f2f4f8;
+  --color-card-bg: #ffffff;
+  --color-text: #333;
+  --color-border: #ccc;
+  --color-save: #4CAF50;
+  --color-pdf: #2196F3;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ----- BODY / FONT ----- */
+/* --- 2. STILI GENERALI (BODY, TYPOGRAPHY, LINKS) --- */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f2f4f8;
-  color: #333;
+  color: var(--color-text);
   line-height: 1.6;
   padding: 30px;
+  background: url("sfondo-simpatica.png") no-repeat center center fixed;
+  background-size: cover;
 }
 
-/* ----- HEADER / LOGO CENTRATO ----- */
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+  display: block;
+}
+
+/* Titoli principali o di scheda, sempre centrati */
+h1, h2, .scheda-title {
+  text-align: center;
+  color: var(--color-primary);
+}
+
+/* --- 3. LAYOUT PRINCIPALE (HEADER, LISTE) --- */
 header {
   display: flex;
   flex-direction: column;
@@ -31,43 +56,90 @@ header img {
 
 header h1 {
   font-size: 26px;
-  color: #1d3557;
 }
 
-
-/* ----- LINKS / LISTE ----- */
-ul {
+/* Usato per la lista di link nella pagina principale */
+ul.link-list {
   list-style: none;
   max-width: 600px;
   margin: 0 auto;
   padding: 0;
 }
 
-li {
-  background: #ffffff;
-  border: 1px solid #ccc;
+ul.link-list li {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
   padding: 15px;
   margin: 10px 0;
-  text-align: center;
   font-size: 18px;
   border-radius: 8px;
   transition: background-color 0.3s;
 }
 
-li:hover {
+ul.link-list li:hover {
   background-color: #e0f0ff;
 }
 
-a {
-  text-decoration: none;
-  color: #1d3557;
-  display: block;
+/* --- 4. COMPONENTI RIUTILIZZABILI (PAGE-HEADER, BUTTONS) --- */
+
+/* Card generica per header di pagina o sezioni speciali */
+.page-header {
+  background: var(--color-card-bg);
+  padding: 24px;
+  margin: 0 auto 40px auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  text-align: center;
 }
 
-/* ----- LOGIN BOX ----- */
+/* Stile base per tutti i bottoni */
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Modificatori di colore per i bottoni */
+.button--save {
+  background-color: var(--color-save);
+}
+.button--save:hover {
+  background-color: #45a049;
+}
+
+.button--pdf {
+  background-color: var(--color-pdf);
+}
+.button--pdf:hover {
+  background-color: #0b7dda;
+}
+
+/* Titolo per una sezione interna a una scheda */
+.section-title {
+  text-align: center;
+  font-weight: bold;
+  margin: 25px 0 20px 0;
+}
+.section-title--large {
+  font-size: 1.4em;
+  margin: 30px 0 20px 0;
+}
+.section-title--medium {
+  font-size: 1.2em;
+}
+
+/* --- 5. STILI SPECIFICI (LOGIN, FORM, SCHEDA 1) --- */
+
 .login-box {
   max-width: 400px;
 }
+
 .anagrafica-grid {
   display: flex;
   flex-wrap: wrap;
@@ -81,69 +153,15 @@ a {
   padding: 5px;
   box-sizing: border-box;
 }
+
 .form-actions {
   display: flex;
-  gap: 10px; /* distanza tra pulsanti */
+  gap: 10px;
   margin-top: 20px;
 }
 
-.form-actions button {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-/* Pulsante Salva */
-#save-btn {
-  background-color: #4CAF50; /* verde */
-  color: white;
-}
-
-#save-btn:hover {
-  background-color: #45a049;
-}
-
-/* Pulsante PDF */
-#pdf-btn {
-  background-color: #2196F3; /* blu */
-  color: white;
-}
-
-#pdf-btn:hover {
-  background-color: #0b7dda;
-}
-main h1,
-main h2 {
-  text-align: center !important;
-}
-.card h1,
-.card h2 {
-  text-align: center !important;
-}
-.card h1,
-.card h2 {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-}
-.scheda-title {
-  text-align: center;
-}
-.scheda1-intro {
-  text-align: justify;
-  margin-bottom: 20px;
-}
-
-.scheda1-aggettivi-titolo {
-  text-align: center;
-  font-weight: bold;
-  margin: 20px 0;
-}
+/* Stili specifici per i testi della Scheda 1 */
+.scheda1-intro,
 .scheda1-istruzioni {
   text-align: justify;
   margin-bottom: 20px;
@@ -152,44 +170,12 @@ main h2 {
 .scheda1-esempio {
   text-align: center;
   font-weight: bold;
-  margin: 25px 0 15px 0; /* spazio sopra e sotto */
+  margin: 25px 0 15px 0;
 }
-.scheda1-mappa-titolo {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.4em;   /* un po' più grande */
-  margin: 30px 0 20px 0; /* spazio sopra e sotto */
-}
-.scheda1-tabella-aggettivi {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.2em;   /* leggermente più piccolo del titolo mappa */
-  margin: 25px 0 20px 0; /* distanziato sopra e sotto */
-}
-.scheda1-domanda {
-  text-align: left;         /* restano allineate a sinistra per leggibilità */
-  font-weight: bold;
-  font-size: 1.1em;
-  margin: 25px 0 10px 0;    /* spaziatura sopra e sotto */
-}
+
 .domanda-label {
   text-align: left;
   font-weight: bold;
   font-size: 1.1em;
   margin: 25px 0 10px 0;
-}
-body {
-  background: url("sfondo-simpatica.png") no-repeat center center fixed;
-  background-size: cover;
-  font-family: 'Arial', sans-serif;
-}
-/* Inserisci questa nuova regola sotto lo stile della classe .card */
-.page-header {
-  background: var(--color-card-bg);
-  padding: 24px;
-  margin: 0 auto 40px auto;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  max-width: 900px;
-  text-align: center; /* Centra il contenuto (logo e titolo) */
 }
