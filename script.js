@@ -74,16 +74,23 @@ function getResumeStudentId() {
   if (idx !== -1 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1]);
   return null;
 }
+
 const studentId =
   getResumeStudentId() ||
   localStorage.getItem('studentId') ||
   (window.crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
+
 localStorage.setItem('studentId', studentId);
 
-
-
-// Genera link di ripresa e salvalo su Firestore per l'area docente
+// Genera link di ripresa
 const resumeLink = `${window.location.origin}${window.location.pathname}#/continua/${encodeURIComponent(studentId)}`;
+
+// Mostra il link di ripresa nella card
+const recoveryEl = document.getElementById("recovery-url");
+if (recoveryEl) {
+  recoveryEl.textContent = resumeLink;
+  recoveryEl.href = resumeLink;
+}
 
 // Salvataggio asincrono, non blocca il resto
 (async () => {
@@ -528,3 +535,48 @@ window.addEventListener('DOMContentLoaded', () => {
 // Aspetta che il DOM sia pronto e poi pre-carica dati
 const resumeId = studentId; // abbiamo già deciso l'id in alto
 avviaPreloadQuandoDOMPronto(resumeId);
+// --- Salvataggio ---
+document.getElementById("save-btn").addEventListener("click", () => {
+  saveData()  // <-- qui resta la tua funzione di salvataggio su Firebase
+    .then(() => {
+      alert("✅ Dati salvati correttamente!");
+    })
+    .catch(err => {
+      console.error("Errore durante il salvataggio", err);
+      alert("❌ Errore nel salvataggio. Riprova.");
+    });
+});
+
+// --- Scarica PDF come screenshot del questionario ---
+document.getElementById("pdf-btn").addEventListener("click", () => {
+  html2canvas(document.body).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("questionario.pdf");
+  });
+});
+
+// --- Torna al menu principale ---
+document.getElementById("menu-btn").addEventListener("click", () => {
+  // Se l'index.html è nella stessa cartella:
+  window.location.href = "./index.html";
+  // Se invece vuoi tornare alla home del sito Netlify:
+  // window.location.href = "/";
+});
+
+// --- Link di recupero ---
+function setRecoveryLink(studentId) {
+  const recoveryUrl = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
+  const recoveryLinkEl = document.getElementById("recovery-url");
+  if (recoveryLinkEl) {
+    recoveryLinkEl.textContent = recoveryUrl;
+    recoveryLinkEl.href = recoveryUrl;
+  }
+}
+
+// ESEMPIO: dopo aver creato o recuperato lo studentId al login/avvio
+// chiama setRecoveryLink(studentId);
