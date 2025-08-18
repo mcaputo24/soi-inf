@@ -599,3 +599,12 @@ button.menu-btn:hover {
   color: #0077cc;
   word-break: break-all;
 }
+.card {
+  border-top: none !important;
+}
+hr {
+  display: none;
+}
+.recovery-link.card {
+  margin-top: 20px !important; /* riduce lo spazio */
+}
