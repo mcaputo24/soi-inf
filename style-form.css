@@ -393,3 +393,24 @@ ul.work-modes li:nth-child(3) {
 ul.work-modes li:nth-child(4) {
   background-color: #e9f8ef; /* verde pastello */
 }
+.scheda3-intro {
+  text-align: justify;
+  margin: 25px 0 15px 0;
+  font-size: 1.05em;
+}
+
+.scheda3-titolo {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.3em;
+  background-color: #f0f4ff; /* azzurro chiarissimo */
+  padding: 10px;
+  border-radius: 6px;
+  margin: 25px 0 15px 0;
+}
+
+.scheda3-istruzioni {
+  text-align: justify;
+  font-weight: bold;
+  margin: 15px 0 25px 0;
+}
