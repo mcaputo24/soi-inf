@@ -178,3 +178,8 @@ main h2 {
   font-size: 1.1em;
   margin: 25px 0 10px 0;
 }
+body {
+  background: url("sfondo-simpatica.png") no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Arial', sans-serif;
+}

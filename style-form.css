@@ -519,3 +519,51 @@ ul.work-modes li:nth-child(4) {
   background-color: #f0f4ff; /* azzurro chiarissimo */
   color: #1d3557;
 }
+/* Pulsanti azione */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+button.save-btn,
+button.pdf-btn,
+button.menu-btn {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button.save-btn:hover,
+button.pdf-btn:hover,
+button.menu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.recovery-link {
+  max-width: 900px;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.recovery-link table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.recovery-link th,
+.recovery-link td {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.recovery-link th {
+  background: #f0f0f0;
+}
