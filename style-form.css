@@ -362,6 +362,8 @@ ul.work-modes {
   padding-left: 0;
   margin: 20px 0;
   list-style: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 ul.work-modes li {
