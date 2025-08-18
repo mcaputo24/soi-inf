@@ -414,3 +414,73 @@ ul.work-modes li:nth-child(4) {
   font-weight: bold;
   margin: 15px 0 25px 0;
 }
+/* --- BOX checkbox e tabella (Scheda 3) --- */
+#checkbox-area {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Colori pastello per i blocchi di checkbox */
+.checkbox-column:nth-child(1) {
+  background-color: #eaf7fc; /* azzurro pastello */
+  border-radius: 8px;
+  padding: 15px;
+}
+.checkbox-column:nth-child(2) {
+  background-color: #fef6e4; /* beige pastello */
+  border-radius: 8px;
+  padding: 15px;
+}
+.checkbox-column:nth-child(3) {
+  background-color: #f3f0ff; /* lilla pastello */
+  border-radius: 8px;
+  padding: 15px;
+}
+.checkbox-column:nth-child(4) {
+  background-color: #e9f8ef; /* verde pastello */
+  border-radius: 8px;
+  padding: 15px;
+}
+
+/* Tabella riepilogo con colori */
+.flag-summary th,
+.flag-summary td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.flag-summary th {
+  background-color: #f0f0f0;
+}
+
+#sum-gente {
+  background-color: #eaf7fc; /* azzurro pastello */
+}
+#sum-dati {
+  background-color: #fef6e4; /* beige pastello */
+}
+#sum-idee {
+  background-color: #f3f0ff; /* lilla pastello */
+}
+#sum-cose {
+  background-color: #e9f8ef; /* verde pastello */
+}
+
+/* Domanda finale evidenziata */
+.reflection-question {
+  margin-top: 35px;
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.reflection-question p {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
