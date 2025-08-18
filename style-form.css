@@ -1,9 +1,30 @@
-/* === STILE PER IL FORM DI ORIENTAMENTO === */
+/* === STILE UNIFICATO PER IL FORM DI ORIENTAMENTO === */
+
+/* --- 1. VARIABILI GLOBALI E STILI DI BASE --- */
+:root {
+  /* Colori Principali */
+  --color-primary: #007bff;
+  --color-primary-hover: #0056b3;
+  --color-danger: #dc3545;
+  --color-text: #333;
+  --color-heading: #1d3557;
+  --color-background: #f4f7fa;
+  --color-card-bg: #fff;
+  --color-border: #ccc;
+
+  /* Colori Pastello */
+  --pastel-blue: #eaf7fc;
+  --pastel-beige: #fef6e4;
+  --pastel-lilac: #f3f0ff;
+  --pastel-green: #e9f8ef;
+  --pastel-light-blue-bg: #f0f4ff;
+}
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7fa;
-  color: #333;
+  line-height: 1.6;
+  background-color: var(--color-background);
+  color: var(--color-text);
   padding: 20px;
   margin: 0;
 }
@@ -13,19 +34,70 @@ main {
   margin: 0 auto;
 }
 
+hr {
+  display: none; /* Rimosso per pulizia layout */
+}
+
+
+/* --- 2. LAYOUT E COMPONENTI PRINCIPALI --- */
+
 .card {
-  background: #fff;
+  background: var(--color-card-bg);
   padding: 24px;
-  margin: 30px 0;
-  border-radius: 8px;
+  margin: 0 auto 40px auto;
+  border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+}
+
+/* Card specifica per il link di recupero */
+.recovery-link.card {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.anagrafica-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.anagrafica-grid label {
+  flex: 1 1 200px;
+}
+
+
+/* --- 3. TIPOGRAFIA --- */
+
+h2, h3, h4 {
+  color: var(--color-heading);
+  margin-top: 1.5em;
+  margin-bottom: 16px;
 }
 
 h2 {
-  margin-bottom: 16px;
   font-size: 24px;
-  color: #1d3557;
 }
+
+.scheda-title {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 50px 0 25px 0;
+  background-color: var(--pastel-light-blue-bg);
+  color: var(--color-heading);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.recovery-link a {
+  font-weight: bold;
+  color: #0077cc;
+  word-break: break-all;
+}
+
+
+/* --- 4. ELEMENTI FORM --- */
 
 label {
   display: block;
@@ -36,14 +108,16 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="date"],
+input[type="number"],
 textarea {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
   box-sizing: border-box;
   margin-top: 8px;
+  font-family: inherit;
 }
 
 textarea {
@@ -57,47 +131,218 @@ fieldset {
   padding: 0;
 }
 
-button#save-submit-btn {
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  margin: 40px auto;
-  padding: 15px;
-  font-size: 18px;
+
+/* --- 5. BOTTONI --- */
+
+button {
+  padding: 12px 20px;
+  margin: 1rem 0.5rem 0 0;
+  font-size: 1rem;
   font-weight: bold;
-  color: #fff;
-  background-color: #007bff;
+  color: white;
+  background-color: var(--color-primary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-button#save-submit-btn:hover {
-  background-color: #0056b3;
+button:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  margin: 16px 0;
+/* Contenitore per bottoni di azione */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 30px 0;
 }
 
-/* Tabelle riepilogo */
-.flag-summary {
+/* Stile specifico per i bottoni con gradiente */
+.action-buttons button {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  border-radius: 25px;
+  padding: 12px 24px;
+}
+
+
+/* --- 6. TABELLE --- */
+
+.responsive-table,
+.flag-summary,
+.recovery-link table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-}
-.flag-summary th,
-.flag-summary td {
-  border: 1px solid #ccc;
-  padding: 12px;
-  text-align: center;
-  background-color: #f9f9f9;
+  font-size: 0.95rem;
 }
 
-/* Responsività */
+.responsive-table th,
+.responsive-table td,
+.flag-summary th,
+.flag-summary td,
+.recovery-link th,
+.recovery-link td {
+  border: 1px solid var(--color-border);
+  padding: 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.responsive-table th,
+.flag-summary th,
+.recovery-link th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Colori specifici per la tabella riepilogo */
+#sum-gente { background-color: var(--pastel-blue); }
+#sum-dati  { background-color: var(--pastel-beige); }
+#sum-idee  { background-color: var(--pastel-lilac); }
+#sum-cose  { background-color: var(--pastel-green); }
+
+
+/* --- 7. COMPONENTI SPECIFICI PER SCHEDE --- */
+
+/* Checkbox in colonne */
+.checkbox-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 20px;
+}
+.checkbox-column {
+  flex: 1 1 45%;
+  min-width: 300px;
+  border-radius: 8px;
+  padding: 15px;
+}
+.checkbox-column:nth-child(1) { background-color: var(--pastel-blue); }
+.checkbox-column:nth-child(2) { background-color: var(--pastel-beige); }
+.checkbox-column:nth-child(3) { background-color: var(--pastel-lilac); }
+.checkbox-column:nth-child(4) { background-color: var(--pastel-green); }
+
+/* Stili per le liste di Scheda 3 */
+ul.work-modes {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0;
+}
+ul.work-modes li {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+ul.work-modes li:nth-child(1) { background-color: var(--pastel-blue); }
+ul.work-modes li:nth-child(2) { background-color: var(--pastel-beige); }
+ul.work-modes li:nth-child(3) { background-color: var(--pastel-lilac); }
+ul.work-modes li:nth-child(4) { background-color: var(--pastel-green); }
+
+/* Box domanda di riflessione */
+.reflection-question {
+  margin-top: 35px;
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.reflection-question p {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+
+/* --- 8. STILI MAPPA (CYTOSCAPE) --- */
+
+.cy-node {
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+}
+.cy-node.io-sono { background-color: #005a87; }
+.cy-node.aggettivo { background-color: #c15c2d; }
+.cy-node.attivita { background-color: #3a7d44; }
+.cy-node.contesto { background-color: #5bc0de; color: #000; }
+
+
+/* --- 9. PANNELLO DI CONTROLLO --- */
+
+#controls-content {
+  background: #f9f9f9;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 350px;
+  margin-top: 20px;
+}
+#controls-content h4 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #003366;
+}
+#controls-content .form-group {
+  margin-bottom: 16px;
+}
+#controls-content button.delete-btn {
+  background-color: var(--color-danger);
+}
+
+
+/* --- 10. RESPONSIVITÀ (MEDIA QUERIES) --- */
+
+@media screen and (max-width: 768px) {
+  .card {
+    margin-bottom: 25px;
+  }
+  .scheda-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+  }
+  
+  /* Comportamento tabelle su mobile */
+  .responsive-table thead {
+    display: none;
+  }
+  .responsive-table, 
+  .responsive-table tbody, 
+  .responsive-table tr, 
+  .responsive-table td {
+    display: block;
+    width: 100%;
+  }
+  .responsive-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+  .responsive-table td {
+    padding-left: 50%;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+  .responsive-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+}
+
 @media screen and (max-width: 600px) {
   body {
     padding: 12px;
@@ -108,503 +353,7 @@ img {
   h2 {
     font-size: 20px;
   }
-  button#save-submit-btn {
+  button {
     font-size: 16px;
   }
-}
-.checkbox-columns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  margin-top: 20px;
-}
-
-.checkbox-column {
-  flex: 1 1 45%;
-  min-width: 300px;
-}
-.checkbox-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 15px;
-  line-height: 1.4;
-}
-/* NODI MAPPA */
-.cy-node {
-  border-radius: 8px;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  color: white;
-}
-
-/* Specifici */
-.cy-node.io-sono {
-  background-color: #005a87;
-  text-outline-color: #005a87;
-}
-
-.cy-node.aggettivo {
-  background-color: #c15c2d;
-  text-outline-color: #c15c2d;
-}
-
-.cy-node.attivita {
-  background-color: #3a7d44;
-  text-outline-color: #3a7d44;
-}
-
-.cy-node.contesto {
-  background-color: #5bc0de;
-  color: #000;
-  text-outline-color: #5bc0de;
-}
-
-/* PANNELO DI CONTROLLO */
-#controls-content {
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 350px;
-  font-family: 'Segoe UI', sans-serif;
-  margin-top: 20px;
-}
-
-#controls-content h4 {
-  margin-bottom: 12px;
-  font-size: 18px;
-  color: #003366;
-}
-
-#controls-content .form-group {
-  margin-bottom: 16px;
-}
-
-#controls-content input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-#controls-content button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  font-weight: bold;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-#controls-content button:hover {
-  opacity: 0.9;
-}
-
-#controls-content button.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-#controls-content button:not(.delete-btn) {
-  background-color: #007bff;
-  color: white;
-}
-/* ✅ Struttura base della pagina */
-body {
-  font-family: "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-  color: #222;
-  background-color: #f8f9fa;
-  padding: 1rem;
-}
-
-/* ✅ Card centrale */
-.card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* ✅ Titoli */
-.card h2, .card h3, .card h4 {
-  color: #2c3e50;
-  margin-top: 1.5em;
-}
-
-/* ✅ Tabelle */
-.responsive-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
-  font-size: 0.95rem;
-}
-
-.responsive-table th,
-.responsive-table td {
-  border: 1px solid #ccc;
-  padding: 12px;
-  vertical-align: top;
-  text-align: left;
-}
-
-.responsive-table th {
-  background-color: #f0f0f0;
-  color: #333;
-  font-weight: bold;
-}
-
-/* ✅ Radio button */
-.responsive-table input[type="radio"] {
-  margin-right: 8px;
-  transform: scale(1.1);
-}
-
-.responsive-table label {
-  display: block;
-  margin-bottom: 6px;
-}
-
-/* ✅ Textarea */
-textarea {
-  width: 100%;
-  padding: 10px;
-  font-family: inherit;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  resize: vertical;
-}
-
-/* ✅ Input */
-input[type="text"], input[type="date"], input[type="number"] {
-  padding: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-top: 4px;
-}
-
-/* ✅ Pulsanti */
-button {
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  margin: 1rem 0.5rem 0 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-/* ✅ Responsive su mobile */
-@media screen and (max-width: 768px) {
-  .responsive-table thead {
-    display: none;
-  }
-
-  .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
-    display: block;
-    width: 100%;
-  }
-
-  .responsive-table td {
-    margin-bottom: 1rem;
-    padding-left: 50%;
-    position: relative;
-  }
-
-  .responsive-table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 1rem;
-    top: 0;
-    font-weight: bold;
-    white-space: nowrap;
-  }
-}
-.anagrafica-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-.anagrafica-grid label {
-  flex: 1 1 200px;
-}
-.anagrafica-grid input {
-  width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-}
-.scheda1-istruzioni {
-  text-align: justify;
-  margin-bottom: 20px;
-}
-
-.scheda1-esempio {
-  text-align: center;
-  font-weight: bold;
-  margin: 25px 0 15px 0; /* spazio sopra e sotto */
-}
-/* Stile box per Scheda 3 */
-ul.work-modes {
-  padding-left: 0;
-  margin: 20px 0;
-  list-style: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-ul.work-modes li {
-  width: 100%;               /* occupa tutta la larghezza */
-  display: block;            /* per sicurezza */
-  box-sizing: border-box;     /* include padding nel calcolo della larghezza */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 18px;
-  margin-bottom: 16px;
-  line-height: 1.6;
-  font-size: 16px;
-  text-align: left;
-}
-
-
-/* Colori pastello diversi per ogni box */
-ul.work-modes li:nth-child(1) {
-  background-color: #eaf7fc; /* azzurro pastello */
-}
-ul.work-modes li:nth-child(2) {
-  background-color: #fef6e4; /* beige pastello */
-}
-ul.work-modes li:nth-child(3) {
-  background-color: #f3f0ff; /* lilla pastello */
-}
-ul.work-modes li:nth-child(4) {
-  background-color: #e9f8ef; /* verde pastello */
-}
-.scheda3-intro {
-  text-align: justify;
-  margin: 25px 0 15px 0;
-  font-size: 1.05em;
-}
-
-.scheda3-titolo {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.3em;
-  background-color: #f0f4ff; /* azzurro chiarissimo */
-  padding: 10px;
-  border-radius: 6px;
-  margin: 25px 0 15px 0;
-}
-
-.scheda3-istruzioni {
-  text-align: justify;
-  font-weight: bold;
-  margin: 15px 0 25px 0;
-}
-/* --- BOX checkbox e tabella (Scheda 3) --- */
-#checkbox-area {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-}
-
-/* Colori pastello per i blocchi di checkbox */
-.checkbox-column:nth-child(1) {
-  background-color: #eaf7fc; /* azzurro pastello */
-  border-radius: 8px;
-  padding: 15px;
-}
-.checkbox-column:nth-child(2) {
-  background-color: #fef6e4; /* beige pastello */
-  border-radius: 8px;
-  padding: 15px;
-}
-.checkbox-column:nth-child(3) {
-  background-color: #f3f0ff; /* lilla pastello */
-  border-radius: 8px;
-  padding: 15px;
-}
-.checkbox-column:nth-child(4) {
-  background-color: #e9f8ef; /* verde pastello */
-  border-radius: 8px;
-  padding: 15px;
-}
-
-/* Tabella riepilogo con colori */
-.flag-summary th,
-.flag-summary td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-}
-
-.flag-summary th {
-  background-color: #f0f0f0;
-}
-
-#sum-gente {
-  background-color: #eaf7fc; /* azzurro pastello */
-}
-#sum-dati {
-  background-color: #fef6e4; /* beige pastello */
-}
-#sum-idee {
-  background-color: #f3f0ff; /* lilla pastello */
-}
-#sum-cose {
-  background-color: #e9f8ef; /* verde pastello */
-}
-
-/* Domanda finale evidenziata */
-.reflection-question {
-  margin-top: 35px;
-  padding: 20px;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.reflection-question p {
-  font-weight: bold;
-  font-size: 1.1em;
-  margin-bottom: 10px;
-}
-/* Uniforma tutta la Scheda 3 dentro la larghezza della card */
-#checkbox-area,
-.flag-summary,
-.reflection-question {
-  max-width: 900px;   /* stessa larghezza delle card */
-  margin: 20px auto;  /* centrato e con margine sopra e sotto */
-  display: block;
-}
-.scheda4-domanda {
-  text-align: left;
-  font-weight: bold;
-  font-size: 1.1em;
-  margin: 25px 0 10px 0; /* spazio sopra e sotto */
-}
-.scheda-title {
-  text-align: center;
-  font-size: 1.4em;
-  font-weight: bold;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 30px 0 20px 0;
-  background-color: #f0f4ff; /* azzurro chiarissimo */
-  color: #1d3557;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-.card h2.scheda-title {
-  text-align: center !important;
-  font-size: 1.5em !important;
-  font-weight: bold !important;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 30px 0 20px 0;
-  background-color: #f0f4ff; /* azzurro chiarissimo */
-  color: #1d3557;
-}
-/* Pulsanti azione */
-.action-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin: 30px 0;
-}
-
-button.save-btn,
-button.pdf-btn,
-button.menu-btn {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: white;
-  font-weight: bold;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-button.save-btn:hover,
-button.pdf-btn:hover,
-button.menu-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-.recovery-link {
-  max-width: 900px;
-  margin: 30px auto;
-  text-align: center;
-}
-
-.recovery-link table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.recovery-link th,
-.recovery-link td {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-
-.recovery-link th {
-  background: #f0f0f0;
-}
-/* Distanziamento uniforme tra schede */
-.card {
-  margin-bottom: 40px;  /* spazio di default (desktop) */
-}
-
-/* Distanziamento extra per i titoli delle schede */
-.scheda-title {
-  margin-top: 50px;
-  margin-bottom: 25px;
-}
-
-/* Variante ottimizzata per schermi piccoli (smartphone) */
-@media (max-width: 768px) {
-  .card {
-    margin-bottom: 25px; /* meno spazio tra schede */
-  }
-
-  .scheda-title {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    font-size: 1.2em; /* titoli leggermente più compatti */
-  }
-}
-.recovery-link {
-  text-align: center;
-  margin-top: 30px;
-}
-.recovery-link a {
-  font-weight: bold;
-  color: #0077cc;
-  word-break: break-all;
-}
-.card {
-  border-top: none !important;
-}
-hr {
-  display: none;
-}
-.recovery-link.card {
-  margin-top: 20px !important; /* riduce lo spazio */
 }
