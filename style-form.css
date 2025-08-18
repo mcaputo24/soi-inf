@@ -567,3 +567,26 @@ button.menu-btn:hover {
 .recovery-link th {
   background: #f0f0f0;
 }
+/* Distanziamento uniforme tra schede */
+.card {
+  margin-bottom: 40px;  /* spazio di default (desktop) */
+}
+
+/* Distanziamento extra per i titoli delle schede */
+.scheda-title {
+  margin-top: 50px;
+  margin-bottom: 25px;
+}
+
+/* Variante ottimizzata per schermi piccoli (smartphone) */
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 25px; /* meno spazio tra schede */
+  }
+
+  .scheda-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 1.2em; /* titoli leggermente più compatti */
+  }
+}
