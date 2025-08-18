@@ -399,22 +399,67 @@ function generaSoloPDF() {
 
 // --- Listener pulsanti ---
 if (saveBtn) saveBtn.addEventListener('click', salvaSoloFirebase);
-// MODIFICA QUI: Sostituisci il vecchio listener del PDF con quello nuovo
 if (pdfBtn) {
-  pdfBtn.addEventListener("click", () => {
-    // Aggiungi un piccolo ritardo per assicurarti che tutto sia renderizzato
-    setTimeout(() => {
-      html2canvas(document.body).then(canvas => {
-        const { jsPDF } = window.jspdf; // Assicurati che jsPDF sia disponibile
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("questionario.pdf");
-      });
-    }, 200); // 200ms di ritardo
+  pdfBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+      alert("⚠️ Errore: Le librerie per creare il PDF non sono state caricate correttamente.");
+      return;
+    }
+
+    // 1. Mostra un indicatore di caricamento
+    document.body.style.cursor = 'wait';
+    pdfBtn.textContent = 'Creazione PDF in corso...';
+    pdfBtn.disabled = true;
+
+    // 2. Opzioni per html2canvas
+    const options = {
+      scale: 1,
+      width: document.documentElement.scrollWidth,
+      height: document.documentElement.scrollHeight,
+      windowWidth: document.documentElement.scrollWidth,
+      windowHeight: document.documentElement.scrollHeight,
+      scrollX: 0,
+      scrollY: 0,
+    };
+
+    window.scrollTo(0, 0);
+
+    html2canvas(document.body, options).then(canvas => {
+      const imgData = canvas.toDataURL('image/jpeg', 0.75);
+      
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = -heightLeft; // La posizione y dell'immagine deve essere negativa
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+      }
+      
+      pdf.save('questionario_completo.pdf');
+
+    }).catch(error => {
+      alert("❌ Si è verificato un errore durante la creazione del PDF.");
+      console.error("Errore durante la generazione del PDF:", error);
+    }).finally(() => {
+      // 4. Ripristina il pulsante e il cursore
+      document.body.style.cursor = 'default';
+      pdfBtn.textContent = 'Scarica PDF';
+      pdfBtn.disabled = false;
+    });
   });
 }
 // AGGIUNGI QUI: Il listener per il pulsante del menu
