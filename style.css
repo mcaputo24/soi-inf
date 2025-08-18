@@ -172,3 +172,9 @@ main h2 {
   font-size: 1.1em;
   margin: 25px 0 10px 0;    /* spaziatura sopra e sotto */
 }
+.domanda-label {
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin: 25px 0 10px 0;
+}
