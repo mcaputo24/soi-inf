@@ -492,3 +492,9 @@ ul.work-modes li:nth-child(4) {
   margin: 20px auto;  /* centrato e con margine sopra e sotto */
   display: block;
 }
+.scheda4-domanda {
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin: 25px 0 10px 0; /* spazio sopra e sotto */
+}
