@@ -346,7 +346,7 @@ async function salvaSoloFirebase() {
 
     await setDoc(doc(db, 'fase1-studente-anno1', studentId), payload, { merge: true });
     console.log('Dati salvati per studentId:', studentId);
-    alert("✅ Dati salvati correttamente!");
+    showSaveMessage();
   } catch (e) {
     console.error('Errore salvataggio Firebase:', e);
     alert("❌ Errore durante il salvataggio!");
@@ -399,7 +399,31 @@ function generaSoloPDF() {
 
 // --- Listener pulsanti ---
 if (saveBtn) saveBtn.addEventListener('click', salvaSoloFirebase);
-if (pdfBtn) pdfBtn.addEventListener('click', generaSoloPDF);
+// MODIFICA QUI: Sostituisci il vecchio listener del PDF con quello nuovo
+if (pdfBtn) {
+  pdfBtn.addEventListener("click", () => {
+    // Aggiungi un piccolo ritardo per assicurarti che tutto sia renderizzato
+    setTimeout(() => {
+      html2canvas(document.body).then(canvas => {
+        const { jsPDF } = window.jspdf; // Assicurati che jsPDF sia disponibile
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("questionario.pdf");
+      });
+    }, 200); // 200ms di ritardo
+  });
+}
+// AGGIUNGI QUI: Il listener per il pulsante del menu
+const menuBtn = document.getElementById('menu-btn');
+if (menuBtn) {
+  menuBtn.addEventListener("click", () => {
+    window.location.href = "./index.html";
+  });
+}
 
 
 // --------------------------
@@ -546,38 +570,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // Aspetta che il DOM sia pronto e poi pre-carica dati
 const resumeId = studentId; // abbiamo già deciso l'id in alto
 avviaPreloadQuandoDOMPronto(resumeId);
-// --- Salvataggio ---
-document.getElementById("save-btn").addEventListener("click", () => {
-  saveData()  // <-- qui resta la tua funzione di salvataggio su Firebase
-    .then(() => {
-      showSaveMessage(); // <-- box verde fisso
-    })
-    .catch(err => {
-      console.error("Errore durante il salvataggio", err);
-      alert("❌ Errore nel salvataggio. Riprova.");
-    });
-});
 
-// --- Scarica PDF come screenshot del questionario ---
-document.getElementById("pdf-btn").addEventListener("click", () => {
-  html2canvas(document.body).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("questionario.pdf");
-  });
-});
-
-// --- Torna al menu principale ---
-document.getElementById("menu-btn").addEventListener("click", () => {
-  // Se l'index.html è nella stessa cartella:
-  window.location.href = "./index.html";
-  // Se invece vuoi tornare alla home del sito Netlify:
-  // window.location.href = "/";
-});
 
 // --- Link di recupero ---
 function setRecoveryLink(studentId) {
