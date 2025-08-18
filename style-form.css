@@ -357,3 +357,7 @@ ul.work-modes li:nth-child(4) { background-color: var(--pastel-green); }
     font-size: 16px;
   }
 }
+/* Inserisci questa nuova regola alla fine della sezione LAYOUT */
+.scheda-title + .recovery-link.card {
+  margin-top: 0;
+}

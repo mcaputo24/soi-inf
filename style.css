@@ -183,3 +183,13 @@ body {
   background-size: cover;
   font-family: 'Arial', sans-serif;
 }
+/* Inserisci questa nuova regola sotto lo stile della classe .card */
+.page-header {
+  background: var(--color-card-bg);
+  padding: 24px;
+  margin: 0 auto 40px auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  text-align: center; /* Centra il contenuto (logo e titolo) */
+}
