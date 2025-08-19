@@ -4,6 +4,11 @@ function renderMapDataAsGraph(cyElements) {
   const cyBox = document.createElement('div');
   cyBox.id = 'cy-preview';
   cyBox.style.height = '300px';
+  cyBox.style.width = '100%';
+  cyBox.style.maxWidth = '600px';
+  cyBox.style.border = '1px solid #ccc';
+  cyBox.style.marginTop = '10px';
+  cyBox.style.overflow = 'auto';
   studentAnswers.appendChild(cyBox);
 
   import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
@@ -19,7 +24,10 @@ function renderMapDataAsGraph(cyElements) {
             'background-color': '#007bff',
             'color': '#fff',
             'text-valign': 'center',
-            'text-halign': 'center'
+            'text-halign': 'center',
+            'width': 'label',
+            'height': 'label',
+            'padding': '8px'
           }
         },
         {
@@ -48,7 +56,7 @@ const evaluationForm = document.getElementById('evaluation-form');
 const backButton = document.getElementById('back-button');
 const studentNameTitle = document.getElementById('student-name-title');
 
-// Etichette leggibili per il docente
+// Etichette leggibili
 const etichette = {
   cognome: "Cognome",
   nome: "Nome",
@@ -69,29 +77,24 @@ const etichette = {
   motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te?",
   obiettivi: "Quali obiettivi o sogni vuoi realizzare con questo lavoro?",
   ispirazioni: "Chi ti ispira o ti ha influenzato?",
-  modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?",
-  scuola_post_media: "Quale scuola pensi sia adatta dopo la terza media?",
-  stato_scelta: "Come ti senti di fronte alla scelta dopo la scuola media?",
-  scoperta_finale: "Cosa hai scoperto di te che prima non conoscevi?"
+  modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?"
 };
 
-// Sezioni divise per scheda
+// Sezioni primo anno (solo 4 schede)
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
   'Scheda 1 – Mappa di descrizione di sé': ['agg'],
   'Scheda 2 – Un pensiero sul lavoro': ['cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
   'Scheda 3 – Modi di lavorare': ['scheda3_riflessione','sum-gente','sum-idee','sum-dati','sum-cose'],
-  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare','scuola_post_media'],
-  'Scheda 5 – Come ti senti di fronte alla scelta': ['stato_scelta','scoperta_finale']
+  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare']
 };
 
-// Dimensioni da valutare
+// Dimensioni da valutare (solo Schede 1-4)
 const schede = {
   'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
   'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
   'Scheda 3 – Modi di lavorare': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
-  'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione'],
-  'Scheda 5 – Come ti senti di fronte alla scelta': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
+  'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
 };
 
 async function loadStudentList() {
