@@ -10,70 +10,62 @@
   <header>
     <img src="logo.png" alt="Logo">
     <h1>FASE 1 - Griglia di osservazione della classe</h1>
-    <button id="logout-btn" type="button" class="nav-button danger">Esci</button>
+    <div style="margin-left:auto; display:flex; gap:10px;">
+      <a href="index.html" class="button-primary">Menu principale</a>
+      <button id="logout-btn" type="button" class="button-danger">Logout</button>
+    </div>
   </header>
 
   <main>
-    <p class="intro-text">
+    <p style="max-width: 800px; margin: 0 auto 30px; font-size: 16px; line-height: 1.5;">
       Compila questa griglia riportando le annotazioni più rilevanti emerse
       durante la compilazione delle schede da parte degli studenti, la restituzione in plenaria
       o successivamente alla realizzazione del laboratorio.
     </p>
 
     <!-- Navigazione -->
-    <div class="nav-container">
-      <a href="fase2-docente-anno1.html" class="nav-button">Vai alla Fase 2 – Sintesi individuale</a>
-      <button type="button" id="show-fase3-btn" class="nav-button">Vai alla Fase 3 – Sintesi generale</button>
+    <div style="text-align: center; margin-bottom: 30px;">
+      <a href="fase2-docente-anno1.html" class="button-primary">Vai alla Fase 2 – Sintesi individuale</a>
+      <button type="button" id="show-fase3-btn" class="button-primary">Vai alla Fase 3 – Sintesi generale</button>
     </div>
 
     <form id="fase1-docente-form">
 
-      <!-- Scheda 1 -->
       <div class="card">
         <h2>Scheda 1 – Mappa di descrizione di sé</h2>
-        <p class="help-text">Annota osservazioni su come gli studenti hanno rappresentato se stessi e le proprie caratteristiche personali.</p>
-        <label>Autoconsapevolezza:<br><textarea name="scheda1_autoconsapevolezza" rows="3"></textarea></label><br>
-        <label>Processo decisionale:<br><textarea name="scheda1_processo_decisionale" rows="3"></textarea></label><br>
-        <label>Visione futura:<br><textarea name="scheda1_visione_futura" rows="3"></textarea></label><br>
+        <label>Autoconsapevolezza:<br><textarea name="scheda1_autoconsapevolezza" rows="3"></textarea></label>
+        <label>Processo decisionale:<br><textarea name="scheda1_processo_decisionale" rows="3"></textarea></label>
+        <label>Visione futura:<br><textarea name="scheda1_visione_futura" rows="3"></textarea></label>
         <label>Organizzazione:<br><textarea name="scheda1_organizzazione" rows="3"></textarea></label>
       </div>
 
-      <!-- Scheda 2 -->
       <div class="card">
         <h2>Scheda 2 – Un pensiero sul lavoro</h2>
-        <p class="help-text">Osservazioni sul modo in cui gli studenti riflettono sul significato e sul valore del lavoro.</p>
-        <label>Autoconsapevolezza:<br><textarea name="scheda2_autoconsapevolezza" rows="3"></textarea></label><br>
-        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda2_conoscenza_lavoro" rows="3"></textarea></label><br>
-        <label>Visione futura:<br><textarea name="scheda2_visione_futura" rows="3"></textarea></label><br>
+        <label>Autoconsapevolezza:<br><textarea name="scheda2_autoconsapevolezza" rows="3"></textarea></label>
+        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda2_conoscenza_lavoro" rows="3"></textarea></label>
+        <label>Visione futura:<br><textarea name="scheda2_visione_futura" rows="3"></textarea></label>
         <label>Organizzazione:<br><textarea name="scheda2_organizzazione" rows="3"></textarea></label>
       </div>
 
-      <!-- Scheda 3 -->
       <div class="card">
         <h2>Scheda 3 – Modi di lavorare</h2>
-        <p class="help-text">Annota come gli studenti si rapportano ai diversi modi di lavorare: con la gente, con i dati, con le idee, con le cose.</p>
-        <label>Autoconsapevolezza:<br><textarea name="scheda3_autoconsapevolezza" rows="3"></textarea></label><br>
-        <label>Processo decisionale:<br><textarea name="scheda3_processo_decisionale" rows="3"></textarea></label><br>
-        <label>Visione futura:<br><textarea name="scheda3_visione_futura" rows="3"></textarea></label><br>
+        <label>Autoconsapevolezza:<br><textarea name="scheda3_autoconsapevolezza" rows="3"></textarea></label>
+        <label>Processo decisionale:<br><textarea name="scheda3_processo_decisionale" rows="3"></textarea></label>
+        <label>Visione futura:<br><textarea name="scheda3_visione_futura" rows="3"></textarea></label>
         <label>Organizzazione:<br><textarea name="scheda3_organizzazione" rows="3"></textarea></label>
       </div>
 
-      <!-- Scheda 4 -->
       <div class="card">
         <h2>Scheda 4 – Tutte le possibili strade</h2>
-        <p class="help-text">Osservazioni sulle scelte di percorsi futuri ipotizzati dagli studenti.</p>
-        <label>Autoconsapevolezza:<br><textarea name="scheda4_autoconsapevolezza" rows="3"></textarea></label><br>
-        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda4_conoscenza_lavoro" rows="3"></textarea></label><br>
-        <label>Processo decisionale:<br><textarea name="scheda4_processo_decisionale" rows="3"></textarea></label><br>
-        <label>Visione futura:<br><textarea name="scheda4_visione_futura" rows="3"></textarea></label><br>
+        <label>Autoconsapevolezza:<br><textarea name="scheda4_autoconsapevolezza" rows="3"></textarea></label>
+        <label>Conoscenza del mondo del lavoro:<br><textarea name="scheda4_conoscenza_lavoro" rows="3"></textarea></label>
+        <label>Processo decisionale:<br><textarea name="scheda4_processo_decisionale" rows="3"></textarea></label>
+        <label>Visione futura:<br><textarea name="scheda4_visione_futura" rows="3"></textarea></label>
         <label>Organizzazione:<br><textarea name="scheda4_organizzazione" rows="3"></textarea></label>
       </div>
 
       <!-- Pulsante Salva -->
-      <div class="form-actions">
-        <button type="submit" class="nav-button primary">💾 Salva osservazioni</button>
-      </div>
-
+      <button type="submit" class="button-success">💾 Salva osservazioni</button>
     </form>
   </main>
 

@@ -143,3 +143,17 @@ textarea {
   padding: var(--spacing-sm);
   line-height: 1;
 }
+/* --- Varianti colore per pulsanti --- */
+.button-success {
+  background-color: #28a745;
+}
+.button-success:hover {
+  background-color: #218838;
+}
+
+.button-danger {
+  background-color: #dc3545;
+}
+.button-danger:hover {
+  background-color: #c82333;
+}
