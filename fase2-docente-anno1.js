@@ -11,34 +11,42 @@ function renderMapDataAsGraph(cyElements) {
   cyBox.style.overflow = 'auto';
   studentAnswers.appendChild(cyBox);
 
-  import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
-    const cytoscape = module.default;
-    cytoscape({
-      container: cyBox,
-      elements: cyElements,
-      style: [
-        {
-          selector: 'node',
-          style: {
-            'label': 'data(label)',
-            'background-color': '#007bff',
-            'color': '#fff',
-            'text-valign': 'center',
-            'text-halign': 'center',
-            'width': 'label',
-            'height': 'label',
-            'padding': '8px'
+  // ATTENDI che il browser abbia renderizzato la pagina, POI crea la mappa
+  requestAnimationFrame(() => {
+    import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
+      const cytoscape = module.default;
+      const cy = cytoscape({
+        container: cyBox,
+        elements: cyElements,
+        style: [
+          {
+            selector: 'node',
+            style: {
+              'label': 'data(label)',
+              'background-color': '#007bff',
+              'color': '#fff',
+              'text-valign': 'center',
+              'text-halign': 'center',
+              'width': 'label',
+              'height': 'label',
+              'padding': '8px'
+            }
+          },
+          {
+            selector: 'edge',
+            style: {
+              'width': 2,
+              'line-color': '#999'
+            }
           }
-        },
-        {
-          selector: 'edge',
-          style: {
-            'width': 2,
-            'line-color': '#999'
-          }
-        }
-      ],
-      layout: { name: 'grid' }
+        ],
+        // NOTA: 'grid' è un layout molto semplice.
+        // Potresti provare 'breadthfirst' o 'circle' per un risultato più leggibile.
+        layout: { name: 'breadthfirst', padding: 20 }
+      });
+
+      // Adatta lo zoom per vedere tutti gli elementi
+      cy.fit();
     });
   });
 }
