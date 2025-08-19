@@ -1,8 +1,8 @@
-/* Stili per la pagina docente (Versione Ottimizzata) */
+/* Stili per la pagina docente (Versione Ottimizzata e Corretta) */
 
 /* --- 1. Variabili Globali --- */
 :root {
-  /* Colori */
+  /* Colori Base */
   --color-primary: #1d3557;
   --color-primary-dark: #16324d;
   --color-secondary: #2c3e50;
@@ -11,6 +11,12 @@
   --color-text: #333;
   --color-border: #ddd;
 
+  /* Colori per i Pulsanti */
+  --color-success: #28a745;
+  --color-success-dark: #218838;
+  --color-danger: #dc3545;
+  --color-danger-dark: #c82333;
+
   /* Spaziature */
   --spacing-sm: 8px;
   --spacing-md: 15px;
@@ -18,7 +24,7 @@
   --spacing-xl: 30px;
   --spacing-xxl: 40px;
 
-  /* Font */
+  /* Font e Bordi */
   --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --border-radius: 8px;
 }
@@ -34,25 +40,26 @@ body {
 
 main {
   max-width: 1000px;
-  margin-inline: auto; /* Proprietà logica per centrare */
+  margin-inline: auto;
 }
 
 /* --- 3. Componenti --- */
 header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
   margin-bottom: var(--spacing-xxl);
-  max-width: 1000px;
-  margin-inline: auto;
+  text-align: center;
 }
 
 header img {
-  height: 60px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 
 header h1 {
-  font-size: 24px;
+  font-size: 26px;
   color: var(--color-primary);
 }
 
@@ -72,7 +79,7 @@ header h1 {
   margin-bottom: var(--spacing-md);
 }
 
-/* --- 4. Elementi Form --- */
+/* --- 4. Elementi Form e Pulsanti --- */
 label {
   display: block;
   margin-bottom: var(--spacing-md);
@@ -89,30 +96,53 @@ textarea {
   resize: vertical;
 }
 
-/* Pulsante primario riutilizzabile */
-.button-primary {
-  display: block;
-  margin: 30px auto 60px auto;
-  background-color: var(--color-primary);
+/* Stile Base dei Pulsanti (Forma e Comportamento) */
+.button {
+  display: inline-block; /* Permette di affiancare i pulsanti */
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 500;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 12px 30px;
-  font-size: 16px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-decoration: none; /* Per usarlo anche sui tag <a> */
   text-align: center;
+  text-decoration: none;
+  min-width: 220px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
-.button-primary:hover {
-  background-color: var(--color-primary-dark);
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Modificatori di Colore */
+.button-primary { background-color: var(--color-primary); }
+.button-primary:hover { background-color: var(--color-primary-dark); }
+
+.button-success { background-color: var(--color-success); }
+.button-success:hover { background-color: var(--color-success-dark); }
+
+.button-danger { background-color: var(--color-danger); }
+.button-danger:hover { background-color: var(--color-danger-dark); }
+
+/* Contenitore per i pulsanti di azione */
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: var(--spacing-xxl);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
 }
 
 /* --- 5. Modale --- */
 .modal-overlay {
   position: fixed;
-  inset: 0; /* Sintassi moderna per top/left/width/height */
+  inset: 0;
   background: rgba(0, 0, 0, 0.4);
   z-index: 1000;
   display: flex;
@@ -129,7 +159,7 @@ textarea {
   max-width: 1000px;
   width: 95%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  position: relative; /* Necessario per il posizionamento del pulsante di chiusura */
+  position: relative;
 }
 
 .close-button {
@@ -142,81 +172,4 @@ textarea {
   cursor: pointer;
   padding: var(--spacing-sm);
   line-height: 1;
-}
-/* --- Varianti colore per pulsanti --- */
-.button-success {
-  background-color: #28a745;
-}
-.button-success:hover {
-  background-color: #218838;
-}
-
-.button-danger {
-  background-color: #dc3545;
-}
-.button-danger:hover {
-  background-color: #c82333;
-}
-.form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid var(--color-border);
-}
-
-.form-actions .button-primary,
-.form-actions .button-success,
-.form-actions .button-danger {
-  min-width: 220px;
-  padding: 14px 28px;
-  font-size: 16px;
-}
-.form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid var(--color-border);
-}
-
-.form-actions .button-primary,
-.form-actions .button-success,
-.form-actions .button-danger {
-  min-width: 220px;
-  padding: 14px 28px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form-actions .button-primary:hover,
-.form-actions .button-success:hover,
-.form-actions .button-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
-  text-align: center;
-}
-
-header img {
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-header h1 {
-  font-size: 26px;
 }
