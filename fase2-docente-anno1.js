@@ -1,11 +1,38 @@
-function renderMapDataAsText(mappa) {
-  if (!Array.isArray(mappa)) return '';
-  return `
-    <div class="card">
-      <h4>Scheda 1 – Mappa di descrizione di sé</h4>
-      ${mappa.map(conn => `<p>${conn.from} → ${conn.to}</p>`).join('')}
-    </div>
-  `;
+// fase2-docente-anno1.js
+
+function renderMapDataAsGraph(cyElements) {
+  const cyBox = document.createElement('div');
+  cyBox.id = 'cy-preview';
+  cyBox.style.height = '300px';
+  studentAnswers.appendChild(cyBox);
+
+  import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
+    const cytoscape = module.default;
+    cytoscape({
+      container: cyBox,
+      elements: cyElements,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'label': 'data(label)',
+            'background-color': '#007bff',
+            'color': '#fff',
+            'text-valign': 'center',
+            'text-halign': 'center'
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'width': 2,
+            'line-color': '#999'
+          }
+        }
+      ],
+      layout: { name: 'grid' }
+    });
+  });
 }
 
 import { db } from './firebase-init.js';
@@ -21,47 +48,50 @@ const evaluationForm = document.getElementById('evaluation-form');
 const backButton = document.getElementById('back-button');
 const studentNameTitle = document.getElementById('student-name-title');
 
-const schede = {
-  'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
-  'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
-  'Scheda 3 – Modi di lavorare': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
-  'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
-};
-
+// Etichette leggibili per il docente
 const etichette = {
   cognome: "Cognome",
   nome: "Nome",
   classe: "Classe",
   data: "Data compilazione",
-  agg1: "Aggettivo 1", agg2: "Aggettivo 2", agg3: "Aggettivo 3", agg4: "Aggettivo 4", agg5: "Aggettivo 5",
-  agg6: "Aggettivo 6", agg7: "Aggettivo 7", agg8: "Aggettivo 8", agg9: "Aggettivo 9", agg10: "Aggettivo 10",
-  pensiero_lavoro: "Un pensiero sul lavoro",
-  cos_e_lavoro: "1) Secondo te, cosa è il lavoro?",
-  perche_lavoro: "2) Perché le persone lavorano?",
-  senza_lavoro: "3) Se nessuno lavorasse, cosa succederebbe?",
-  emozioni_lavoro: "4) Se penso al lavoro, mi sento...",
-  scheda3: "Questionario di autovalutazione",
-  scheda4: "Scheda 4 – Percorsi possibili dopo la scuola",
-  'scheda3_riflessione': 'Riflessione dello studente',
-  'sum-gente': 'Lavorare con la Gente',
-  'sum-idee': 'Lavorare con le Idee',
-  'sum-dati': 'Lavorare con i Dati',
-  'sum-cose': 'Lavorare con le Cose',
-  lavori_preferiti: "Considerate tutte le “scoperte” che hai fatto con le schede precedenti, quale o quali lavori ti piacerebbe fare da grande?",
-  immaginazione_lavoro: "Come ti immagini mentre svolgi uno di questi lavori?",
+  agg: "Aggettivi scelti dallo studente",
+  cos_e_lavoro: "Secondo te, cos’è il lavoro?",
+  perche_lavoro: "Perché le persone lavorano?",
+  senza_lavoro: "Cosa succederebbe se nessuno lavorasse?",
+  emozioni_lavoro: "Se penso al lavoro, mi sento...",
+  scheda3_riflessione: "Riflessione: quale modo di lavorare senti più tuo?",
+  'sum-gente': 'Preferenza: Lavorare con la Gente',
+  'sum-idee': 'Preferenza: Lavorare con le Idee',
+  'sum-dati': 'Preferenza: Lavorare con i Dati',
+  'sum-cose': 'Preferenza: Lavorare con le Cose',
+  lavori_preferiti: "Quali lavori ti piacerebbe fare da grande?",
+  immaginazione_lavoro: "Come ti immagini mentre fai questo lavoro?",
   motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te?",
-  obiettivi: "Quali desideri, sogni, obiettivi pensi di poter realizzare con questo lavoro?",
-  ispirazioni: "C'è qualcuno che ammiri o che ti ispira per il suo lavoro o il suo modo di vivere?",
-  modo_studiare: "ADESSO - Come mi preparo al mio futuro? Qual è il modo di studiare che funziona meglio per te?"
-
+  obiettivi: "Quali obiettivi o sogni vuoi realizzare con questo lavoro?",
+  ispirazioni: "Chi ti ispira o ti ha influenzato?",
+  modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?",
+  scuola_post_media: "Quale scuola pensi sia adatta dopo la terza media?",
+  stato_scelta: "Come ti senti di fronte alla scelta dopo la scuola media?",
+  scoperta_finale: "Cosa hai scoperto di te che prima non conoscevi?"
 };
 
+// Sezioni divise per scheda
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
-  'Scheda 1 – Mappa di descrizione di sé': ['agg1','agg2','agg3','agg4','agg5','agg6','agg7','agg8','agg9','agg10'],
-  'Scheda 2 – Un pensiero sul lavoro': ['pensiero_lavoro','cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
-  'Scheda 3 – Modi di lavorare': ['scheda3_riflessione', 'sum-gente', 'sum-idee', 'sum-dati', 'sum-cose'],
-  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare']
+  'Scheda 1 – Mappa di descrizione di sé': ['agg'],
+  'Scheda 2 – Un pensiero sul lavoro': ['cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
+  'Scheda 3 – Modi di lavorare': ['scheda3_riflessione','sum-gente','sum-idee','sum-dati','sum-cose'],
+  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare','scuola_post_media'],
+  'Scheda 5 – Come ti senti di fronte alla scelta': ['stato_scelta','scoperta_finale']
+};
+
+// Dimensioni da valutare
+const schede = {
+  'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
+  'Scheda 3 – Modi di lavorare': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 4 – Tutte le possibili strade': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione'],
+  'Scheda 5 – Come ti senti di fronte alla scelta': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'processo decisionale', 'visione futura', 'organizzazione']
 };
 
 async function loadStudentList() {
@@ -98,97 +128,47 @@ async function loadStudentDetail(studentId, studentFullName) {
   evaluationForm.innerHTML = '';
   studentAnswers.innerHTML = '';
 
-  // Titolo evidenziato
+  // Titolo con nome studente
   studentNameTitle.innerHTML = `<span class="student-name">${studentFullName}</span>`;
 
   const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
 
   if (studenteDoc.exists()) {
     const data = studenteDoc.data();
-    
+
     Object.entries(sezioni).forEach(([titolo, chiavi]) => {
+      const risposte = chiavi.map(k => data[k]).filter(Boolean);
+      if (risposte.length === 0 && !(titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements)) return;
+
       const section = document.createElement('div');
       section.className = 'card';
       const h4 = document.createElement('h4');
-h4.textContent = (titolo === 'Scheda 1 – Mappa di descrizione di sé') ? 'Aggettivi' : titolo;
-section.appendChild(h4);
-if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-  const aggettivi = chiavi.map(k => data[k]).filter(Boolean);
-  if (aggettivi.length > 0) {
-    const p = document.createElement('p');
-    p.textContent = aggettivi.join(', ');
-    section.appendChild(p);
-  }
-        studentAnswers.appendChild(section);
-   return; // Salta gli altri aggettivi uno a uno
-}
+      h4.textContent = titolo;
+      section.appendChild(h4);
 
       chiavi.forEach(k => {
-
-        if (k.startsWith('sum-') && data.checkboxCounts) {
-  const categoria = k.split('-')[1];
-  const valore = data.checkboxCounts[categoria];
-  if (valore !== undefined) {
-    const p = document.createElement('p');
-    p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${valore}`;
-    section.appendChild(p);
-  }
-} else if (data[k]) {
-  const p = document.createElement('p');
-  p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
-  section.appendChild(p);
-}
-
+        if (data[k]) {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+          section.appendChild(p);
+        }
       });
 
       studentAnswers.appendChild(section);
-if (titolo === 'Dati anagrafici' && data.conceptMap) {
-    const mappaBox = document.createElement('div');
-    mappaBox.innerHTML = renderMapDataAsText(data.conceptMap);
-    studentAnswers.appendChild(mappaBox);
-  }
+
+      // Mostra mappa concettuale se disponibile
+      if (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements) {
+        renderMapDataAsGraph(data.cyElements);
+      }
     });
-
-    if (data.cyElements) {
-      const cyBox = document.createElement('div');
-      cyBox.id = 'cy-preview';
-      studentAnswers.appendChild(cyBox);
-
-      import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
-        const cytoscape = module.default;
-        cytoscape({
-          container: cyBox,
-          elements: data.cyElements,
-          style: [
-            {
-              selector: 'node',
-              style: {
-                'label': 'data(label)',
-                'background-color': '#007bff',
-                'color': '#fff',
-                'text-valign': 'center',
-                'text-halign': 'center'
-              }
-            },
-            {
-              selector: 'edge',
-              style: {
-                'width': 2,
-                'line-color': '#999'
-              }
-            }
-          ],
-          layout: { name: 'grid' }
-        });
-      });
-    }
   }
 
-  // Valutazione
+  // Recupera valutazioni già salvate
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
   const valutazioneSnap = await getDoc(valutazioneDocRef);
   const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
 
+  // Form valutazione docente
   Object.entries(schede).forEach(([schedaTitolo, dimensioni]) => {
     const card = document.createElement('div');
     card.className = 'card';
@@ -229,67 +209,48 @@ if (titolo === 'Dati anagrafici' && data.conceptMap) {
     evaluationForm.appendChild(card);
   });
 
+  // Tabella riepilogo dimensioni
+  const dimensioniTotali = { autoconsapevolezza:0,'conoscenza del mondo del lavoro':0,'processo decisionale':0,'visione futura':0,organizzazione:0 };
+  const dimensioniPresenti = { autoconsapevolezza:0,'conoscenza del mondo del lavoro':0,'processo decisionale':0,'visione futura':0,organizzazione:0 };
+
+  Object.entries(valutazioni).forEach(([chiave, valore]) => {
+    const match = chiave.match(/__([^_]+(?: [^_]+)*)$/);
+    if (!match) return;
+    const dimensione = match[1].toLowerCase();
+    if (!(dimensione in dimensioniTotali)) return;
+    dimensioniTotali[dimensione]++;
+    if (valore === 'presente') dimensioniPresenti[dimensione]++;
+  });
+
+  const summaryCard = document.createElement('div');
+  summaryCard.className = 'card';
+  summaryCard.innerHTML = `<h3>Riepilogo per dimensione</h3>
+    <table class="summary-table" style="width:100%; border-collapse:collapse; margin-top:10px;">
+      <thead>
+        <tr>
+          <th>Dimensione</th><th>Presente</th><th>Da potenziare</th><th>Risultato</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Object.keys(dimensioniTotali).map(dim => {
+          const presenti = dimensioniPresenti[dim];
+          const totali = dimensioniTotali[dim];
+          const potenziare = totali - presenti;
+          const risultato = (presenti > potenziare) ? 'PRESENTE' : 'DA POTENZIARE';
+          return `
+            <tr>
+              <td>${dim.charAt(0).toUpperCase() + dim.slice(1)}</td>
+              <td>${presenti} / ${totali}</td>
+              <td>${potenziare} / ${totali}</td>
+              <td><strong>${risultato}</strong></td>
+            </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+  evaluationForm.appendChild(summaryCard);
+
+  // Pulsante salva
   const saveBtn = document.createElement('button');
-// --- Calcolo riepilogo dimensioni ---
-const dimensioniTotali = {
-  autoconsapevolezza: 0,
-  'conoscenza del mondo del lavoro': 0,
-  'processo decisionale': 0,
-  'visione futura': 0,
-  organizzazione: 0
-};
-const dimensioniPresenti = {
-  autoconsapevolezza: 0,
-  'conoscenza del mondo del lavoro': 0,
-  'processo decisionale': 0,
-  'visione futura': 0,
-  organizzazione: 0
-};
-
-Object.entries(valutazioni).forEach(([chiave, valore]) => {
-  const match = chiave.match(/__([^_]+(?: [^_]+)*)$/); // estrae la dimensione dopo '__'
-  if (!match) return;
-  const dimensione = match[1].toLowerCase();
-  if (!(dimensione in dimensioniTotali)) return;
-  dimensioniTotali[dimensione]++;
-  if (valore === 'presente') {
-    dimensioniPresenti[dimensione]++;
-  }
-});
-
-// --- Creazione tabella riepilogativa ---
-const summaryCard = document.createElement('div');
-summaryCard.className = 'card';
-summaryCard.innerHTML = `<h3>Riepilogo per dimensione</h3>
-  <table class="summary-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-    <thead>
-      <tr>
-        <th style="border: 1px solid #ccc; padding: 8px;">Dimensione</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Presente</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Da potenziare</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Risultato generale</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${Object.keys(dimensioniTotali).map(dim => {
-        const presenti = dimensioniPresenti[dim];
-        const totali = dimensioniTotali[dim];
-        const potenziare = totali - presenti;
-        const risultato = (presenti > potenziare) ? 'PRESENTE' : 'DA POTENZIARE';
-        return `
-          <tr>
-            <td style="border: 1px solid #ccc; padding: 8px;">${dim.charAt(0).toUpperCase() + dim.slice(1)}</td>
-            <td style="border: 1px solid #ccc; padding: 8px;">${presenti} / ${totali}</td>
-            <td style="border: 1px solid #ccc; padding: 8px;">${potenziare} / ${totali}</td>
-            <td style="border: 1px solid #ccc; padding: 8px;"><strong>${risultato}</strong></td>
-          </tr>`;
-      }).join('')}
-    </tbody>
-  </table>
-`;
-
-evaluationForm.appendChild(summaryCard);
-
   saveBtn.textContent = 'Salva valutazione';
   saveBtn.type = 'submit';
   evaluationForm.appendChild(saveBtn);
