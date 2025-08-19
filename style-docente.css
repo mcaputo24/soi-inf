@@ -1,19 +1,48 @@
+/* Stili per la pagina docente (Versione Ottimizzata) */
 
-/* Stili per la pagina docente */
+/* --- 1. Variabili Globali --- */
+:root {
+  /* Colori */
+  --color-primary: #1d3557;
+  --color-primary-dark: #16324d;
+  --color-secondary: #2c3e50;
+  --color-background: #f2f4f8;
+  --color-surface: #ffffff;
+  --color-text: #333;
+  --color-border: #ddd;
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f2f4f8;
-  color: #333;
-  margin: 0;
-  padding: 30px;
+  /* Spaziature */
+  --spacing-sm: 8px;
+  --spacing-md: 15px;
+  --spacing-lg: 25px;
+  --spacing-xl: 30px;
+  --spacing-xxl: 40px;
+
+  /* Font */
+  --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --border-radius: 8px;
 }
 
+/* --- 2. Stili di Base --- */
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  margin: 0;
+  padding: var(--spacing-xl);
+}
+
+main {
+  max-width: 1000px;
+  margin-inline: auto; /* Proprietà logica per centrare */
+}
+
+/* --- 3. Componenti --- */
 header {
   display: flex;
   align-items: center;
   gap: 20px;
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-xxl);
   max-width: 1000px;
   margin-inline: auto;
 }
@@ -24,33 +53,29 @@ header img {
 
 header h1 {
   font-size: 24px;
-  color: #1d3557;
-}
-
-main {
-  max-width: 1000px;
-  margin: 0 auto;
+  color: var(--color-primary);
 }
 
 .card {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 25px;
-  margin-bottom: 30px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .card h2 {
   margin-top: 0;
   font-size: 20px;
-  color: #2c3e50;
-  margin-bottom: 15px;
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-md);
 }
 
+/* --- 4. Elementi Form --- */
 label {
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-md);
   font-weight: 500;
   font-size: 15px;
 }
@@ -64,10 +89,11 @@ textarea {
   resize: vertical;
 }
 
-button[type="submit"] {
+/* Pulsante primario riutilizzabile */
+.button-primary {
   display: block;
   margin: 30px auto 60px auto;
-  background-color: #1d3557;
+  background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -75,41 +101,45 @@ button[type="submit"] {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-decoration: none; /* Per usarlo anche sui tag <a> */
+  text-align: center;
 }
 
-button[type="submit"]:hover {
-  background-color: #16324d;
+.button-primary:hover {
+  background-color: var(--color-primary-dark);
 }
+
+/* --- 5. Modale --- */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0; /* Sintassi moderna per top/left/width/height */
   background: rgba(0, 0, 0, 0.4);
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 50px;
+  padding: 50px var(--spacing-md);
   overflow-y: auto;
 }
 
 .modal-content {
-  background: #fff;
-  padding: 30px;
+  background: var(--color-surface);
+  padding: var(--spacing-xl);
   border-radius: 12px;
   max-width: 1000px;
   width: 95%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative; /* Necessario per il posizionamento del pulsante di chiusura */
 }
 
 .close-button {
   position: absolute;
-  top: 15px;
-  right: 20px;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
   font-size: 24px;
   border: none;
   background: none;
   cursor: pointer;
+  padding: var(--spacing-sm);
+  line-height: 1;
 }
