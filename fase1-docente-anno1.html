@@ -10,10 +10,6 @@
   <header>
     <img src="logo.png" alt="Logo">
     <h1>FASE 1 - Griglia di osservazione della classe</h1>
-    <div style="margin-left:auto; display:flex; gap:10px;">
-      <a href="index.html" class="button-primary">Menu principale</a>
-      <button id="logout-btn" type="button" class="button-danger">Logout</button>
-    </div>
   </header>
 
   <main>
@@ -22,12 +18,6 @@
       durante la compilazione delle schede da parte degli studenti, la restituzione in plenaria
       o successivamente alla realizzazione del laboratorio.
     </p>
-
-    <!-- Navigazione -->
-    <div style="text-align: center; margin-bottom: 30px;">
-      <a href="fase2-docente-anno1.html" class="button-primary">Vai alla Fase 2 – Sintesi individuale</a>
-      <button type="button" id="show-fase3-btn" class="button-primary">Vai alla Fase 3 – Sintesi generale</button>
-    </div>
 
     <form id="fase1-docente-form">
 
@@ -64,8 +54,14 @@
         <label>Organizzazione:<br><textarea name="scheda4_organizzazione" rows="3"></textarea></label>
       </div>
 
-      <!-- Pulsante Salva -->
-      <button type="submit" class="button-success">💾 Salva osservazioni</button>
+      <!-- Pulsanti azione -->
+      <div class="form-actions">
+        <button type="submit" class="button-success">💾 Salva osservazioni</button>
+        <a href="fase2-docente-anno1.html" class="button-primary">Vai alla Fase 2 – Sintesi individuale</a>
+        <button type="button" id="show-fase3-btn" class="button-primary">Vai alla Fase 3 – Sintesi generale</button>
+        <a href="index.html" class="button-primary">Menu principale</a>
+        <button id="logout-btn" type="button" class="button-danger">Logout</button>
+      </div>
     </form>
   </main>
 
