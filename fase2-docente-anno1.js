@@ -124,6 +124,9 @@ async function loadStudentList() {
   });
 }
 
+// =================================================================
+// Sostituisci la TUA funzione loadStudentDetail con QUESTA VERSIONE FINALE
+// =================================================================
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
   studentEvaluation.style.display = 'block';
@@ -147,40 +150,59 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Logica per visualizzare i dati
-      chiavi.forEach(k => {
-        if (data[k]) {
-          if (k === 'agg') {
-            // Gestione speciale per la lista di aggettivi
-            const p = document.createElement('p');
-            p.innerHTML = `<strong>${etichette[k]}:</strong>`;
-            section.appendChild(p);
-            
-            const aggettiviList = document.createElement('ul');
-            aggettiviList.style.listStyleType = 'disc';
-            aggettiviList.style.paddingLeft = '20px';
-            
-            data.agg.split(',').forEach(agg => {
-              const trimmedAgg = agg.trim();
-              if (trimmedAgg) {
-                const li = document.createElement('li');
-                li.textContent = trimmedAgg;
-                aggettiviList.appendChild(li);
-              }
-            });
-            section.appendChild(aggettiviList);
-          } else {
-            // Gestione generica per tutti gli altri campi
+      // Logica specifica e unificata per la Scheda 1
+      if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
+        
+        // 1. NUOVA LOGICA: Cerca i campi agg1, agg2, ... e crea la lista
+        const aggettiviTrovati = [];
+        for (let i = 1; i <= 10; i++) {
+          const key = `agg${i}`;
+          if (data[key]) {
+            aggettiviTrovati.push(data[key]);
+          }
+        }
+
+        if (aggettiviTrovati.length > 0) {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
+          section.appendChild(p);
+          
+          const aggettiviList = document.createElement('ul');
+          aggettiviList.style.listStyleType = 'disc';
+          aggettiviList.style.paddingLeft = '20px';
+          
+          aggettiviTrovati.forEach(agg => {
+            const li = document.createElement('li');
+            li.textContent = agg;
+            aggettiviList.appendChild(li);
+          });
+          section.appendChild(aggettiviList);
+        }
+
+        // 2. ORDINE INVERTITO: Prima la mappa, poi le domande
+        // Renderizza la mappa concettuale (se esiste)
+        if (data.cyElements) {
+          renderMapDataAsGraph(data.cyElements, section);
+        }
+
+        // Renderizza le risposte alle altre domande di Scheda 1
+        chiavi.forEach(k => {
+          if (k !== 'agg' && data[k]) { // Escludiamo 'agg' perché non esiste
             const p = document.createElement('p');
             p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
             section.appendChild(p);
           }
-        }
-      });
+        });
 
-      // Aggiungi la mappa solo alla fine della Scheda 1
-      if (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements) {
-        renderMapDataAsGraph(data.cyElements, section);
+      } else {
+        // Logica generica per tutte le altre schede
+        chiavi.forEach(k => {
+          if (data[k]) {
+            const p = document.createElement('p');
+            p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+            section.appendChild(p);
+          }
+        });
       }
 
       studentAnswers.appendChild(section);
