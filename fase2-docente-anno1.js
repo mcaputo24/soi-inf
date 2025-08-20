@@ -133,6 +133,9 @@ async function loadStudentList() {
   });
 }
 
+// =================================================================
+// Sostituisci la TUA funzione loadStudentDetail con QUESTA
+// =================================================================
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
   studentEvaluation.style.display = 'block';
@@ -147,9 +150,10 @@ async function loadStudentDetail(studentId, studentFullName) {
     const data = studenteDoc.data();
 
     Object.entries(sezioni).forEach(([titolo, chiavi]) => {
-      const risposte = chiavi.map(k => data[k]).filter(Boolean);
-      const hasContent = risposte.length > 0 || (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements);
-      if (!hasContent) return;
+      const hasTextResponse = chiavi.some(k => data[k]);
+      const isScheda1WithMap = titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements;
+      
+      if (!hasTextResponse && !isScheda1WithMap) return;
 
       const section = document.createElement('div');
       section.className = 'card';
@@ -157,17 +161,7 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Ciclo generico per TUTTE le risposte TRANNE gli aggettivi
-      chiavi.forEach(k => {
-        if (data[k] && k !== 'agg') { // <-- MODIFICA QUI: esclude 'agg'
-          const p = document.createElement('p');
-          p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
-          section.appendChild(p);
-        }
-      });
-
-      // === BLOCCO SPECIFICO PER SCHEDA 1 ===
-      // Aggiunge la lista di aggettivi e la mappa dentro la stessa card
+      // Logica specifica e unificata per la Scheda 1
       if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
         
         // 1. Crea e aggiunge la lista di aggettivi (se esistono)
@@ -191,10 +185,20 @@ async function loadStudentDetail(studentId, studentFullName) {
           section.appendChild(aggettiviList);
         }
 
-        // 2. Renderizza la mappa concettuale (se esiste)
+        // 2. Renderizza la mappa concettuale (se esiste) DENTRO la card
         if (data.cyElements) {
-          renderMapDataAsGraph(data.cyElements, section); // Passiamo 'section' come contenitore
+          renderMapDataAsGraph(data.cyElements, section);
         }
+
+      } else {
+        // Logica generica per tutte le altre schede
+        chiavi.forEach(k => {
+          if (data[k]) {
+            const p = document.createElement('p');
+            p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+            section.appendChild(p);
+          }
+        });
       }
 
       studentAnswers.appendChild(section);
