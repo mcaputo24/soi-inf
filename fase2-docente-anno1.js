@@ -316,10 +316,34 @@ const viewBtn = document.createElement('button');
   evaluationForm.appendChild(summaryCard);
 
   // Pulsante salva
-  const saveBtn = document.createElement('button');
-  saveBtn.textContent = 'Salva valutazione';
-  saveBtn.type = 'submit';
-  evaluationForm.appendChild(saveBtn);
+  // Contenitore pulsanti in basso
+const actionsDiv = document.createElement('div');
+actionsDiv.className = 'form-actions';
+
+// Pulsante Salva
+const saveBtn = document.createElement('button');
+saveBtn.textContent = 'Salva valutazione';
+saveBtn.type = 'submit';
+saveBtn.className = 'button button-success';
+actionsDiv.appendChild(saveBtn);
+
+// Pulsante Logout
+const logoutBtn = document.createElement('a');
+logoutBtn.textContent = 'Logout';
+logoutBtn.href = 'index.html'; // torna alla home
+logoutBtn.className = 'button button-danger';
+actionsDiv.appendChild(logoutBtn);
+
+// Pulsante Menu principale
+const menuBtn = document.createElement('a');
+menuBtn.textContent = 'Menu principale';
+menuBtn.href = 'index.html';
+menuBtn.className = 'button button-primary';
+actionsDiv.appendChild(menuBtn);
+
+// Aggiungiamo il contenitore al form
+evaluationForm.appendChild(actionsDiv);
+
 
   evaluationForm.onsubmit = async (e) => {
     e.preventDefault();
