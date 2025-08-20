@@ -10,7 +10,6 @@ function renderMapDataAsGraph(cyElements, container) {
   cyBox.style.marginTop = '10px';
   cyBox.style.overflow = 'auto';
 
-  // se c'è un container specifico (es. la card), appoggiamo lì
   if (container) {
     container.appendChild(cyBox);
   } else {
@@ -72,6 +71,10 @@ const etichette = {
   classe: "Classe",
   data: "Data compilazione",
   agg: "Aggettivi scelti dallo studente",
+  scheda1_autoconsapevolezza: "Autoconsapevolezza",
+  scheda1_processo_decisionale: "Processo decisionale",
+  scheda1_visione_futura: "Visione futura",
+  scheda1_organizzazione: "Organizzazione",
   cos_e_lavoro: "Secondo te, cos’è il lavoro?",
   perche_lavoro: "Perché le persone lavorano?",
   senza_lavoro: "Cosa succederebbe se nessuno lavorasse?",
@@ -89,13 +92,26 @@ const etichette = {
   modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?"
 };
 
-// Sezioni primo anno (solo 4 schede)
+// Sezioni primo anno (aggiornate per Scheda 1)
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
-  'Scheda 1 – Mappa di descrizione di sé': ['agg'],
-  'Scheda 2 – Un pensiero sul lavoro': ['cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'],
-  'Scheda 3 – Modi di lavorare': ['scheda3_riflessione','sum-gente','sum-idee','sum-dati','sum-cose'],
-  'Scheda 4 – Tutte le possibili strade': ['lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro','obiettivi','ispirazioni','modo_studiare']
+  'Scheda 1 – Mappa di descrizione di sé': [
+    'agg',
+    'scheda1_autoconsapevolezza',
+    'scheda1_processo_decisionale',
+    'scheda1_visione_futura',
+    'scheda1_organizzazione'
+  ],
+  'Scheda 2 – Un pensiero sul lavoro': [
+    'cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'
+  ],
+  'Scheda 3 – Modi di lavorare': [
+    'scheda3_riflessione','sum-gente','sum-idee','sum-dati','sum-cose'
+  ],
+  'Scheda 4 – Tutte le possibili strade': [
+    'lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro',
+    'obiettivi','ispirazioni','modo_studiare'
+  ]
 };
 
 // Dimensioni da valutare (solo Schede 1-4)
@@ -159,34 +175,42 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
+      // Scheda 1: aggettivi + risposte testuali + mappa
       if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-        // Elenco aggettivi
-        if (data.agg) {
-          const p = document.createElement('p');
-          p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
-          section.appendChild(p);
+        chiavi.forEach(k => {
+          if (data[k]) {
+            if (k === 'agg') {
+              const p = document.createElement('p');
+              p.innerHTML = `<strong>${etichette[k]}:</strong>`;
+              section.appendChild(p);
 
-          const aggettiviList = document.createElement('ul');
-          aggettiviList.style.listStyleType = 'disc';
-          aggettiviList.style.paddingLeft = '20px';
+              const aggettiviList = document.createElement('ul');
+              aggettiviList.style.listStyleType = 'disc';
+              aggettiviList.style.paddingLeft = '20px';
 
-          data.agg.split(',').forEach(agg => {
-            const trimmedAgg = agg.trim();
-            if (trimmedAgg) {
-              const li = document.createElement('li');
-              li.textContent = trimmedAgg;
-              aggettiviList.appendChild(li);
+              data.agg.split(',').forEach(agg => {
+                const trimmedAgg = agg.trim();
+                if (trimmedAgg) {
+                  const li = document.createElement('li');
+                  li.textContent = trimmedAgg;
+                  aggettiviList.appendChild(li);
+                }
+              });
+              section.appendChild(aggettiviList);
+            } else {
+              const p = document.createElement('p');
+              p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+              section.appendChild(p);
             }
-          });
-          section.appendChild(aggettiviList);
-        }
+          }
+        });
 
-        // Mappa concettuale dentro la stessa card
         if (data.cyElements) {
           renderMapDataAsGraph(data.cyElements, section);
         }
+
       } else {
-        // Logica generica per tutte le altre schede
+        // Altre schede (logica generica)
         chiavi.forEach(k => {
           if (data[k]) {
             const p = document.createElement('p');
