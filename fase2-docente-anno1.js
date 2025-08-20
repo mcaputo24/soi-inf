@@ -1,6 +1,6 @@
 // fase2-docente-anno1.js
 
-function renderMapDataAsGraph(cyElements) {
+function renderMapDataAsGraph(cyElements, container) {
   const cyBox = document.createElement('div');
   cyBox.id = 'cy-preview';
   cyBox.style.height = '300px';
@@ -9,9 +9,14 @@ function renderMapDataAsGraph(cyElements) {
   cyBox.style.border = '1px solid #ccc';
   cyBox.style.marginTop = '10px';
   cyBox.style.overflow = 'auto';
-  studentAnswers.appendChild(cyBox);
 
-  // ATTENDI che il browser abbia renderizzato la pagina, POI crea la mappa
+  // se c'è un container specifico (es. la card), appoggiamo lì
+  if (container) {
+    container.appendChild(cyBox);
+  } else {
+    studentAnswers.appendChild(cyBox);
+  }
+
   requestAnimationFrame(() => {
     import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.esm.min.js').then(module => {
       const cytoscape = module.default;
@@ -40,12 +45,8 @@ function renderMapDataAsGraph(cyElements) {
             }
           }
         ],
-        // NOTA: 'grid' è un layout molto semplice.
-        // Potresti provare 'breadthfirst' o 'circle' per un risultato più leggibile.
         layout: { name: 'breadthfirst', padding: 20 }
       });
-
-      // Adatta lo zoom per vedere tutti gli elementi
       cy.fit();
     });
   });
@@ -133,9 +134,6 @@ async function loadStudentList() {
   });
 }
 
-// =================================================================
-// Sostituisci la TUA funzione loadStudentDetail con QUESTA
-// =================================================================
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
   studentEvaluation.style.display = 'block';
@@ -161,19 +159,17 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Logica specifica e unificata per la Scheda 1
       if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-        
-        // 1. Crea e aggiunge la lista di aggettivi (se esistono)
+        // Elenco aggettivi
         if (data.agg) {
           const p = document.createElement('p');
           p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
           section.appendChild(p);
-          
+
           const aggettiviList = document.createElement('ul');
           aggettiviList.style.listStyleType = 'disc';
           aggettiviList.style.paddingLeft = '20px';
-          
+
           data.agg.split(',').forEach(agg => {
             const trimmedAgg = agg.trim();
             if (trimmedAgg) {
@@ -185,11 +181,10 @@ async function loadStudentDetail(studentId, studentFullName) {
           section.appendChild(aggettiviList);
         }
 
-        // 2. Renderizza la mappa concettuale (se esiste) DENTRO la card
+        // Mappa concettuale dentro la stessa card
         if (data.cyElements) {
           renderMapDataAsGraph(data.cyElements, section);
         }
-
       } else {
         // Logica generica per tutte le altre schede
         chiavi.forEach(k => {
