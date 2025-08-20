@@ -632,3 +632,34 @@ function setRecoveryLink(studentId) {
 
 // ESEMPIO: dopo aver creato o recuperato lo studentId al login/avvio
 // chiama setRecoveryLink(studentId);
+// =================================================================
+// Modalità sola lettura (readonly=true nell'URL)
+// =================================================================
+function attivaSolaLettura() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('readonly') === 'true') {
+    // Disabilita tutti gli input, select e textarea
+    document.querySelectorAll('input, select, textarea, button').forEach(el => {
+      // Non bloccare i pulsanti di navigazione interna se servono (next/prev)
+      if (el.type === 'button' || el.type === 'submit') {
+        el.style.display = 'none'; // li nascondiamo
+      } else {
+        el.disabled = true; // disabilitiamo campi compilabili
+      }
+    });
+
+    // Aggiungi un banner informativo
+    const banner = document.createElement('div');
+    banner.textContent = "Modalità sola lettura – non è possibile modificare le risposte";
+    banner.style.background = "#ffc107";
+    banner.style.color = "#000";
+    banner.style.padding = "10px";
+    banner.style.marginBottom = "15px";
+    banner.style.textAlign = "center";
+    banner.style.fontWeight = "bold";
+    document.body.prepend(banner);
+  }
+}
+
+// Esegui subito
+attivaSolaLettura();
