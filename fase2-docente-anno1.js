@@ -197,6 +197,15 @@ async function loadStudentDetail(studentId, studentFullName) {
 
   section.appendChild(ul);
 
+const viewBtn = document.createElement('button');
+  viewBtn.textContent = "Visualizza questionario completo";
+  viewBtn.style.marginTop = "10px";
+  viewBtn.onclick = () => {
+    const url = `fase1-studente-anno1.html?studentId=${studentId}&readonly=true`;
+    window.open(url, '_blank');
+  };
+  section.appendChild(viewBtn);
+
   if (data.scheda3_riflessione) {
     const p = document.createElement('p');
     p.innerHTML = `<strong>${etichette['scheda3_riflessione']}:</strong> ${data.scheda3_riflessione}`;
