@@ -1,8 +1,3 @@
-// =================================================================
-// INIZIO DEL FILE fase2-docente-anno1.js
-// Sostituisci tutto il tuo codice con questo
-// =================================================================
-
 function renderMapDataAsGraph(cyElements, parentElement) {
   const cyBox = document.createElement('div');
   cyBox.id = 'cy-preview';
@@ -48,14 +43,13 @@ const evaluationForm = document.getElementById('evaluation-form');
 const backButton = document.getElementById('back-button');
 const studentNameTitle = document.getElementById('student-name-title');
 
-// Etichette leggibili (CORRETTE)
+// Etichette leggibili
 const etichette = {
   cognome: "Cognome",
   nome: "Nome",
   classe: "Classe",
   data: "Data compilazione",
   agg: "Aggettivi scelti dallo studente",
-  // Nomi presi dal file HTML dello studente
   scheda1_attivita_preferite: "1) Attività preferite descritte nella mappa e perché",
   scheda1_preferenze_scolastiche: "2) Materie o argomenti scolastici da approfondire",
   cos_e_lavoro: "Secondo te, cos’è il lavoro?",
@@ -63,10 +57,10 @@ const etichette = {
   senza_lavoro: "Cosa succederebbe se nessuno lavorasse?",
   emozioni_lavoro: "Se penso al lavoro, mi sento...",
   scheda3_riflessione: "Riflessione: quale modo di lavorare senti più tuo?",
-  'sum-gente': 'Preferenza: Lavorare con la Gente',
-  'sum-idee': 'Preferenza: Lavorare con le Idee',
-  'sum-dati': 'Preferenza: Lavorare con i Dati',
-  'sum-cose': 'Preferenza: Lavorare con le Cose',
+  'sum-gente': 'Numero di affermazioni → Lavorare con la Gente',
+  'sum-idee': 'Numero di affermazioni → Lavorare con le Idee',
+  'sum-dati': 'Numero di affermazioni → Lavorare con i Dati',
+  'sum-cose': 'Numero di affermazioni → Lavorare con le Cose',
   lavori_preferiti: "Quali lavori ti piacerebbe fare da grande?",
   immaginazione_lavoro: "Come ti immagini mentre fai questo lavoro?",
   motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te?",
@@ -75,7 +69,7 @@ const etichette = {
   modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?"
 };
 
-// Sezioni primo anno (CORRETTE)
+// Sezioni primo anno
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
   'Scheda 1 – Mappa di descrizione di sé': [
@@ -87,7 +81,7 @@ const sezioni = {
     'cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'
   ],
   'Scheda 3 – Modi di lavorare': [
-    'scheda3_riflessione','sum-gente','sum-idee','sum-dati','sum-cose'
+    'sum-gente','sum-idee','sum-dati','sum-cose','scheda3_riflessione'
   ],
   'Scheda 4 – Tutte le possibili strade': [
     'lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro',
@@ -95,7 +89,7 @@ const sezioni = {
   ]
 };
 
-// Dimensioni da valutare (resta invariato)
+// Dimensioni da valutare
 const schede = {
   'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
   'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
@@ -125,7 +119,7 @@ async function loadStudentList() {
 }
 
 // =================================================================
-// Sostituisci la TUA funzione loadStudentDetail con QUESTA VERSIONE FINALE
+// Funzione principale
 // =================================================================
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
@@ -150,52 +144,54 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Logica specifica e unificata per la Scheda 1
+      // Scheda 1 → aggettivi + mappa + domande
       if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-        
-        // 1. NUOVA LOGICA: Cerca i campi agg1, agg2, ... e crea la lista
         const aggettiviTrovati = [];
         for (let i = 1; i <= 10; i++) {
           const key = `agg${i}`;
-          if (data[key]) {
-            aggettiviTrovati.push(data[key]);
-          }
+          if (data[key]) aggettiviTrovati.push(data[key]);
         }
-
         if (aggettiviTrovati.length > 0) {
           const p = document.createElement('p');
           p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
           section.appendChild(p);
-          
-          const aggettiviList = document.createElement('ul');
-          aggettiviList.style.listStyleType = 'disc';
-          aggettiviList.style.paddingLeft = '20px';
-          
+          const ul = document.createElement('ul');
           aggettiviTrovati.forEach(agg => {
             const li = document.createElement('li');
             li.textContent = agg;
-            aggettiviList.appendChild(li);
+            ul.appendChild(li);
           });
-          section.appendChild(aggettiviList);
+          section.appendChild(ul);
         }
-
-        // 2. ORDINE INVERTITO: Prima la mappa, poi le domande
-        // Renderizza la mappa concettuale (se esiste)
-        if (data.cyElements) {
-          renderMapDataAsGraph(data.cyElements, section);
-        }
-
-        // Renderizza le risposte alle altre domande di Scheda 1
+        if (data.cyElements) renderMapDataAsGraph(data.cyElements, section);
         chiavi.forEach(k => {
-          if (k !== 'agg' && data[k]) { // Escludiamo 'agg' perché non esiste
+          if (k !== 'agg' && data[k]) {
             const p = document.createElement('p');
             p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
             section.appendChild(p);
           }
         });
 
+      // Scheda 3 → solo numeri + riflessione
+      } else if (titolo === 'Scheda 3 – Modi di lavorare') {
+        const aree = ['sum-gente','sum-idee','sum-dati','sum-cose'];
+        const ul = document.createElement('ul');
+        ul.style.listStyleType = 'disc';
+        ul.style.paddingLeft = '20px';
+        aree.forEach(a => {
+          const li = document.createElement('li');
+          li.textContent = `${etichette[a]}: ${data[a] || 0}`;
+          ul.appendChild(li);
+        });
+        section.appendChild(ul);
+        if (data.scheda3_riflessione) {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${etichette['scheda3_riflessione']}:</strong> ${data.scheda3_riflessione}`;
+          section.appendChild(p);
+        }
+
+      // Generico
       } else {
-        // Logica generica per tutte le altre schede
         chiavi.forEach(k => {
           if (data[k]) {
             const p = document.createElement('p');
@@ -209,6 +205,7 @@ async function loadStudentDetail(studentId, studentFullName) {
     });
   }
 
+ 
   // Recupera valutazioni già salvate
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
   const valutazioneSnap = await getDoc(valutazioneDocRef);
