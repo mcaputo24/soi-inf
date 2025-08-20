@@ -174,21 +174,36 @@ async function loadStudentDetail(studentId, studentFullName) {
 
       // Scheda 3 → solo numeri + riflessione
       } else if (titolo === 'Scheda 3 – Modi di lavorare') {
-        const aree = ['sum-gente','sum-idee','sum-dati','sum-cose'];
-        const ul = document.createElement('ul');
-        ul.style.listStyleType = 'disc';
-        ul.style.paddingLeft = '20px';
-        aree.forEach(a => {
-          const li = document.createElement('li');
-          li.textContent = `${etichette[a]}: ${data[a] || 0}`;
-          ul.appendChild(li);
-        });
-        section.appendChild(ul);
-        if (data.scheda3_riflessione) {
-          const p = document.createElement('p');
-          p.innerHTML = `<strong>${etichette['scheda3_riflessione']}:</strong> ${data.scheda3_riflessione}`;
-          section.appendChild(p);
-        }
+  const aree = [
+    { key: 'gente', label: 'Numero di affermazioni → Lavorare con la Gente' },
+    { key: 'idee',  label: 'Numero di affermazioni → Lavorare con le Idee' },
+    { key: 'dati',  label: 'Numero di affermazioni → Lavorare con i Dati' },
+    { key: 'cose',  label: 'Numero di affermazioni → Lavorare con le Cose' }
+  ];
+
+  const ul = document.createElement('ul');
+  ul.style.listStyleType = 'disc';
+  ul.style.paddingLeft = '20px';
+
+  aree.forEach(area => {
+    let valore = 0;
+    if (data.checkboxCounts && data.checkboxCounts[area.key] !== undefined) {
+      valore = data.checkboxCounts[area.key];
+    }
+    const li = document.createElement('li');
+    li.textContent = `${area.label}: ${valore}`;
+    ul.appendChild(li);
+  });
+
+  section.appendChild(ul);
+
+  if (data.scheda3_riflessione) {
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>${etichette['scheda3_riflessione']}:</strong> ${data.scheda3_riflessione}`;
+    section.appendChild(p);
+  }
+}
+
 
       // Generico
       } else {
