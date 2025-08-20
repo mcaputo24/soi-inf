@@ -167,10 +167,26 @@ async function loadStudentDetail(studentId, studentFullName) {
 
       studentAnswers.appendChild(section);
 
-      // Mostra mappa concettuale se disponibile
-      if (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements) {
-        renderMapDataAsGraph(data.cyElements);
-      }
+      // Mostra aggettivi + mappa concettuale per Scheda 1
+if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
+  // Elenco aggettivi se presenti
+  if (data.agg) {
+    const aggettiviList = document.createElement('ul');
+    aggettiviList.className = 'aggettivi-list';
+    data.agg.split(',').map(a => a.trim()).filter(Boolean).forEach(agg => {
+      const li = document.createElement('li');
+      li.textContent = agg;
+      aggettiviList.appendChild(li);
+    });
+    section.appendChild(aggettiviList);
+  }
+
+  // Mappa concettuale se presente
+  if (data.cyElements) {
+    renderMapDataAsGraph(data.cyElements);
+  }
+}
+
     });
   }
 
