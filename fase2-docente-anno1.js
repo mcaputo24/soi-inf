@@ -55,7 +55,6 @@ const etichette = {
   classe: "Classe",
   data: "Data compilazione",
   agg: "Aggettivi scelti dallo studente",
-  // Nomi presi dal file HTML dello studente
   scheda1_attivita_preferite: "1) Attività preferite descritte nella mappa e perché",
   scheda1_preferenze_scolastiche: "2) Materie o argomenti scolastici da approfondire",
   cos_e_lavoro: "Secondo te, cos’è il lavoro?",
@@ -63,10 +62,10 @@ const etichette = {
   senza_lavoro: "Cosa succederebbe se nessuno lavorasse?",
   emozioni_lavoro: "Se penso al lavoro, mi sento...",
   scheda3_riflessione: "Riflessione: quale modo di lavorare senti più tuo?",
-  'sum-gente': 'Preferenza: Lavorare con la Gente',
-  'sum-idee': 'Preferenza: Lavorare con le Idee',
-  'sum-dati': 'Preferenza: Lavorare con i Dati',
-  'sum-cose': 'Preferenza: Lavorare con le Cose',
+  'sum-gente': 'Lavorare con la Gente',
+  'sum-idee': 'Lavorare con le Idee',
+  'sum-dati': 'Lavorare con i Dati',
+  'sum-cose': 'Lavorare con le Cose',
   lavori_preferiti: "Quali lavori ti piacerebbe fare da grande?",
   immaginazione_lavoro: "Come ti immagini mentre fai questo lavoro?",
   motivazioni_lavoro: "Perché pensi che questo lavoro faccia per te?",
@@ -75,7 +74,7 @@ const etichette = {
   modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?"
 };
 
-// Sezioni primo anno (CORRETTE)
+// Sezioni primo anno
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
   'Scheda 1 – Mappa di descrizione di sé': [
@@ -95,7 +94,7 @@ const sezioni = {
   ]
 };
 
-// Dimensioni da valutare (resta invariato)
+// Dimensioni da valutare
 const schede = {
   'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
   'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
@@ -125,7 +124,7 @@ async function loadStudentList() {
 }
 
 // =================================================================
-// Sostituisci la TUA funzione loadStudentDetail con QUESTA VERSIONE FINALE
+// Funzione principale
 // =================================================================
 async function loadStudentDetail(studentId, studentFullName) {
   studentSelection.style.display = 'none';
@@ -150,52 +149,70 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Logica specifica e unificata per la Scheda 1
+      // Scheda 1: Aggettivi + mappa + domande
       if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-        
-        // 1. NUOVA LOGICA: Cerca i campi agg1, agg2, ... e crea la lista
         const aggettiviTrovati = [];
         for (let i = 1; i <= 10; i++) {
           const key = `agg${i}`;
-          if (data[key]) {
-            aggettiviTrovati.push(data[key]);
-          }
+          if (data[key]) aggettiviTrovati.push(data[key]);
         }
-
         if (aggettiviTrovati.length > 0) {
           const p = document.createElement('p');
           p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
           section.appendChild(p);
-          
-          const aggettiviList = document.createElement('ul');
-          aggettiviList.style.listStyleType = 'disc';
-          aggettiviList.style.paddingLeft = '20px';
-          
+          const ul = document.createElement('ul');
           aggettiviTrovati.forEach(agg => {
             const li = document.createElement('li');
             li.textContent = agg;
-            aggettiviList.appendChild(li);
+            ul.appendChild(li);
           });
-          section.appendChild(aggettiviList);
+          section.appendChild(ul);
         }
-
-        // 2. ORDINE INVERTITO: Prima la mappa, poi le domande
-        // Renderizza la mappa concettuale (se esiste)
-        if (data.cyElements) {
-          renderMapDataAsGraph(data.cyElements, section);
-        }
-
-        // Renderizza le risposte alle altre domande di Scheda 1
+        if (data.cyElements) renderMapDataAsGraph(data.cyElements, section);
         chiavi.forEach(k => {
-          if (k !== 'agg' && data[k]) { // Escludiamo 'agg' perché non esiste
+          if (k !== 'agg' && data[k]) {
             const p = document.createElement('p');
             p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
             section.appendChild(p);
           }
         });
 
+      // Scheda 3: Tabella punteggi + riflessione
+      } else if (titolo === 'Scheda 3 – Modi di lavorare') {
+        const risultati = [
+          { key: 'sum-gente', label: etichette['sum-gente'] },
+          { key: 'sum-idee',  label: etichette['sum-idee'] },
+          { key: 'sum-dati',  label: etichette['sum-dati'] },
+          { key: 'sum-cose',  label: etichette['sum-cose'] }
+        ];
+        const table = document.createElement('table');
+        table.style.width = "100%";
+        table.style.borderCollapse = "collapse";
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th style="border:1px solid #ccc; padding:5px;">Area</th>
+              <th style="border:1px solid #ccc; padding:5px;">Punteggio</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${risultati.map(r => `
+              <tr>
+                <td style="border:1px solid #ccc; padding:5px;">${r.label}</td>
+                <td style="border:1px solid #ccc; padding:5px;">${data[r.key] || 0}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        section.appendChild(table);
+        if (data.scheda3_riflessione) {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${etichette['scheda3_riflessione']}:</strong> ${data.scheda3_riflessione}`;
+          section.appendChild(p);
+        }
+
+      // Generico
       } else {
-        // Logica generica per tutte le altre schede
         chiavi.forEach(k => {
           if (data[k]) {
             const p = document.createElement('p');
@@ -208,6 +225,15 @@ async function loadStudentDetail(studentId, studentFullName) {
       studentAnswers.appendChild(section);
     });
   }
+
+  // ... (resto del codice valutazione docente e riepilogo invariato)
+  // ================================================================
+  // (lo lasciamo uguale a quello che mi hai passato, senza modifiche)
+  // ================================================================
+}
+
+backButton.addEventListener('click', (e) => {
+
 
   // Recupera valutazioni già salvate
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
