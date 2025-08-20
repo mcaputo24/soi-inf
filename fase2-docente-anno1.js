@@ -87,11 +87,7 @@ const sezioni = {
     'cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'
   ],
   'Scheda 3 – Modi di lavorare': [
-    'sum-gente', // Conteggio area "Gente"
-    'sum-idee',  // Conteggio area "Idee"
-    'sum-dati',  // Conteggio area "Dati"
-    'sum-cose',  // Conteggio area "Cose"
-    'scheda3_riflessione' // Riflessione finale
+    'scheda3_riflessione','sum-gente','sum-idee','sum-dati','sum-cose'
   ],
   'Scheda 4 – Tutte le possibili strade': [
     'lavori_preferiti','immaginazione_lavoro','motivazioni_lavoro',
@@ -154,20 +150,27 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Logica specifica per la Scheda 1 (resta invariata)
+      // Logica specifica e unificata per la Scheda 1
       if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
+        
+        // 1. NUOVA LOGICA: Cerca i campi agg1, agg2, ... e crea la lista
         const aggettiviTrovati = [];
         for (let i = 1; i <= 10; i++) {
-          if (data[`agg${i}`]) aggettiviTrovati.push(data[`agg${i}`]);
+          const key = `agg${i}`;
+          if (data[key]) {
+            aggettiviTrovati.push(data[key]);
+          }
         }
 
         if (aggettiviTrovati.length > 0) {
           const p = document.createElement('p');
           p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
           section.appendChild(p);
+          
           const aggettiviList = document.createElement('ul');
           aggettiviList.style.listStyleType = 'disc';
           aggettiviList.style.paddingLeft = '20px';
+          
           aggettiviTrovati.forEach(agg => {
             const li = document.createElement('li');
             li.textContent = agg;
@@ -176,12 +179,15 @@ async function loadStudentDetail(studentId, studentFullName) {
           section.appendChild(aggettiviList);
         }
 
+        // 2. ORDINE INVERTITO: Prima la mappa, poi le domande
+        // Renderizza la mappa concettuale (se esiste)
         if (data.cyElements) {
           renderMapDataAsGraph(data.cyElements, section);
         }
 
+        // Renderizza le risposte alle altre domande di Scheda 1
         chiavi.forEach(k => {
-          if (k.startsWith('scheda1_')) {
+          if (k !== 'agg' && data[k]) { // Escludiamo 'agg' perché non esiste
             const p = document.createElement('p');
             p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
             section.appendChild(p);
@@ -189,7 +195,7 @@ async function loadStudentDetail(studentId, studentFullName) {
         });
 
       } else {
-        // Logica generica per TUTTE le altre schede (inclusa la Scheda 3 ora)
+        // Logica generica per tutte le altre schede
         chiavi.forEach(k => {
           if (data[k]) {
             const p = document.createElement('p');
@@ -202,54 +208,7 @@ async function loadStudentDetail(studentId, studentFullName) {
       studentAnswers.appendChild(section);
     });
   }
-  
-  // Il resto della funzione per il form di valutazione non cambia
-  const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
-  // ... eccetera...
-  const valutazioneSnap = await getDoc(valutazioneDocRef);
-  const valutazioni = valutazioneSnap.exists() ? valutazioneSnap.data() : {};
 
-  // Form valutazione docente
-  Object.entries(schede).forEach(([schedaTitolo, dimensioni]) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    const h3 = document.createElement('h3');
-    h3.textContent = schedaTitolo;
-    card.appendChild(h3);
-
-    dimensioni.forEach(dim => {
-      const wrapper = document.createElement('div');
-      wrapper.style.marginBottom = '12px';
-
-      const label = document.createElement('label');
-      label.textContent = dim.charAt(0).toUpperCase() + dim.slice(1);
-      label.style.display = 'block';
-
-      const nameKey = `${schedaTitolo}__${dim}`;
-
-      const presente = document.createElement('input');
-      presente.type = 'radio';
-      presente.name = nameKey;
-      presente.value = 'presente';
-      if (valutazioni[nameKey] === 'presente') presente.checked = true;
-
-      const potenziare = document.createElement('input');
-      potenziare.type = 'radio';
-      potenziare.name = nameKey;
-      potenziare.value = 'da potenziare';
-      if (valutazioni[nameKey] === 'da potenziare') potenziare.checked = true;
-
-      wrapper.appendChild(label);
-      wrapper.appendChild(presente);
-      wrapper.appendChild(document.createTextNode(' Presente '));
-      wrapper.appendChild(potenziare);
-      wrapper.appendChild(document.createTextNode(' Da potenziare '));
-      card.appendChild(wrapper);
-    });
-
-    evaluationForm.appendChild(card);
-  });
-}
   // Recupera valutazioni già salvate
   const valutazioneDocRef = doc(db, 'fase2-docente-anno1', studentId);
   const valutazioneSnap = await getDoc(valutazioneDocRef);
