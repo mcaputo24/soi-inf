@@ -1,6 +1,9 @@
-// fase2-docente-anno1.js
+// =================================================================
+// INIZIO DEL FILE fase2-docente-anno1.js
+// Sostituisci tutto il tuo codice con questo
+// =================================================================
 
-function renderMapDataAsGraph(cyElements, container) {
+function renderMapDataAsGraph(cyElements, parentElement) {
   const cyBox = document.createElement('div');
   cyBox.id = 'cy-preview';
   cyBox.style.height = '300px';
@@ -8,10 +11,9 @@ function renderMapDataAsGraph(cyElements, container) {
   cyBox.style.maxWidth = '600px';
   cyBox.style.border = '1px solid #ccc';
   cyBox.style.marginTop = '10px';
-  cyBox.style.overflow = 'auto';
-
-  if (container) {
-    container.appendChild(cyBox);
+  
+  if (parentElement) {
+    parentElement.appendChild(cyBox);
   } else {
     studentAnswers.appendChild(cyBox);
   }
@@ -23,26 +25,8 @@ function renderMapDataAsGraph(cyElements, container) {
         container: cyBox,
         elements: cyElements,
         style: [
-          {
-            selector: 'node',
-            style: {
-              'label': 'data(label)',
-              'background-color': '#007bff',
-              'color': '#fff',
-              'text-valign': 'center',
-              'text-halign': 'center',
-              'width': 'label',
-              'height': 'label',
-              'padding': '8px'
-            }
-          },
-          {
-            selector: 'edge',
-            style: {
-              'width': 2,
-              'line-color': '#999'
-            }
-          }
+          { selector: 'node', style: { 'label': 'data(label)', 'background-color': '#007bff', 'color': '#fff', 'text-valign': 'center', 'text-halign': 'center', 'width': 'label', 'height': 'label', 'padding': '8px' }},
+          { selector: 'edge', style: { 'width': 2, 'line-color': '#999' }}
         ],
         layout: { name: 'breadthfirst', padding: 20 }
       });
@@ -64,17 +48,16 @@ const evaluationForm = document.getElementById('evaluation-form');
 const backButton = document.getElementById('back-button');
 const studentNameTitle = document.getElementById('student-name-title');
 
-// Etichette leggibili
+// Etichette leggibili (CORRETTE)
 const etichette = {
   cognome: "Cognome",
   nome: "Nome",
   classe: "Classe",
   data: "Data compilazione",
   agg: "Aggettivi scelti dallo studente",
-  scheda1_autoconsapevolezza: "Autoconsapevolezza",
-  scheda1_processo_decisionale: "Processo decisionale",
-  scheda1_visione_futura: "Visione futura",
-  scheda1_organizzazione: "Organizzazione",
+  // Nomi presi dal file HTML dello studente
+  scheda1_attivita_preferite: "1) Attività preferite descritte nella mappa e perché",
+  scheda1_preferenze_scolastiche: "2) Materie o argomenti scolastici da approfondire",
   cos_e_lavoro: "Secondo te, cos’è il lavoro?",
   perche_lavoro: "Perché le persone lavorano?",
   senza_lavoro: "Cosa succederebbe se nessuno lavorasse?",
@@ -92,15 +75,13 @@ const etichette = {
   modo_studiare: "Come ti prepari al futuro? Qual è il tuo modo di studiare?"
 };
 
-// Sezioni primo anno (aggiornate per Scheda 1)
+// Sezioni primo anno (CORRETTE)
 const sezioni = {
   'Dati anagrafici': ['cognome', 'nome', 'classe', 'data'],
   'Scheda 1 – Mappa di descrizione di sé': [
     'agg',
-    'scheda1_autoconsapevolezza',
-    'scheda1_processo_decisionale',
-    'scheda1_visione_futura',
-    'scheda1_organizzazione'
+    'scheda1_attivita_preferite',
+    'scheda1_preferenze_scolastiche'
   ],
   'Scheda 2 – Un pensiero sul lavoro': [
     'cos_e_lavoro','perche_lavoro','senza_lavoro','emozioni_lavoro'
@@ -114,7 +95,7 @@ const sezioni = {
   ]
 };
 
-// Dimensioni da valutare (solo Schede 1-4)
+// Dimensioni da valutare (resta invariato)
 const schede = {
   'Scheda 1 – Mappa di descrizione di sé': ['autoconsapevolezza', 'processo decisionale', 'visione futura', 'organizzazione'],
   'Scheda 2 – Un pensiero sul lavoro': ['autoconsapevolezza', 'conoscenza del mondo del lavoro', 'visione futura', 'organizzazione'],
@@ -129,12 +110,7 @@ async function loadStudentList() {
   querySnapshot.forEach(docSnap => {
     const data = docSnap.data();
     if (data.cognome && data.nome) {
-      students.push({
-        id: docSnap.id,
-        nome: data.nome,
-        cognome: data.cognome,
-        label: data.cognome + ' ' + data.nome
-      });
+      students.push({ id: docSnap.id, nome: data.nome, cognome: data.cognome, label: data.cognome + ' ' + data.nome });
     }
   });
 
@@ -143,9 +119,7 @@ async function loadStudentList() {
     const li = document.createElement('li');
     li.textContent = s.label;
     li.style.cursor = 'pointer';
-    li.addEventListener('click', () => {
-      loadStudentDetail(s.id, s.label);
-    });
+    li.addEventListener('click', () => loadStudentDetail(s.id, s.label));
     studentList.appendChild(li);
   });
 }
@@ -164,10 +138,8 @@ async function loadStudentDetail(studentId, studentFullName) {
     const data = studenteDoc.data();
 
     Object.entries(sezioni).forEach(([titolo, chiavi]) => {
-      const hasTextResponse = chiavi.some(k => data[k]);
-      const isScheda1WithMap = titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements;
-      
-      if (!hasTextResponse && !isScheda1WithMap) return;
+      const hasContent = chiavi.some(k => data[k]) || (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements);
+      if (!hasContent) return;
 
       const section = document.createElement('div');
       section.className = 'card';
@@ -175,49 +147,40 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
-      // Scheda 1: aggettivi + risposte testuali + mappa
-      if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-        chiavi.forEach(k => {
-          if (data[k]) {
-            if (k === 'agg') {
-              const p = document.createElement('p');
-              p.innerHTML = `<strong>${etichette[k]}:</strong>`;
-              section.appendChild(p);
-
-              const aggettiviList = document.createElement('ul');
-              aggettiviList.style.listStyleType = 'disc';
-              aggettiviList.style.paddingLeft = '20px';
-
-              data.agg.split(',').forEach(agg => {
-                const trimmedAgg = agg.trim();
-                if (trimmedAgg) {
-                  const li = document.createElement('li');
-                  li.textContent = trimmedAgg;
-                  aggettiviList.appendChild(li);
-                }
-              });
-              section.appendChild(aggettiviList);
-            } else {
-              const p = document.createElement('p');
-              p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
-              section.appendChild(p);
-            }
-          }
-        });
-
-        if (data.cyElements) {
-          renderMapDataAsGraph(data.cyElements, section);
-        }
-
-      } else {
-        // Altre schede (logica generica)
-        chiavi.forEach(k => {
-          if (data[k]) {
+      // Logica per visualizzare i dati
+      chiavi.forEach(k => {
+        if (data[k]) {
+          if (k === 'agg') {
+            // Gestione speciale per la lista di aggettivi
+            const p = document.createElement('p');
+            p.innerHTML = `<strong>${etichette[k]}:</strong>`;
+            section.appendChild(p);
+            
+            const aggettiviList = document.createElement('ul');
+            aggettiviList.style.listStyleType = 'disc';
+            aggettiviList.style.paddingLeft = '20px';
+            
+            data.agg.split(',').forEach(agg => {
+              const trimmedAgg = agg.trim();
+              if (trimmedAgg) {
+                const li = document.createElement('li');
+                li.textContent = trimmedAgg;
+                aggettiviList.appendChild(li);
+              }
+            });
+            section.appendChild(aggettiviList);
+          } else {
+            // Gestione generica per tutti gli altri campi
             const p = document.createElement('p');
             p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
             section.appendChild(p);
           }
-        });
+        }
+      });
+
+      // Aggiungi la mappa solo alla fine della Scheda 1
+      if (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements) {
+        renderMapDataAsGraph(data.cyElements, section);
       }
 
       studentAnswers.appendChild(section);
