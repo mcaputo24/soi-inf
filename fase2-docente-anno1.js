@@ -202,7 +202,6 @@ async function loadStudentDetail(studentId, studentFullName) {
     p.innerHTML = `<strong>${etichette['scheda3_riflessione']}:</strong> ${data.scheda3_riflessione}`;
     section.appendChild(p);
   }
-}
 
 
       // Generico
