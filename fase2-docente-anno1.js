@@ -165,11 +165,20 @@ async function loadStudentDetail(studentId, studentFullName) {
         }
         if (data.cyElements) renderMapDataAsGraph(data.cyElements, section);
         chiavi.forEach(k => {
-          if (k !== 'agg' && data[k]) {
-            const p = document.createElement('p');
-            p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
-            section.appendChild(p);
-          }
+          if (k === 'data' && data[k]) {
+  const d = new Date(data[k]);
+  const giorno = String(d.getDate()).padStart(2, '0');
+  const mese = String(d.getMonth() + 1).padStart(2, '0');
+  const anno = d.getFullYear();
+  const dataFormattata = `${giorno}/${mese}/${anno}`;
+  const p = document.createElement('p');
+  p.innerHTML = `<strong>${etichette[k]}:</strong> ${dataFormattata}`;
+  section.appendChild(p);
+} else {
+  const p = document.createElement('p');
+  p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
+  section.appendChild(p);
+}
         });
 
       // Scheda 3 → solo numeri + riflessione
@@ -327,12 +336,25 @@ saveBtn.type = 'submit';
 saveBtn.className = 'button button-success';
 actionsDiv.appendChild(saveBtn);
 
+import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
 // Pulsante Logout
-const logoutBtn = document.createElement('a');
+const logoutBtn = document.createElement('button');
 logoutBtn.textContent = 'Logout';
-logoutBtn.href = 'index.html'; // torna alla home
+logoutBtn.type = 'button';
 logoutBtn.className = 'button button-danger';
+logoutBtn.addEventListener('click', async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+    window.location.href = 'index.html'; // dopo logout torna alla home
+  } catch (error) {
+    console.error("Errore durante il logout:", error);
+    alert("Errore durante il logout");
+  }
+});
 actionsDiv.appendChild(logoutBtn);
+
 
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
