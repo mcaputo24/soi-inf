@@ -1,4 +1,4 @@
-/* Stili per la pagina docente (Versione Ottimizzata e Corretta) */
+/* Stili per la pagina docente (Versione Unificata e Ottimizzata) */
 
 /* --- 1. Variabili Globali --- */
 :root {
@@ -6,6 +6,7 @@
   --color-primary: #1d3557;
   --color-primary-dark: #16324d;
   --color-secondary: #2c3e50;
+  --color-accent: #007bff; /* Aggiunto per elementi di enfasi */
   --color-background: #f2f4f8;
   --color-surface: #ffffff;
   --color-text: #333;
@@ -43,7 +44,7 @@ main {
   margin-inline: auto;
 }
 
-/* --- 3. Componenti --- */
+/* --- 3. Componenti Principali (Header, Card) --- */
 header {
   display: flex;
   flex-direction: column;
@@ -72,19 +73,39 @@ header h1 {
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.card h2 {
+/* --- 4. Stili Tipografici interni alle Card --- */
+.card h2,
+.card h3,
+.card h4 {
   margin-top: 0;
   font-size: 20px;
   color: var(--color-secondary);
   margin-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: var(--spacing-sm);
 }
 
-/* --- 4. Elementi Form e Pulsanti --- */
+.card p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.card p strong {
+  color: #34495e;
+  font-weight: 600;
+}
+
+/* --- 5. Elementi Form e Pulsanti --- */
 label {
   display: block;
   margin-bottom: var(--spacing-md);
   font-weight: 500;
   font-size: 15px;
+}
+
+.card label { /* Stile più specifico per le label nelle card */
+  font-weight: 600;
+  color: var(--color-secondary);
 }
 
 textarea {
@@ -96,12 +117,18 @@ textarea {
   resize: vertical;
 }
 
-/* Stile Base dei Pulsanti (Forma e Comportamento) */
+.card input[type="radio"] {
+  margin-right: 5px;
+  transform: scale(1.2);
+  accent-color: var(--color-accent);
+}
+
+/* Sistema di Pulsanti Unificato */
 .button {
-  display: inline-block; /* Permette di affiancare i pulsanti */
+  display: inline-block;
   padding: 14px 28px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: white;
   border: none;
   border-radius: var(--border-radius);
@@ -139,7 +166,34 @@ textarea {
   border-top: 1px solid var(--color-border);
 }
 
-/* --- 5. Modale --- */
+/* --- 6. Tabelle e Modale --- */
+.summary-table {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-collapse: collapse;
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.summary-table th {
+  background-color: var(--color-accent);
+  color: white;
+  padding: var(--spacing-sm);
+}
+
+.summary-table td {
+  padding: 6px;
+  border: 1px solid var(--color-border);
+}
+
+.summary-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.summary-table strong {
+  color: var(--color-accent);
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
