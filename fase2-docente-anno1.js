@@ -139,7 +139,6 @@ async function loadStudentDetail(studentId, studentFullName) {
   evaluationForm.innerHTML = '';
   studentAnswers.innerHTML = '';
 
-  // Titolo con nome studente
   studentNameTitle.innerHTML = `<span class="student-name">${studentFullName}</span>`;
 
   const studenteDoc = await getDoc(doc(db, 'fase1-studente-anno1', studentId));
@@ -149,7 +148,8 @@ async function loadStudentDetail(studentId, studentFullName) {
 
     Object.entries(sezioni).forEach(([titolo, chiavi]) => {
       const risposte = chiavi.map(k => data[k]).filter(Boolean);
-      if (risposte.length === 0 && !(titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements)) return;
+      const hasContent = risposte.length > 0 || (titolo === 'Scheda 1 – Mappa di descrizione di sé' && data.cyElements);
+      if (!hasContent) return;
 
       const section = document.createElement('div');
       section.className = 'card';
@@ -157,36 +157,47 @@ async function loadStudentDetail(studentId, studentFullName) {
       h4.textContent = titolo;
       section.appendChild(h4);
 
+      // Ciclo generico per TUTTE le risposte TRANNE gli aggettivi
       chiavi.forEach(k => {
-        if (data[k]) {
+        if (data[k] && k !== 'agg') { // <-- MODIFICA QUI: esclude 'agg'
           const p = document.createElement('p');
           p.innerHTML = `<strong>${etichette[k] || k}:</strong> ${data[k]}`;
           section.appendChild(p);
         }
       });
 
+      // === BLOCCO SPECIFICO PER SCHEDA 1 ===
+      // Aggiunge la lista di aggettivi e la mappa dentro la stessa card
+      if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
+        
+        // 1. Crea e aggiunge la lista di aggettivi (se esistono)
+        if (data.agg) {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${etichette['agg']}:</strong>`;
+          section.appendChild(p);
+          
+          const aggettiviList = document.createElement('ul');
+          aggettiviList.style.listStyleType = 'disc';
+          aggettiviList.style.paddingLeft = '20px';
+          
+          data.agg.split(',').forEach(agg => {
+            const trimmedAgg = agg.trim();
+            if (trimmedAgg) {
+              const li = document.createElement('li');
+              li.textContent = trimmedAgg;
+              aggettiviList.appendChild(li);
+            }
+          });
+          section.appendChild(aggettiviList);
+        }
+
+        // 2. Renderizza la mappa concettuale (se esiste)
+        if (data.cyElements) {
+          renderMapDataAsGraph(data.cyElements, section); // Passiamo 'section' come contenitore
+        }
+      }
+
       studentAnswers.appendChild(section);
-
-      // Mostra aggettivi + mappa concettuale per Scheda 1
-if (titolo === 'Scheda 1 – Mappa di descrizione di sé') {
-  // Elenco aggettivi se presenti
-  if (data.agg) {
-    const aggettiviList = document.createElement('ul');
-    aggettiviList.className = 'aggettivi-list';
-    data.agg.split(',').map(a => a.trim()).filter(Boolean).forEach(agg => {
-      const li = document.createElement('li');
-      li.textContent = agg;
-      aggettiviList.appendChild(li);
-    });
-    section.appendChild(aggettiviList);
-  }
-
-  // Mappa concettuale se presente
-  if (data.cyElements) {
-    renderMapDataAsGraph(data.cyElements);
-  }
-}
-
     });
   }
 
