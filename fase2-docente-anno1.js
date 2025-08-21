@@ -394,7 +394,7 @@ logoutBtn.addEventListener('click', async () => {
     await signOut(auth);
     sessionStorage.clear();
     localStorage.clear();
-    window.location.href = 'login.html'; // meglio mandarlo alla login, non all'index
+    window.location.href = 'index.html'; // meglio mandarlo alla login, non all'index
   } catch (error) {
     console.error("Errore durante il logout:", error);
     alert("Errore durante il logout");
