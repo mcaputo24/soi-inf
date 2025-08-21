@@ -108,9 +108,9 @@ function renderFase3Page(fase1Data, sintesi, datiSalvati) {
         </tbody>
       </table>
       <br>
-      <div style="text-align: right">
-        <button type="submit">Salva Sintesi</button>
-      </div>
+      <div style="text-align: center; margin-top: 20px;">
+  <button type="submit" class="button-save">Salva considerazioni finali</button>
+</div>
     </form>
   `;
 
