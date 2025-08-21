@@ -165,11 +165,11 @@ header h1 {
   font-size: 14px;
 }
 .button-secondary {
-  background-color: #6c757d;
-  color: #333;
+  background-color: var(--color-primary); /* Sfondo blu primario */
+  color: white; /* Testo bianco */
 }
 .button-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-primary-dark); /* Sfondo blu scuro al passaggio del mouse */
 }
 .form-actions {
   display: flex;
