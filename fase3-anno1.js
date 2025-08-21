@@ -1,111 +1,99 @@
 // fase3-anno1.js
 import { db } from './firebase-init.js';
 import {
-  collection, addDoc, getDocs, query, where
+  doc, setDoc, getDoc
 } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const form = document.getElementById('fase3-form');
+  const container = document.getElementById('esperienze-container');
+  const linkBox = document.getElementById('link-recupero');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
+  // recupero studentId da URL
+  const urlParams = new URLSearchParams(window.location.search);
+  let studentId = urlParams.get('id');
 
-    // Gestione multiple esperienze (array)
-    const entries = Array.from(document.querySelectorAll('.experience-entry'));
-    const esperienze = entries.map(entry => {
-      const getValue = name => entry.querySelector(`[name^="${name}"]`)?.value || '';
-      return {
-        data: getValue('data_attivita'),
-        anno: getValue('anno_scolastico'),
-        nome_progetto: getValue('nome_progetto'),
-        tipo_attivita: getValue('tipo_attivita'),
-        obiettivo: getValue('obiettivo'),
-        ore: getValue('ore'),
-        modalita: getValue('modalita'),
-        descrizione: getValue('attivita_descrizione'),
-        colpito: getValue('colpito'),
-        insegnamenti: getValue('insegnamenti'),
-        documenti: getValue('documenti')
-      };
-    });
+  if (studentId) {
+    // carica dati salvati
+    const docRef = doc(db, 'fase3-studente-anno1', studentId);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      form.querySelector('[name="sintesi_nome"]').value = data.nome || '';
+      form.querySelector('[name="sintesi_cognome"]').value = data.cognome || '';
+      form.querySelector('[name="sintesi_classe"]').value = data.classe || '';
 
-    const baseData = {
-      nome: data.sintesi_nome,
-      cognome: data.sintesi_cognome,
-      classe: data.sintesi_classe,
-      data: data.sintesi_data,
-      timestamp: new Date()
-    };
-
-    // Salva ogni esperienza singolarmente
-    for (const esperienza of esperienze) {
-      await addDoc(collection(db, 'fase3-studente-anno1'), {
-        ...baseData,
-        esperienza
+      // rimuovi l’esperienza vuota di default
+      container.innerHTML = '';
+      (data.esperienze || []).forEach(exp => {
+        const entry = createExperienceEntry();
+        fillEntry(entry, exp);
+        container.appendChild(entry);
       });
     }
+    linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
+  }
 
-    alert('Esperienza salvata correttamente.');
-    form.reset();
+  // aggiungi nuova esperienza
+  document.getElementById('aggiungi-esperienza-btn').addEventListener('click', () => {
+    container.appendChild(createExperienceEntry());
   });
 
-  // PDF
-  const pdfBtn = document.createElement('button');
-  pdfBtn.textContent = '📄 Scarica PDF con tutte le esperienze';
-  pdfBtn.type = 'button';
-  form.appendChild(pdfBtn);
+  // salvataggio
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  pdfBtn.addEventListener('click', async () => {
-    const nome = form.querySelector('[name="sintesi_nome"]').value.trim();
-    const cognome = form.querySelector('[name="sintesi_cognome"]').value.trim();
-    const classe = form.querySelector('[name="sintesi_classe"]').value.trim();
-
-    if (!nome || !cognome || !classe) {
-      alert('Compila nome, cognome e classe prima di scaricare il PDF.');
-      return;
+    if (!studentId) {
+      studentId = crypto.randomUUID(); // nuovo id
     }
 
-    const q = query(collection(db, 'fase3-studente-anno1'),
-      where('nome', '==', nome),
-      where('cognome', '==', cognome),
-      where('classe', '==', classe)
-    );
+    const esperienze = Array.from(container.querySelectorAll('.experience-entry')).map(entry => ({
+      data: entry.querySelector('[name^="data_attivita"]').value,
+      anno: entry.querySelector('[name^="anno_scolastico"]').value,
+      nome_progetto: entry.querySelector('[name^="nome_progetto"]').value,
+      tipo_attivita: entry.querySelector('[name^="tipo_attivita"]').value,
+      obiettivo: entry.querySelector('[name^="obiettivo"]').value,
+      ore: entry.querySelector('[name^="ore"]').value,
+      modalita: entry.querySelector('[name^="modalita"]').value,
+      descrizione: entry.querySelector('[name^="attivita_descrizione"]').value,
+      colpito: entry.querySelector('[name^="colpito"]').value,
+      insegnamenti: entry.querySelector('[name^="insegnamenti"]').value,
+      documenti: entry.querySelector('[name^="documenti"]').value
+    }));
 
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      alert('Nessuna esperienza trovata per questo studente.');
-      return;
-    }
+    const baseData = {
+      nome: form.querySelector('[name="sintesi_nome"]').value.trim(),
+      cognome: form.querySelector('[name="sintesi_cognome"]').value.trim(),
+      classe: form.querySelector('[name="sintesi_classe"]').value.trim(),
+      esperienze
+    };
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    let y = 10;
+    await setDoc(doc(db, 'fase3-studente-anno1', studentId), baseData, { merge: true });
 
-    doc.setFontSize(14);
-    doc.text(`Sintesi dell'esperienza – ${cognome} ${nome} (${classe})`, 10, y);
-    y += 10;
-
-    snapshot.forEach(docSnap => {
-      const d = docSnap.data();
-      const e = d.esperienza;
-
-      doc.setFontSize(12);
-      doc.text(`📅 Data esperienza: ${e.data || '—'}`, 10, y); y += 8;
-      doc.text(`📘 Nome progetto/ente: ${e.nome_progetto || '—'}`, 10, y); y += 8;
-      doc.text(`🎯 Obiettivo: ${e.obiettivo || '—'}`, 10, y); y += 8;
-      doc.text(`🕓 Ore: ${e.ore || '—'} | Modalità: ${e.modalita || '—'}`, 10, y); y += 8;
-      doc.text(`✏️ Attività: ${e.descrizione || '—'}`, 10, y); y += 8;
-      doc.text(`✨ Colpito da: ${e.colpito || '—'}`, 10, y); y += 8;
-      doc.text(`📚 Insegnamenti: ${e.insegnamenti || '—'}`, 10, y); y += 8;
-      doc.text(`📎 Documenti: ${e.documenti || '—'}`, 10, y); y += 12;
-
-      if (y > 270) {
-        doc.addPage();
-        y = 10;
-      }
-    });
-
-    doc.save(`esperienze_${cognome}_${nome}.pdf`);
+    alert('Dati salvati correttamente!');
+    linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
   });
+
+  // funzioni helper
+  function createExperienceEntry() {
+    const div = document.createElement('div');
+    div.classList.add('experience-entry');
+    div.innerHTML = container.querySelector('.experience-entry')?.innerHTML || '';
+    div.querySelectorAll('input, textarea').forEach(el => el.value = '');
+    return div;
+  }
+
+  function fillEntry(entry, exp) {
+    entry.querySelector('[name^="data_attivita"]').value = exp.data || '';
+    entry.querySelector('[name^="anno_scolastico"]').value = exp.anno || '';
+    entry.querySelector('[name^="nome_progetto"]').value = exp.nome_progetto || '';
+    entry.querySelector('[name^="tipo_attivita"]').value = exp.tipo_attivita || '';
+    entry.querySelector('[name^="obiettivo"]').value = exp.obiettivo || '';
+    entry.querySelector('[name^="ore"]').value = exp.ore || '';
+    entry.querySelector('[name^="modalita"]').value = exp.modalita || '';
+    entry.querySelector('[name^="attivita_descrizione"]').value = exp.descrizione || '';
+    entry.querySelector('[name^="colpito"]').value = exp.colpito || '';
+    entry.querySelector('[name^="insegnamenti"]').value = exp.insegnamenti || '';
+    entry.querySelector('[name^="documenti"]').value = exp.documenti || '';
+  }
 });
