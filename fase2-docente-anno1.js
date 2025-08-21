@@ -383,24 +383,12 @@ saveBtn.addEventListener('click', async () => {
 });
 actionsDiv.appendChild(saveBtn);
 
-// Pulsante Logout
-const logoutBtn = document.createElement('button');
-logoutBtn.textContent = 'Logout';
-logoutBtn.type = 'button';
-logoutBtn.className = 'button button-danger';
-logoutBtn.addEventListener('click', async () => {
-  try {
-    const auth = getAuth();
-    await signOut(auth);
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.href = 'index.html'; // meglio mandarlo alla login, non all'index
-  } catch (error) {
-    console.error("Errore durante il logout:", error);
-    alert("Errore durante il logout");
-  }
-});
-actionsDiv.appendChild(logoutBtn);
+// Pulsante Torna alla Fase 1
+const backToFase1Btn = document.createElement('a');
+backToFase1Btn.textContent = 'Torna alla Fase 1';
+backToFase1Btn.href = 'fase1-docente-anno1.html';
+backToFase1Btn.className = 'button button-secondary';
+actionsDiv.appendChild(backToFase1Btn);
 
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
