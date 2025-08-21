@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Collega la funzione al pulsante "Aggiungi"
   document.getElementById('aggiungi-esperienza-btn').addEventListener('click', addExperienceBlock);
 
-  // --- Caricamento Dati Esistenti ---
+  // recupero studentId da URL o da localStorage
   const urlParams = new URLSearchParams(window.location.search);
-  let studentId = urlParams.get('id');
+  let studentId = urlParams.get('id') || localStorage.getItem('fase3-studentId');
 
   if (studentId) {
     const docRef = doc(db, 'fase3-studente-anno1', studentId);
@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!studentId) {
       studentId = crypto.randomUUID();
+      localStorage.setItem('fase3-studentId', studentId); // <-- AGGIUNGI QUESTA RIGA
     }
     
     // CORREZIONE QUI: Cerca i blocchi .experience-entry direttamente dentro al form
