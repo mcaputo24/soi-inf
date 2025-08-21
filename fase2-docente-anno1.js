@@ -106,16 +106,36 @@ async function loadStudentList() {
   querySnapshot.forEach(docSnap => {
     const data = docSnap.data();
     if (data.cognome && data.nome) {
-      students.push({ id: docSnap.id, nome: data.nome, cognome: data.cognome, label: data.cognome + ' ' + data.nome });
+      students.push({ id: docSnap.id, nome: data.nome, cognome: data.cognome, label: data.cognome + ' ' + data.nome, resumeLink: data.resumeLink || null	 });
     }
   });
 
   students.sort((a, b) => a.label.localeCompare(b.label));
   students.forEach(s => {
     const li = document.createElement('li');
-    li.textContent = s.label;
-    li.style.cursor = 'pointer';
-    li.addEventListener('click', () => loadStudentDetail(s.id, s.label));
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.marginBottom = "10px";
+
+    const nameBtn = document.createElement('button');
+    nameBtn.textContent = s.label;
+    nameBtn.className = "button button-primary";
+    nameBtn.style.flex = "1";
+    nameBtn.addEventListener('click', () => loadStudentDetail(s.id, s.label));
+
+    li.appendChild(nameBtn);
+
+    if (s.resumeLink) {
+      const link = document.createElement('a');
+      link.href = s.resumeLink;
+      link.target = "_blank";
+      link.textContent = "Recupero";
+      link.className = "button button-success";
+      link.style.marginLeft = "10px";
+      li.appendChild(link);
+    }
+
     studentList.appendChild(li);
   });
 }
