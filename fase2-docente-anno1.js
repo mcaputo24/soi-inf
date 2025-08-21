@@ -101,44 +101,65 @@ const schede = {
 
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
-  const students = [];
+  const resumeSnapshot = await getDocs(collection(db, 'resumeLinks'));
 
+  // Mappa degli resumeLinks
+  const resumeMap = {};
+  resumeSnapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    if (data.studentId && data.link) {
+      resumeMap[data.studentId] = data.link;
+    }
+  });
+
+  const students = [];
   querySnapshot.forEach(docSnap => {
     const data = docSnap.data();
     if (data.cognome && data.nome) {
-      students.push({ id: docSnap.id, nome: data.nome, cognome: data.cognome, label: data.cognome + ' ' + data.nome, resumeLink: data.resumeLink || null	 });
+      students.push({
+        id: docSnap.id,
+        nome: data.nome,
+        cognome: data.cognome,
+        label: data.cognome + ' ' + data.nome,
+        resumeLink: resumeMap[docSnap.id] || null
+      });
     }
   });
 
+  // Ordina alfabeticamente
   students.sort((a, b) => a.label.localeCompare(b.label));
+
+  // Stampa lista
   students.forEach(s => {
-    const li = document.createElement('li');
-    li.style.display = "flex";
-    li.style.justifyContent = "space-between";
-    li.style.alignItems = "center";
-    li.style.marginBottom = "10px";
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.gap = '10px';
+    container.style.marginBottom = '10px';
 
-    const nameBtn = document.createElement('button');
-    nameBtn.textContent = s.label;
-    nameBtn.className = "button button-primary";
-    nameBtn.style.flex = "1";
-    nameBtn.addEventListener('click', () => loadStudentDetail(s.id, s.label));
+    // Pulsante selezione studente
+    const btnStud = document.createElement('button');
+    btnStud.textContent = s.label;
+    btnStud.className = 'button button-primary';
+    btnStud.style.flex = '1';
+    btnStud.addEventListener('click', () => loadStudentDetail(s.id, s.label));
+    container.appendChild(btnStud);
 
-    li.appendChild(nameBtn);
-
+    // Pulsante recupero link
     if (s.resumeLink) {
-      const link = document.createElement('a');
-      link.href = s.resumeLink;
-      link.target = "_blank";
-      link.textContent = "Recupero";
-      link.className = "button button-success";
-      link.style.marginLeft = "10px";
-      li.appendChild(link);
+      const linkBtn = document.createElement('a');
+      linkBtn.href = s.resumeLink;
+      linkBtn.textContent = "Recupero";
+      linkBtn.target = "_blank";
+      linkBtn.className = 'button button-success';
+      linkBtn.style.minWidth = "140px";
+      container.appendChild(linkBtn);
     }
 
-    studentList.appendChild(li);
+    studentList.appendChild(container);
   });
 }
+
 
 // =================================================================
 // Funzione principale
