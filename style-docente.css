@@ -152,3 +152,7 @@ header h1 {
   padding-bottom: var(--spacing-sm);
   margin-top: 0;
 }
+#fase1-docente-form .card label {
+  width: 100%;
+  display: block; /* Assicura che ogni campo vada a capo */
+}

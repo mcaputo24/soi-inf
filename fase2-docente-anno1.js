@@ -367,16 +367,20 @@ const viewBtn = document.createElement('button');
     </table>`;
   evaluationForm.appendChild(summaryCard);
 
-  // Pulsante salva
-  // Contenitore pulsanti in basso
+// Contenitore pulsanti in basso
 const actionsDiv = document.createElement('div');
 actionsDiv.className = 'form-actions';
 
 // Pulsante Salva
 const saveBtn = document.createElement('button');
 saveBtn.textContent = 'Salva valutazione';
-saveBtn.type = 'button';
+saveBtn.type = 'button'; // non submit
 saveBtn.className = 'button button-success';
+saveBtn.addEventListener('click', async () => {
+  const data = Object.fromEntries(new FormData(evaluationForm).entries());
+  await setDoc(valutazioneDocRef, data);
+  alert('Valutazione salvata');
+});
 actionsDiv.appendChild(saveBtn);
 
 // Pulsante Logout
@@ -385,17 +389,18 @@ logoutBtn.textContent = 'Logout';
 logoutBtn.type = 'button';
 logoutBtn.className = 'button button-danger';
 logoutBtn.addEventListener('click', async () => {
-  const auth = getAuth();
   try {
+    const auth = getAuth();
     await signOut(auth);
-    window.location.href = 'index.html'; // dopo logout torna alla home
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = 'login.html'; // meglio mandarlo alla login, non all'index
   } catch (error) {
     console.error("Errore durante il logout:", error);
     alert("Errore durante il logout");
   }
 });
 actionsDiv.appendChild(logoutBtn);
-
 
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
@@ -406,6 +411,7 @@ actionsDiv.appendChild(menuBtn);
 
 // Aggiungiamo il contenitore al form
 evaluationForm.appendChild(actionsDiv);
+
 
 
   evaluationForm.onsubmit = async (e) => {
