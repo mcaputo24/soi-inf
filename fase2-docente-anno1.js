@@ -30,6 +30,8 @@ function renderMapDataAsGraph(cyElements, parentElement) {
   });
 }
 
+import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
 import { db } from './firebase-init.js';
 import {
   collection, getDocs, getDoc, doc, setDoc
@@ -335,8 +337,6 @@ saveBtn.textContent = 'Salva valutazione';
 saveBtn.type = 'submit';
 saveBtn.className = 'button button-success';
 actionsDiv.appendChild(saveBtn);
-
-import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
 // Pulsante Logout
 const logoutBtn = document.createElement('button');
