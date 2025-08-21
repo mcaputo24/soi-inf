@@ -237,3 +237,11 @@ header h1 {
 #fase3-form td:nth-child(4) {
   vertical-align: middle;
 }
+/* Evidenzia colonna Dimensioni */
+#fase3-form td:nth-child(1) {
+  background-color: #f2f4f8;   /* grigio chiaro */
+  font-weight: 600;            /* testo più marcato */
+  font-size: 15px;             /* leggermente più grande */
+  color: var(--color-secondary);
+  text-align: center;          /* centrato anche orizzontalmente */
+}
