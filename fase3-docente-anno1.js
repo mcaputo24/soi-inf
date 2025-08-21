@@ -73,17 +73,17 @@ function renderFase3Page(fase1Data, sintesi, datiSalvati) {
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr>
-            <th style="border: 1px solid #ccc; padding: 8px;">Dimensione</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Osservazioni Fase 1</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Annotazioni sintetiche</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Sintesi</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Dimensioni</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Fase 1 - Osservazioni del docente</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Fase 2 - Sintesi schede studenti</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Fase 3 - Considerazioni finali dimensioni/classe</th>
           </tr>
         </thead>
         <tbody>
           ${dimensioni.map(dim => {
             const label = dim.replace(/_/g, ' ');
-            const chiaveSintesi = `sintesi_${dim}`;
-            const chiaveNote = `note_${dim}`;
+            const chiaveSintesi = `sintesi_${dim}`;   // sintesi fase 2
+            const chiaveNote = `note_${dim}`;         // note fase 3
             const osservazioni = sezioni.map(prefix => fase1Data[`${prefix}${dim}`]).filter(Boolean).join('<br>');
 
             return `
@@ -95,12 +95,12 @@ function renderFase3Page(fase1Data, sintesi, datiSalvati) {
                   ${osservazioni || '(nessuna osservazione)'}
                 </td>
                 <td style="border: 1px solid #ccc; padding: 8px;">
-                  <textarea name="${chiaveNote}" rows="2" style="width: 100%;">${datiSalvati[chiaveNote] || ''}</textarea>
-                </td>
-                <td style="border: 1px solid #ccc; padding: 8px;">
                   <input type="text" name="${chiaveSintesi}" 
                     value="${datiSalvati[chiaveSintesi] || sintesi[dim] || ''}" 
                     style="width: 100%;">
+                </td>
+                <td style="border: 1px solid #ccc; padding: 8px;">
+                  <textarea name="${chiaveNote}" rows="2" style="width: 100%;">${datiSalvati[chiaveNote] || ''}</textarea>
                 </td>
               </tr>
             `;
@@ -116,6 +116,7 @@ function renderFase3Page(fase1Data, sintesi, datiSalvati) {
 
   document.getElementById('fase3-form').addEventListener('submit', handlePhase3Submit);
 }
+
 
 async function handlePhase3Submit(e) {
   e.preventDefault();
