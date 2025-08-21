@@ -1,4 +1,3 @@
-// fase3-anno1.js
 import { db } from './firebase-init.js';
 import {
   doc, setDoc, getDoc
@@ -6,15 +5,27 @@ import {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const form = document.getElementById('fase3-form');
-  const container = document.getElementById('esperienze-container');
   const linkBox = document.getElementById('link-recupero');
 
-  // recupero studentId da URL
+  // Funzione per creare un nuovo blocco esperienza (usa la logica del tuo HTML)
+  function addExperienceBlock() {
+      const firstEntry = form.querySelector('.experience-entry');
+      if (firstEntry) {
+          const clone = firstEntry.cloneNode(true);
+          clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
+          // Inserisce il nuovo blocco prima del gruppo di pulsanti
+          form.querySelector('.button-group').before(clone);
+      }
+  }
+  
+  // Collega la funzione al pulsante "Aggiungi"
+  document.getElementById('aggiungi-esperienza-btn').addEventListener('click', addExperienceBlock);
+
+  // --- Caricamento Dati Esistenti ---
   const urlParams = new URLSearchParams(window.location.search);
   let studentId = urlParams.get('id');
 
   if (studentId) {
-    // carica dati già salvati
     const docRef = doc(db, 'fase3-studente-anno1', studentId);
     const snap = await getDoc(docRef);
     if (snap.exists()) {
@@ -23,43 +34,47 @@ document.addEventListener('DOMContentLoaded', async () => {
       form.querySelector('[name="sintesi_cognome"]').value = data.cognome || '';
       form.querySelector('[name="sintesi_classe"]').value = data.classe || '';
 
-      // rimuovo il blocco vuoto di default
-      container.innerHTML = '';
-      (data.esperienze || []).forEach(exp => {
-        const entry = createExperienceEntry();
-        fillEntry(entry, exp);
-        container.appendChild(entry);
+      // Rimuove il blocco di default e carica quelli salvati
+      const allEntries = form.querySelectorAll('.experience-entry');
+      allEntries.forEach((entry, index) => {
+        if (index > 0) entry.remove(); // Rimuove tutti tranne il primo
+      });
+
+      (data.esperienze || []).forEach((exp, index) => {
+        let entryToFill;
+        if (index === 0) {
+          entryToFill = form.querySelector('.experience-entry'); // Usa il primo blocco esistente
+        } else {
+          addExperienceBlock(); // Crea nuovi blocchi per le esperienze successive
+          entryToFill = form.querySelectorAll('.experience-entry')[index];
+        }
+        fillEntry(entryToFill, exp);
       });
     }
-    // mostro link di recupero
-    linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
+    linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}" target="_blank">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
   }
 
-  // aggiungi nuova esperienza
-  document.getElementById('aggiungi-esperienza-btn').addEventListener('click', () => {
-    container.appendChild(createExperienceEntry());
-  });
-
-  // salvataggio
+  // --- Logica di Salvataggio ---
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!studentId) {
-      studentId = crypto.randomUUID(); // genera nuovo id
+      studentId = crypto.randomUUID();
     }
-
-    const esperienze = Array.from(container.querySelectorAll('.experience-entry')).map(entry => ({
-      data: entry.querySelector('[name^="data_attivita"]').value,
-      anno: entry.querySelector('[name^="anno_scolastico"]').value,
-      nome_progetto: entry.querySelector('[name^="nome_progetto"]').value,
-      tipo_attivita: entry.querySelector('[name^="tipo_attivita"]').value,
-      obiettivo: entry.querySelector('[name^="obiettivo"]').value,
-      ore: entry.querySelector('[name^="ore"]').value,
-      modalita: entry.querySelector('[name^="modalita"]').value,
-      descrizione: entry.querySelector('[name^="attivita_descrizione"]').value,
-      colpito: entry.querySelector('[name^="colpito"]').value,
-      insegnamenti: entry.querySelector('[name^="insegnamenti"]').value,
-      documenti: entry.querySelector('[name^="documenti"]').value
+    
+    // CORREZIONE QUI: Cerca i blocchi .experience-entry direttamente dentro al form
+    const esperienze = Array.from(form.querySelectorAll('.experience-entry')).map(entry => ({
+      data: entry.querySelector('[name="data_attivita[]"]').value,
+      anno: entry.querySelector('[name="anno_scolastico[]"]').value,
+      nome_progetto: entry.querySelector('[name="nome_progetto[]"]').value,
+      tipo_attivita: entry.querySelector('[name="tipo_attivita[]"]').value,
+      obiettivo: entry.querySelector('[name="obiettivo[]"]').value,
+      ore: entry.querySelector('[name="ore[]"]').value,
+      modalita: entry.querySelector('[name="modalita[]"]').value,
+      descrizione: entry.querySelector('[name="attivita_descrizione[]"]').value,
+      colpito: entry.querySelector('[name="colpito[]"]').value,
+      insegnamenti: entry.querySelector('[name="insegnamenti[]"]').value,
+      documenti: entry.querySelector('[name="documenti[]"]').value
     }));
 
     const baseData = {
@@ -71,39 +86,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       await setDoc(doc(db, 'fase3-studente-anno1', studentId), baseData, { merge: true });
-
-      // messaggio conferma
       alert('Dati salvati correttamente!');
-
-      // mostra link recupero
-      linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
+      linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}" target="_blank">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
     } catch (err) {
       console.error("Errore salvataggio:", err);
       alert("Errore durante il salvataggio, riprova.");
     }
   });
 
-  // helper per duplicare le sezioni esperienza
-  function createExperienceEntry() {
-    const div = document.createElement('div');
-    div.classList.add('experience-entry');
-    div.innerHTML = container.querySelector('.experience-entry')?.innerHTML || '';
-    div.querySelectorAll('input, textarea').forEach(el => el.value = '');
-    return div;
-  }
-
-  // helper per ricaricare i dati già salvati
+  // Funzione helper per riempire un blocco con i dati
   function fillEntry(entry, exp) {
-    entry.querySelector('[name^="data_attivita"]').value = exp.data || '';
-    entry.querySelector('[name^="anno_scolastico"]').value = exp.anno || '';
-    entry.querySelector('[name^="nome_progetto"]').value = exp.nome_progetto || '';
-    entry.querySelector('[name^="tipo_attivita"]').value = exp.tipo_attivita || '';
-    entry.querySelector('[name^="obiettivo"]').value = exp.obiettivo || '';
-    entry.querySelector('[name^="ore"]').value = exp.ore || '';
-    entry.querySelector('[name^="modalita"]').value = exp.modalita || '';
-    entry.querySelector('[name^="attivita_descrizione"]').value = exp.descrizione || '';
-    entry.querySelector('[name^="colpito"]').value = exp.colpito || '';
-    entry.querySelector('[name^="insegnamenti"]').value = exp.insegnamenti || '';
-    entry.querySelector('[name^="documenti"]').value = exp.documenti || '';
+    entry.querySelector('[name="data_attivita[]"]').value = exp.data || '';
+    entry.querySelector('[name="anno_scolastico[]"]').value = exp.anno || '';
+    entry.querySelector('[name="nome_progetto[]"]').value = exp.nome_progetto || '';
+    entry.querySelector('[name="tipo_attivita[]"]').value = exp.tipo_attivita || '';
+    entry.querySelector('[name="obiettivo[]"]').value = exp.obiettivo || '';
+    entry.querySelector('[name="ore[]"]').value = exp.ore || '';
+    entry.querySelector('[name="modalita[]"]').value = exp.modalita || '';
+    entry.querySelector('[name="attivita_descrizione[]"]').value = exp.descrizione || '';
+    entry.querySelector('[name="colpito[]"]').value = exp.colpito || '';
+    entry.querySelector('[name="insegnamenti[]"]').value = exp.insegnamenti || '';
+    entry.querySelector('[name="documenti[]"]').value = exp.documenti || '';
   }
 });
