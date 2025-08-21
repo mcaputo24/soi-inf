@@ -149,7 +149,7 @@ async function loadStudentList() {
     if (s.resumeLink) {
       const linkBtn = document.createElement('a');
       linkBtn.href = s.resumeLink;
-      linkBtn.textContent = "Recupero";
+      linkBtn.textContent = "Link recupero";
       linkBtn.target = "_blank";
       linkBtn.className = 'button button-success';
       linkBtn.style.minWidth = "140px";
