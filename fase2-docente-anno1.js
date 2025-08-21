@@ -394,7 +394,7 @@ actionsDiv.appendChild(backToFase1Btn);
 const menuBtn = document.createElement('a');
 menuBtn.textContent = 'Menu principale';
 menuBtn.href = 'index.html';
-menuBtn.className = 'button button-primary';
+fase1Btn.className = 'button button-secondary';
 actionsDiv.appendChild(menuBtn);
 
 // Aggiungiamo il contenitore al form

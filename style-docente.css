@@ -156,3 +156,24 @@ header h1 {
   width: 100%;
   display: block; /* Assicura che ogni campo vada a capo */
 }
+.card input[type="text"],
+.card textarea,
+.card select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 14px;
+}
+.button-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.button-secondary:hover {
+  background-color: #e0e0e0;
+}
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;   /* spazio orizzontale tra pulsanti */
+  margin-top: 20px;
+}
