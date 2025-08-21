@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let studentId = urlParams.get('id');
 
   if (studentId) {
-    // carica dati salvati
+    // carica dati già salvati
     const docRef = doc(db, 'fase3-studente-anno1', studentId);
     const snap = await getDoc(docRef);
     if (snap.exists()) {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       form.querySelector('[name="sintesi_cognome"]').value = data.cognome || '';
       form.querySelector('[name="sintesi_classe"]').value = data.classe || '';
 
-      // rimuovi l’esperienza vuota di default
+      // rimuovo il blocco vuoto di default
       container.innerHTML = '';
       (data.esperienze || []).forEach(exp => {
         const entry = createExperienceEntry();
@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         container.appendChild(entry);
       });
     }
+    // mostro link di recupero
     linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
   }
 
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
 
     if (!studentId) {
-      studentId = crypto.randomUUID(); // nuovo id
+      studentId = crypto.randomUUID(); // genera nuovo id
     }
 
     const esperienze = Array.from(container.querySelectorAll('.experience-entry')).map(entry => ({
@@ -68,13 +69,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       esperienze
     };
 
-    await setDoc(doc(db, 'fase3-studente-anno1', studentId), baseData, { merge: true });
+    try {
+      await setDoc(doc(db, 'fase3-studente-anno1', studentId), baseData, { merge: true });
 
-    alert('Dati salvati correttamente!');
-    linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
+      // messaggio conferma
+      alert('Dati salvati correttamente!');
+
+      // mostra link recupero
+      linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
+    } catch (err) {
+      console.error("Errore salvataggio:", err);
+      alert("Errore durante il salvataggio, riprova.");
+    }
   });
 
-  // funzioni helper
+  // helper per duplicare le sezioni esperienza
   function createExperienceEntry() {
     const div = document.createElement('div');
     div.classList.add('experience-entry');
@@ -83,6 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return div;
   }
 
+  // helper per ricaricare i dati già salvati
   function fillEntry(entry, exp) {
     entry.querySelector('[name^="data_attivita"]').value = exp.data || '';
     entry.querySelector('[name^="anno_scolastico"]').value = exp.anno || '';
