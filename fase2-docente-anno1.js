@@ -375,7 +375,7 @@ actionsDiv.className = 'form-actions';
 // Pulsante Salva
 const saveBtn = document.createElement('button');
 saveBtn.textContent = 'Salva valutazione';
-saveBtn.type = 'submit';
+saveBtn.type = 'button';
 saveBtn.className = 'button button-success';
 actionsDiv.appendChild(saveBtn);
 

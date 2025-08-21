@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <link rel="stylesheet" href="style-fase2.css">
   <meta charset="UTF-8">
   <title>Fase 2 - Scheda di sintesi individuale</title>
   <link rel="stylesheet" href="style-docente.css">
   <script type="module" src="firebase-init.js"></script>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo">
-    <h1>FASE 2 – Scheda di sintesi individuale (per studente)</h1>
-    <a href="fase1-docente-anno1.html" class="button button-primary">Torna alla Fase 1</a>
-    <a href="index.html" class="button button-primary">Menu principale</a>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <img src="logo.png" alt="Logo">
+        <h1>FASE 2 – Scheda di sintesi individuale</h1>
+      </div>
+      <div class="header-actions">
+        <a href="fase1-docente-anno1.html" class="button button-primary">Torna alla Fase 1</a>
+        <a href="index.html" class="button button-primary">Menu principale</a>
+      </div>
+    </div>
   </header>
 
   <main>
@@ -22,8 +28,12 @@
     </div>
 
     <div id="student-evaluation" style="display:none;">
-      <button id="back-button" class="button button-primary">← Torna all'elenco studenti</button>
-      <h2 id="student-name-title">Studente</h2>
+      
+      <div class="evaluation-header">
+        <button id="back-button" class="button button-primary">&larr; Elenco studenti</button>
+        <h2 id="student-name-title">Studente</h2>
+      </div>
+
       <div class="split-view">
         <div class="left-column">
           <h3>Risposte dello studente</h3>
