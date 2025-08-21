@@ -231,3 +231,9 @@ header h1 {
   background-color: var(--color-primary-dark);
   transform: translateY(-2px);
 }
+/* Allineamento verticale colonne Fase 3 */
+#fase3-form td:nth-child(1),
+#fase3-form td:nth-child(3),
+#fase3-form td:nth-child(4) {
+  vertical-align: middle;
+}
