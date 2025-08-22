@@ -166,7 +166,6 @@ if (pdfButton) {
     }
   });
 }
-  }
 
   // Funzione helper per riempire un blocco con i dati
   function fillEntry(entry, exp) {
