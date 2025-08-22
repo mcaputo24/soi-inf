@@ -1,56 +1,72 @@
+// =================================================================
+// INIZIO DEL FILE fase3-anno1.js (VERSIONE CORRETTA E COMPLETA)
+// =================================================================
+
+// TUTTI GLI IMPORT DEVONO STARE QUI, ALL'INIZIO DEL FILE
 import { db } from './firebase-init.js';
 import {
   doc, setDoc, getDoc
 } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
+// Tutta la logica viene eseguita solo dopo che la pagina è stata caricata
 document.addEventListener('DOMContentLoaded', async () => {
   const form = document.getElementById('fase3-form');
   const linkBox = document.getElementById('link-recupero');
 
-  // Funzione per creare un nuovo blocco esperienza (usa la logica del tuo HTML)
+  // Funzione per creare un nuovo blocco esperienza
   function addExperienceBlock() {
-      const firstEntry = form.querySelector('.experience-entry');
-      if (firstEntry) {
-          const clone = firstEntry.cloneNode(true);
-          clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
-          // Inserisce il nuovo blocco prima del gruppo di pulsanti
-          form.querySelector('.button-group').before(clone);
-      }
+    const firstEntry = form.querySelector('.experience-entry');
+    if (firstEntry) {
+      const clone = firstEntry.cloneNode(true);
+      clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
+      form.querySelector('.button-group').before(clone);
+    }
   }
   
-  // Collega la funzione al pulsante "Aggiungi"
   document.getElementById('aggiungi-esperienza-btn').addEventListener('click', addExperienceBlock);
 
-  // recupero studentId da URL o da localStorage
+  // --- Caricamento Dati Esistenti ---
   const urlParams = new URLSearchParams(window.location.search);
   let studentId = urlParams.get('id') || localStorage.getItem('fase3-studentId');
 
   if (studentId) {
+    localStorage.setItem('fase3-studentId', studentId);
     const docRef = doc(db, 'fase3-studente-anno1', studentId);
     const snap = await getDoc(docRef);
+
     if (snap.exists()) {
       const data = snap.data();
       form.querySelector('[name="sintesi_nome"]').value = data.nome || '';
       form.querySelector('[name="sintesi_cognome"]').value = data.cognome || '';
       form.querySelector('[name="sintesi_classe"]').value = data.classe || '';
 
-      // Rimuove il blocco di default e carica quelli salvati
+      // LOGICA DI CARICAMENTO CORRETTA
       const allEntries = form.querySelectorAll('.experience-entry');
+      // Rimuove tutti i blocchi tranne il primo, che useremo come template
       allEntries.forEach((entry, index) => {
-        if (index > 0) entry.remove(); // Rimuove tutti tranne il primo
+        if (index > 0) entry.remove();
       });
 
-      (data.esperienze || []).forEach((exp, index) => {
-  let entryToFill;
-  if (index === 0) {
-    entryToFill = form.querySelector('.experience-entry'); // primo blocco
-  } else {
-    addExperienceBlock(); 
-    const entries = form.querySelectorAll('.experience-entry');
-    entryToFill = entries[entries.length - 1]; // l'ultimo creato
-  }
-  fillEntry(entryToFill, exp);
-});
+      const experiencesData = data.esperienze || [];
+      const firstBlock = form.querySelector('.experience-entry');
+
+      if (experiencesData.length === 0) {
+          // Se non ci sono esperienze salvate, puliamo il primo blocco
+          firstBlock.querySelectorAll('input, textarea').forEach(el => el.value = '');
+      } else {
+          // Altrimenti, riempiamo i blocchi con i dati salvati
+          experiencesData.forEach((exp, index) => {
+              let entryToFill;
+              if (index === 0) {
+                  entryToFill = firstBlock; // Usa il primo blocco per la prima esperienza
+              } else {
+                  addExperienceBlock(); // Crea un nuovo blocco per le esperienze successive
+                  const currentEntries = form.querySelectorAll('.experience-entry');
+                  entryToFill = currentEntries[currentEntries.length - 1]; // Seleziona l'ultimo blocco creato
+              }
+              fillEntry(entryToFill, exp);
+          });
+      }
     }
     linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}" target="_blank">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
   }
@@ -61,10 +77,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!studentId) {
       studentId = crypto.randomUUID();
-      localStorage.setItem('fase3-studentId', studentId); // <-- AGGIUNGI QUESTA RIGA
+      localStorage.setItem('fase3-studentId', studentId);
     }
     
-    // CORREZIONE QUI: Cerca i blocchi .experience-entry direttamente dentro al form
     const esperienze = Array.from(form.querySelectorAll('.experience-entry')).map(entry => ({
       data: entry.querySelector('[name="data_attivita[]"]').value,
       anno: entry.querySelector('[name="anno_scolastico[]"]').value,
@@ -96,6 +111,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // --- Logica scarica PDF ---
+  const pdfButton = document.getElementById('download-pdf-btn');
+  if (pdfButton) {
+      pdfButton.addEventListener('click', async () => {
+          try {
+              const { jsPDF } = window.jspdf;
+              const pdf = new jsPDF("p", "mm", "a4");
+              const mainContent = document.querySelector('main');
+              
+              pdfButton.textContent = 'Creazione PDF...';
+              pdfButton.disabled = true;
+
+              const canvas = await window.html2canvas(mainContent, { scale: 2 });
+              const imgData = canvas.toDataURL("image/jpeg", 0.7);
+              const pageWidth = pdf.internal.pageSize.getWidth();
+              const pageHeight = pdf.internal.pageSize.getHeight();
+              const imgWidth = pageWidth;
+              const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+              let position = 0;
+              pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+
+              let heightLeft = imgHeight - pageHeight;
+              while (heightLeft > 0) {
+                  position = -heightLeft;
+                  pdf.addPage();
+                  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+                  heightLeft -= pageHeight;
+              }
+
+              pdf.save("fase3-studente.pdf");
+
+          } catch (err) {
+              console.error("Errore generazione PDF:", err);
+              alert("Errore nella generazione del PDF.");
+          } finally {
+              pdfButton.textContent = 'Scarica PDF';
+              pdfButton.disabled = false;
+          }
+      });
+  }
+
   // Funzione helper per riempire un blocco con i dati
   function fillEntry(entry, exp) {
     entry.querySelector('[name="data_attivita[]"]').value = exp.data || '';
@@ -110,39 +167,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     entry.querySelector('[name="insegnamenti[]"]').value = exp.insegnamenti || '';
     entry.querySelector('[name="documenti[]"]').value = exp.documenti || '';
   }
-// --- Logica scarica PDF ---
-import html2canvas from 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
-
-document.getElementById('download-pdf-btn').addEventListener('click', async () => {
-  try {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "a4");
-    const scale = 2; // qualità screenshot
-    const form = document.querySelector('main');
-
-    const canvas = await html2canvas(form, { scale });
-    const imgData = canvas.toDataURL("image/jpeg", 0.6); // qualità più leggera
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let position = 0;
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-
-    // Se il contenuto è lungo, aggiunge altre pagine
-    let heightLeft = imgHeight - pageHeight;
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-
-    pdf.save("fase3-studente.pdf");
-  } catch (err) {
-    console.error("Errore generazione PDF:", err);
-    alert("Errore nella generazione del PDF.");
-  }
-});
 });
