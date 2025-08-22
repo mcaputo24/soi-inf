@@ -41,15 +41,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       (data.esperienze || []).forEach((exp, index) => {
-        let entryToFill;
-        if (index === 0) {
-          entryToFill = form.querySelector('.experience-entry'); // Usa il primo blocco esistente
-        } else {
-          addExperienceBlock(); // Crea nuovi blocchi per le esperienze successive
-          entryToFill = form.querySelectorAll('.experience-entry')[index];
-        }
-        fillEntry(entryToFill, exp);
-      });
+  let entryToFill;
+  if (index === 0) {
+    entryToFill = form.querySelector('.experience-entry'); // primo blocco
+  } else {
+    addExperienceBlock(); 
+    const entries = form.querySelectorAll('.experience-entry');
+    entryToFill = entries[entries.length - 1]; // l'ultimo creato
+  }
+  fillEntry(entryToFill, exp);
+});
     }
     linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}" target="_blank">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
   }
