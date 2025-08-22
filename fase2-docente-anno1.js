@@ -149,18 +149,19 @@ async function loadStudentList() {
     if (s.resumeLink) {
       const linkBtn = document.createElement('a');
       linkBtn.href = s.resumeLink;
-      linkBtn.textContent = "Link recupero";
+      linkBtn.textContent = "Link Fase 1";
       linkBtn.target = "_blank";
       linkBtn.className = 'button button-success';
       linkBtn.style.minWidth = "140px";
       container.appendChild(linkBtn);
+}
 // Link recupero Fase 3
 const linkFase3 = `${window.location.origin}/fase3-anno1.html?id=${s.id}`;
 const linkBtn3 = document.createElement('a');
 linkBtn3.href = linkFase3;
 linkBtn3.textContent = "Link Fase 3";
 linkBtn3.target = "_blank";
-linkBtn3.className = 'button button-info';
+linkBtn3.className = 'button button-success';
 linkBtn3.style.minWidth = "140px";
 container.appendChild(linkBtn3);
 
@@ -170,11 +171,9 @@ container.appendChild(linkBtn3);
 // linkBtn4.href = linkFase4;
 // linkBtn4.textContent = "Link Fase 4";
 // linkBtn4.target = "_blank";
-// linkBtn4.className = 'button button-info';
+// linkBtn4.className = 'button button-success';
 // linkBtn4.style.minWidth = "140px";
 // container.appendChild(linkBtn4);
-    
-}
 
     studentList.appendChild(container);
   });
