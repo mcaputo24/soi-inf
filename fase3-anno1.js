@@ -94,7 +94,49 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert("Errore durante il salvataggio, riprova.");
     }
   });
+// --- Logica scarica PDF ---
+  const pdfButton = document.getElementById('download-pdf-btn');
+  if (pdfButton) {
+    pdfButton.addEventListener('click', async () => {
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4");
+        const mainContent = document.querySelector('main');
 
+        // Mostra un indicatore di caricamento
+        pdfButton.textContent = 'Creazione PDF...';
+        pdfButton.disabled = true;
+
+        const canvas = await window.html2canvas(mainContent, { scale: 2 });
+        const imgData = canvas.toDataURL("image/jpeg", 0.7);
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let position = 0;
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+
+        let heightLeft = imgHeight - pageHeight;
+        while (heightLeft > 0) {
+          position = -heightLeft;
+          pdf.addPage();
+          pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save("fase3-studente.pdf");
+
+      } catch (err) {
+        console.error("Errore generazione PDF:", err);
+        alert("Errore nella generazione del PDF.");
+      } finally {
+        // Ripristina il pulsante
+        pdfButton.textContent = 'Scarica PDF';
+        pdfButton.disabled = false;
+      }
+    });
+  }
   // Funzione helper per riempire un blocco con i dati
   function fillEntry(entry, exp) {
     entry.querySelector('[name="data_attivita[]"]').value = exp.data || '';

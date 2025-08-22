@@ -83,41 +83,6 @@
     width: 35%;
     background-color: #eef4ff;
   }
-  .button-group {
-    margin-top: 25px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-  .btn-primary, .btn-secondary {
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: bold;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  .btn-primary {
-    background-color: #007bff;
-    color: white;
-  }
-  .btn-primary:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-  }
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-  .btn-secondary:hover {
-    background-color: #565e64;
-    transform: scale(1.05);
-  }
 </style>
 </head>
 <body>
@@ -196,10 +161,11 @@
         <textarea name="documenti[]" rows="2"></textarea>
       </div>
 
-      <div class="button-group">
-        <button type="button" id="aggiungi-esperienza-btn" class="btn-secondary">Aggiungi un’altra esperienza</button>
-        <a href="index.html" class="btn-secondary">Menu principale</a>
-        <button type="submit" class="btn-primary">Salva</button>
+      <div class="form-actions">
+        <button type="button" id="aggiungi-esperienza-btn" class="button button-primary">Aggiungi un’altra esperienza</button>
+        <a href="index.html" class="button button-primary">Menu principale</a>
+        <button type="submit" class="button button-success">Salva</button>
+        <button type="button" id="download-pdf-btn" class="button button-success">Scarica PDF</button>
       </div>
       <div id="link-recupero" style="margin-top:20px; text-align:center; font-weight:bold;"></div>
     </div>
