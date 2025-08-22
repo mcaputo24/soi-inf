@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           });
       }
     }
-    linkBox.innerHTML = `🔗 Link di recupero: <a href="?id=${studentId}" target="_blank">${window.location.origin}${window.location.pathname}?id=${studentId}</a>`;
+  
   }
 
   // --- Logica di Salvataggio ---
