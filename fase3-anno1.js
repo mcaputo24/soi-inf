@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // --- Logica di Salvataggio ---
   // --- Logica di Salvataggio ---
+  // --- Logica di Salvataggio ---
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       localStorage.setItem('fase3-studentId', studentId);
     }
     
-    // La raccolta dei dati 'esperienze' e 'baseData' resta identica
+    // La raccolta dei dati (esperienze, baseData) resta invariata
     const esperienze = Array.from(form.querySelectorAll('.experience-entry')).map(entry => ({
       data: entry.querySelector('[name="data_attivita[]"]').value,
       anno: entry.querySelector('[name="anno_scolastico[]"]').value,
@@ -104,22 +105,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     try {
-      // 1. Salva i dati del form dello studente (come prima)
+      // 1. Salva i dati del form dello studente
       await setDoc(doc(db, 'fase3-studente-anno1', studentId), baseData, { merge: true });
 
-      // --- NUOVA LOGICA: Salva il link di recupero ufficiale in 'resumeLinks' ---
+      // 2. CREA E SALVA IL LINK UFFICIALE NELLA COLLEZIONE 'resumeLinks'
       const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
       const linkData = {
         studentId: studentId,
-        linkFase3: recoveryLink // Aggiunge o aggiorna il campo specifico per la Fase 3
+        linkFase3: recoveryLink, // Aggiunge/aggiorna il campo specifico per la Fase 3
+        updatedAt: new Date()
       };
-      // Usiamo { merge: true } per aggiungere il campo linkFase3 senza cancellare il linkFase1 esistente
+      // Usa { merge: true } per non cancellare il link della Fase 1
       await setDoc(doc(db, 'resumeLinks', studentId), linkData, { merge: true });
-      // --- FINE NUOVA LOGICA ---
 
       alert('Dati salvati correttamente!');
-      linkBox.innerHTML = `🔗 Link di recupero: <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>`;
       
+      // 3. MOSTRA SULLA PAGINA IL LINK UFFICIALE APPENA SALVATO
+      linkBox.innerHTML = `🔗 Link di recupero: <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>`;
+
     } catch (err) {
       console.error("Errore salvataggio:", err);
       alert("Errore durante il salvataggio, riprova.");
