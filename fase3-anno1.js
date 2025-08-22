@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (firstEntry) {
       const clone = firstEntry.cloneNode(true);
       clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
-      form.querySelector('.button-group').before(clone);
+      form.querySelector('.form-actions').before(clone);
     }
   }
   
