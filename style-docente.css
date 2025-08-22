@@ -25,7 +25,9 @@
 /* --- 2. Stili di Base --- */
 body {
   font-family: var(--font-family-base);
-  background-color: var(--color-background);
+  /* Imposta sia un'immagine di sfondo sia un colore di fallback */
+  background: var(--color-background) url("sfondo-simpatica.png") no-repeat center center fixed;
+  background-size: cover;
   color: var(--color-text);
   margin: 0;
   padding: var(--spacing-xl);
