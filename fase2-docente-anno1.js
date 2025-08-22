@@ -101,18 +101,19 @@ const schede = {
 
 // Sostituisci l'intera funzione loadStudentList con questa
 
+// Verifica che questa funzione sia presente nel tuo fase2-docente-anno1.js
+
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
   const resumeSnapshot = await getDocs(collection(db, 'resumeLinks'));
 
-  // La mappa ora conterrà un oggetto con entrambi i link
   const resumeMap = {};
   resumeSnapshot.forEach(docSnap => {
     const data = docSnap.data();
     if (data.studentId) {
       resumeMap[data.studentId] = {
-        linkFase1: data.link || null, // Link Fase 1
-        linkFase3: data.linkFase3 || null // NUOVO: Link Fase 3
+        linkFase1: data.link || null,
+        linkFase3: data.linkFase3 || null // Legge il nuovo campo
       };
     }
   });
@@ -126,7 +127,6 @@ async function loadStudentList() {
         nome: data.nome,
         cognome: data.cognome,
         label: data.cognome + ' ' + data.nome,
-        // Assegna l'intero oggetto dei link allo studente
         resumeLinks: resumeMap[docSnap.id] || {}
       });
     }
@@ -134,7 +134,7 @@ async function loadStudentList() {
 
   students.sort((a, b) => a.label.localeCompare(b.label));
   
-  studentList.innerHTML = ''; // Pulisce la lista prima di riempirla
+  studentList.innerHTML = '';
 
   students.forEach(s => {
     const container = document.createElement('div');
