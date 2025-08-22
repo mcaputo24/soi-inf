@@ -111,46 +111,61 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // --- Logica scarica PDF ---
-  const pdfButton = document.getElementById('download-pdf-btn');
-  if (pdfButton) {
-      pdfButton.addEventListener('click', async () => {
-          try {
-              const { jsPDF } = window.jspdf;
-              const pdf = new jsPDF("p", "mm", "a4");
-              const mainContent = document.querySelector('main');
-              
-              pdfButton.textContent = 'Creazione PDF...';
-              pdfButton.disabled = true;
+  // Codice corretto da incollare al posto di quello vecchio
 
-              const canvas = await window.html2canvas(mainContent, { scale: 2 });
-              const imgData = canvas.toDataURL("image/jpeg", 0.7);
-              const pageWidth = pdf.internal.pageSize.getWidth();
-              const pageHeight = pdf.internal.pageSize.getHeight();
-              const imgWidth = pageWidth;
-              const imgHeight = (canvas.height * imgWidth) / canvas.width;
+// --- Logica scarica PDF ---
+const pdfButton = document.getElementById('download-pdf-btn');
+if (pdfButton) {
+  pdfButton.addEventListener('click', async () => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+      const mainContent = document.querySelector('main');
 
-              let position = 0;
-              pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      // Mostra un indicatore di caricamento
+      pdfButton.textContent = 'Creazione PDF...';
+      pdfButton.disabled = true;
 
-              let heightLeft = imgHeight - pageHeight;
-              while (heightLeft > 0) {
-                  position = -heightLeft;
-                  pdf.addPage();
-                  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-                  heightLeft -= pageHeight;
-              }
-
-              pdf.save("fase3-studente.pdf");
-
-          } catch (err) {
-              console.error("Errore generazione PDF:", err);
-              alert("Errore nella generazione del PDF.");
-          } finally {
-              pdfButton.textContent = 'Scarica PDF';
-              pdfButton.disabled = false;
-          }
+      const canvas = await window.html2canvas(mainContent, {
+        scale: 2,
+        // Assicura che venga catturato tutto anche se la pagina ha uno scroll
+        windowWidth: mainContent.scrollWidth,
+        windowHeight: mainContent.scrollHeight
       });
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.7);
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let position = 0;
+      let heightLeft = imgHeight;
+
+      // Aggiunge la prima pagina
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Aggiunge le pagine successive se necessario
+      while (heightLeft > 0) {
+        position -= pageHeight; // Sposta la "visuale" dell'immagine in alto
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save("fase3-studente.pdf");
+
+    } catch (err) {
+      console.error("Errore generazione PDF:", err);
+      alert("Errore nella generazione del PDF.");
+    } finally {
+      // Ripristina il pulsante in ogni caso
+      pdfButton.textContent = 'Scarica PDF';
+      pdfButton.disabled = false;
+    }
+  });
+}
   }
 
   // Funzione helper per riempire un blocco con i dati
