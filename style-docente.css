@@ -245,3 +245,68 @@ header h1 {
   color: var(--color-secondary);
   text-align: center;          /* centrato anche orizzontalmente */
 }
+/* ======================================================== */
+/* --- Stili aggiuntivi per la pagina Fase 3 Studente --- */
+/* ======================================================== */
+
+/* Migliora la leggibilità della tabella delle esperienze */
+.responsive-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.responsive-table td {
+  padding: 10px;
+  vertical-align: top;
+  border: 1px solid var(--color-border);
+}
+
+.responsive-table tr:nth-child(even) {
+  background-color: var(--color-background);
+}
+
+/* Evidenzia le etichette della tabella */
+.responsive-table td:first-child {
+  font-weight: 600;
+  width: 35%;
+  background-color: #eef4ff;
+  color: var(--color-secondary);
+}
+
+/* Separa visivamente i blocchi di esperienza */
+.experience-entry {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  position: relative;
+}
+
+.experience-entry h3 {
+  text-align: left;
+  border-bottom: none;
+  font-size: 1.3em;
+}
+
+/* Stile per il pulsante "Rimuovi esperienza" */
+.remove-btn {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background-color: transparent;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: 50px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background-color: var(--color-danger);
+  color: white;
+}
