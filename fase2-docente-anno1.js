@@ -110,12 +110,10 @@ async function loadStudentList() {
   const resumeMap = {};
   resumeSnapshot.forEach(docSnap => {
     const data = docSnap.data();
-    if (data.studentId) {
-      resumeMap[data.studentId] = {
+      resumeMap[docSnap.id] = {
         linkFase1: data.link || null,
         linkFase3: data.linkFase3 || null // Legge il nuovo campo
       };
-    }
   });
 
   const students = [];
