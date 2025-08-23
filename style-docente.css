@@ -26,9 +26,9 @@
 body {
   font-family: var(--font-family-base);
   /* Imposta sia un'immagine di sfondo sia un colore di fallback */
-  background: var(--color-background) url("sfondo-simpatica.png") no-repeat center center fixed;
+  background: none;
   background-size: cover;
-  color: var(--color-text);
+  background-color: #f0f4f8; /* colore neutro */
   margin: 0;
   padding: var(--spacing-xl);
 }
