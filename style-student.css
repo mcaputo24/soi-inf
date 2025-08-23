@@ -1,154 +1,145 @@
-/* --- Layout base --- */
+/* Stili per la pagina docente (Versione Definitiva e Completa) */
+
+/* --- 1. Variabili Globali --- */
+:root {
+  /* ... (le tue variabili restano invariate) ... */
+  --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --border-radius: 8px;
+}
+
+/* --- 2. Stili di Base --- */
 body {
-  font-family: Arial, sans-serif !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: url("sli-sfondi-teams_chiaro.png") no-repeat center center fixed !important;
-  background-size: cover !important;
+  font-family: var(--font-family-base);
+  /* RIPRISTINO IMMAGINE DI SFONDO */
+  background: var(--color-background) url("sfondo-simpatica.png") no-repeat center center fixed;
+  background-size: cover;
+  color: var(--color-text);
+  margin: 0;
+  padding: var(--spacing-xl);
 }
 
 main {
-  max-width: 1000px !important;
-  margin: 30px auto !important;
-  padding: 20px !important;
+  max-width: 1200px;
+  margin-inline: auto;
+  background-color: transparent; /* Assicura che lo sfondo del body sia visibile */
 }
 
-/* --- Header --- */
+/* --- 3. Componenti di Layout --- */
 header {
-  max-width: 1000px !important;
-  margin: 0 auto !important;
-  background: #ffffff !important;
-  padding: 20px !important;
-  border-bottom: 2px solid #ddd !important;
-  border-radius: 10px 10px 0 0 !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  /* Lo stile per l'header ora è gestito principalmente dalla classe .card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
-header img.logo {
-  max-height: 80px !important;
-  display: block !important;
-  margin: 0 auto 10px !important;
+
+header img {
+  height: 80px; /* DIMENSIONE DEL LOGO */
+  margin-bottom: 10px;
 }
+
 header h1 {
-  color: #2c3e50 !important;
-  margin: 0 !important;
-  font-size: 1.6em !important;
-  text-align: center !important;
+  font-size: 26px;
+  color: var(--color-primary);
 }
 
-/* --- Card --- */
+/* ... (il resto delle regole di layout come .page-actions, .split-view etc. restano invariate) ... */
+.page-actions, .form-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
 .card {
-  background: #fff !important;
-  border-radius: 10px !important;
-  padding: 25px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-  margin-bottom: 20px !important;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* --- Titoli --- */
-h2, h3 {
-  text-align: center !important;
-}
-h2 {
-  color: #007bff !important;
-  margin-bottom: 20px !important;
-  font-size: 1.6em !important;
-}
-h3 {
-  color: #2c3e50 !important;
-  margin-top: 30px !important;
-  font-size: 1.3em !important;
+/* --- 4. Stili Tipografici e Liste --- */
+.card h2, .card h3, .card h4 {
+  color: var(--color-secondary);
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 8px; /* Valore fisso per coerenza */
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
 }
 
-/* --- Input & Textarea --- */
-label {
-  display: block !important;
-  margin-bottom: 10px !important;
-  font-weight: 500 !important;
-}
-input[type="text"], input[type="date"], textarea {
-  width: 100% !important;
-  padding: 8px !important;
-  border-radius: 5px !important;
-  border: 1px solid #ccc !important;
-  font-size: 14px !important;
-  box-sizing: border-box !important;
-}
-textarea {
-  resize: vertical !important;
+/* --- 5. Tabelle --- */
+/* UNIFICAZIONE STILI TABELLE */
+.summary-table, .styled-table {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-collapse: collapse;
+  text-align: left;
+  margin-top: var(--spacing-md);
 }
 
-/* --- Tabelle --- */
-.styled-table {
-  border-collapse: collapse !important;
-  margin-top: 15px !important;
-  width: 100% !important;
-  font-size: 15px !important;
-  border: 2px solid #bbb !important;
-}
-.styled-table th, .styled-table td {
-  border: 1px solid #bbb !important;
-  padding: 12px !important;
-  vertical-align: top !important;
-}
-.styled-table th {
-  background-color: #007bff !important;
-  color: white !important;
-  text-align: center !important;
-  font-size: 1em !important;
-}
-.styled-table tr:nth-child(even) {
-  background-color: #f9f9f9 !important;
-}
-.styled-table td label {
-  display: block !important;
-  margin-bottom: 6px !important;
-  font-weight: normal !important;
-}
-.styled-table input[type="radio"] {
-  margin-right: 6px !important;
+.summary-table th, .styled-table th {
+  background-color: var(--color-accent);
+  color: white;
+  padding: 10px;
+  text-align: center;
 }
 
-/* --- Pulsanti --- */
-.form-actions {
-  margin-top: 25px !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 12px !important;
+.summary-table td, .styled-table td {
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  vertical-align: middle; /* ALLINEAMENTO VERTICALE CENTRATO */
 }
+
+.summary-table tr:nth-child(even), .styled-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.summary-table strong, .styled-table strong {
+  color: var(--color-accent);
+}
+
+/* --- 6. Sistema di Pulsanti Unificato --- */
 .button {
-  padding: 10px 25px !important;
-  border-radius: 6px !important;
-  font-size: 15px !important;
-  font-weight: bold !important;
-  text-decoration: none !important;
-  border: none !important;
-  cursor: pointer !important;
-  display: inline-block !important;
-  text-align: center !important;
-  transition: background-color 0.3s, transform 0.2s !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15) !important;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white; /* Testo bianco di default */
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
-.button-success {
-  background-color: #28a745 !important;
-  color: white !important;
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-.button-success:hover {
-  background-color: #218838 !important;
-  transform: scale(1.05) !important;
-}
+
+/* Modificatori di Colore */
+.button-primary { background-color: var(--color-primary); }
+.button-primary:hover { background-color: var(--color-primary-dark); }
+
+.button-success { background-color: var(--color-success); }
+.button-success:hover { background-color: var(--color-success-dark); }
+
+.button-danger { background-color: var(--color-danger); }
+.button-danger:hover { background-color: var(--color-danger-dark); }
+
+/* NUOVO: Stile per un pulsante "bianco" o secondario */
 .button-secondary {
-  background-color: #6c757d !important;
-  color: white !important;
+  background-color: var(--color-surface); /* Sfondo bianco */
+  color: var(--color-primary); /* Testo blu */
+  border: 1px solid var(--color-border);
 }
 .button-secondary:hover {
-  background-color: #5a6268 !important;
-  transform: scale(1.05) !important;
+  background-color: #eef2f7;
 }
 
-/* --- Link di recupero --- */
-#link-recupero {
-  margin-top: 20px !important;
-  text-align: center !important;
-  font-weight: bold !important;
-}
+/* ... (il resto del CSS per le liste e la modale può rimanere invariato) ... */
