@@ -156,26 +156,6 @@ async function loadStudentList() {
     const linksContainer = document.createElement('div');
     linksContainer.className = 'student-links';
     
-    // Aggiungi il pulsante "Link Fase 1" se esiste
-    if (s.resumeLinks.link) { // 'link' è il nome del campo per la Fase 1
-      const linkBtn1 = document.createElement('a');
-      linkBtn1.href = s.resumeLinks.link;
-      linkBtn1.textContent = "Link Fase 1";
-      linkBtn1.target = "_blank";
-      linkBtn1.className = 'button button-success';
-      linksContainer.appendChild(linkBtn1);
-    }
-    
-    // Aggiungi il pulsante "Link Fase 3" se esiste
-    if (s.resumeLinks.linkFase3) {
-      const linkBtn3 = document.createElement('a');
-      linkBtn3.href = s.resumeLinks.linkFase3;
-      linkBtn3.textContent = "Link Fase 3";
-      linkBtn3.target = "_blank";
-      linkBtn3.className = 'button button-success';
-      linksContainer.appendChild(linkBtn3);
-    }
-
     container.appendChild(linksContainer);
     studentList.appendChild(container);
   });
@@ -410,6 +390,13 @@ backToFase1Btn.textContent = 'Torna alla Fase 1';
 backToFase1Btn.href = 'fase1-docente-anno1.html';
 backToFase1Btn.className = 'button button-secondary';
 actionsDiv.appendChild(backToFase1Btn);
+
+// Pulsante Elenco Link di Recupero
+const linksPageBtn = document.createElement('a');
+linksPageBtn.textContent = 'Elenco Link di Recupero';
+linksPageBtn.href = 'resume-links.html';
+linksPageBtn.className = 'button button-secondary';
+actionsDiv.appendChild(linksPageBtn);
 
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');

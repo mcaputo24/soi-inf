@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elenco Link di Recupero</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    a {
+      color: #007bff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Elenco Link di Recupero</h1>
+    <table id="resumeTable">
+      <thead>
+        <tr>
+          <th>Studente</th>
+          <th>Link Fase 1</th>
+          <th>Link Fase 3</th>
+          <th>Link Fase 4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Righe generate da JS -->
+      </tbody>
+    </table>
+  </main>
+
+  <script type="module" src="resume-links.js"></script>
+</body>
+</html>
