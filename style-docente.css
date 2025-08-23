@@ -312,3 +312,22 @@ header h1 {
   background-color: var(--color-danger);
   color: white;
 }
+/* Aggiungi questo alla fine del tuo file CSS */
+
+.student-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.student-name-btn {
+  flex-grow: 1; /* Fa in modo che il pulsante con il nome occupi lo spazio disponibile */
+  text-align: left;
+}
+
+.student-links {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; /* Impedisce ai pulsanti dei link di rimpicciolirsi */
+}
