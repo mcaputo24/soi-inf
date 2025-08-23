@@ -18,10 +18,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (snap.exists()) {
       const data = snap.data();
+
       // Riempie i campi del form con i dati salvati
       for (const [key, value] of Object.entries(data)) {
         const input = form.querySelector(`[name="${key}"]`);
-        if (input) input.value = value;
+        if (!input) continue;
+
+        if (input.type === "radio") {
+          // Se è un radio, spunta quello corrispondente
+          const radio = form.querySelector(`input[name="${key}"][value="${value}"]`);
+          if (radio) radio.checked = true;
+        } else {
+          input.value = value;
+        }
       }
     }
 
@@ -39,8 +48,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       localStorage.setItem('fase4-studentId', studentId);
     }
 
+    // Costruisce un oggetto dati includendo anche i radio button
     const formData = new FormData(form);
-    const dataToSave = Object.fromEntries(formData.entries());
+    const dataToSave = {};
+
+    formData.forEach((value, key) => {
+      dataToSave[key] = value;
+    });
 
     try {
       // 1. Salva in Firestore
