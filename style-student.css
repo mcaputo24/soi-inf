@@ -1,154 +1,154 @@
 /* --- Layout base --- */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: url("sli-sfondi-teams_chiaro.png") no-repeat center center fixed;
-  background-size: cover;
+  font-family: Arial, sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: url("sli-sfondi-teams_chiaro.png") no-repeat center center fixed !important;
+  background-size: cover !important;
 }
 
 main {
-  max-width: 1000px;
-  margin: 30px auto;
-  padding: 20px;
+  max-width: 1000px !important;
+  margin: 30px auto !important;
+  padding: 20px !important;
 }
 
 /* --- Header --- */
 header {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: #ffffff;
-  padding: 20px;
-  border-bottom: 2px solid #ddd;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  padding: 20px !important;
+  border-bottom: 2px solid #ddd !important;
+  border-radius: 10px 10px 0 0 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
 }
 header img.logo {
-  max-height: 80px;
-  display: block;
-  margin: 0 auto 10px;
+  max-height: 80px !important;
+  display: block !important;
+  margin: 0 auto 10px !important;
 }
 header h1 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 1.6em;
-  text-align: center;
+  color: #2c3e50 !important;
+  margin: 0 !important;
+  font-size: 1.6em !important;
+  text-align: center !important;
 }
 
-/* --- Card (contenitori domanda/risposta) --- */
+/* --- Card --- */
 .card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+  background: #fff !important;
+  border-radius: 10px !important;
+  padding: 25px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  margin-bottom: 20px !important;
 }
 
 /* --- Titoli --- */
 h2, h3 {
-  text-align: center;
+  text-align: center !important;
 }
 h2 {
-  color: #007bff;
-  margin-bottom: 20px;
-  font-size: 1.6em;
+  color: #007bff !important;
+  margin-bottom: 20px !important;
+  font-size: 1.6em !important;
 }
 h3 {
-  color: #2c3e50;
-  margin-top: 30px;
-  font-size: 1.3em;
+  color: #2c3e50 !important;
+  margin-top: 30px !important;
+  font-size: 1.3em !important;
 }
 
 /* --- Input & Textarea --- */
 label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: 500;
+  display: block !important;
+  margin-bottom: 10px !important;
+  font-weight: 500 !important;
 }
 input[type="text"], input[type="date"], textarea {
-  width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  box-sizing: border-box;
+  width: 100% !important;
+  padding: 8px !important;
+  border-radius: 5px !important;
+  border: 1px solid #ccc !important;
+  font-size: 14px !important;
+  box-sizing: border-box !important;
 }
 textarea {
-  resize: vertical;
+  resize: vertical !important;
 }
 
 /* --- Tabelle --- */
 .styled-table {
-  border-collapse: collapse;
-  margin-top: 15px;
-  width: 100%;
-  font-size: 15px;
-  border: 2px solid #bbb;
+  border-collapse: collapse !important;
+  margin-top: 15px !important;
+  width: 100% !important;
+  font-size: 15px !important;
+  border: 2px solid #bbb !important;
 }
 .styled-table th, .styled-table td {
-  border: 1px solid #bbb;
-  padding: 12px;
-  vertical-align: top;
+  border: 1px solid #bbb !important;
+  padding: 12px !important;
+  vertical-align: top !important;
 }
 .styled-table th {
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  font-size: 1em;
+  background-color: #007bff !important;
+  color: white !important;
+  text-align: center !important;
+  font-size: 1em !important;
 }
 .styled-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f9f9f9 !important;
 }
 .styled-table td label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: normal;
+  display: block !important;
+  margin-bottom: 6px !important;
+  font-weight: normal !important;
 }
 .styled-table input[type="radio"] {
-  margin-right: 6px;
+  margin-right: 6px !important;
 }
 
 /* --- Pulsanti --- */
 .form-actions {
-  margin-top: 25px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
+  margin-top: 25px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 12px !important;
 }
 .button {
-  padding: 10px 25px;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: bold;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  display: inline-block;
-  text-align: center;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  padding: 10px 25px !important;
+  border-radius: 6px !important;
+  font-size: 15px !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  text-align: center !important;
+  transition: background-color 0.3s, transform 0.2s !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15) !important;
 }
 .button-success {
-  background-color: #28a745;
-  color: white;
+  background-color: #28a745 !important;
+  color: white !important;
 }
 .button-success:hover {
-  background-color: #218838;
-  transform: scale(1.05);
+  background-color: #218838 !important;
+  transform: scale(1.05) !important;
 }
 .button-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: #6c757d !important;
+  color: white !important;
 }
 .button-secondary:hover {
-  background-color: #5a6268;
-  transform: scale(1.05);
+  background-color: #5a6268 !important;
+  transform: scale(1.05) !important;
 }
 
 /* --- Link di recupero --- */
 #link-recupero {
-  margin-top: 20px;
-  text-align: center;
-  font-weight: bold;
+  margin-top: 20px !important;
+  text-align: center !important;
+  font-weight: bold !important;
 }
