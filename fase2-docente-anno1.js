@@ -111,6 +111,7 @@ async function loadStudentList() {
 const resumeMap = {};
 resumeSnapshot.forEach(docSnap => {
   const data = docSnap.data();
+  console.log("resumeLinks doc:", docSnap.id, data); // 👈 DEBUG
   resumeMap[docSnap.id] = {
     linkFase1: data.link || null,
     linkFase3: data.linkFase3 || null
@@ -121,6 +122,7 @@ resumeSnapshot.forEach(docSnap => {
   querySnapshot.forEach(docSnap => {
     const data = docSnap.data();
     if (data.cognome && data.nome) {
+    console.log("Studente:", studId, "links:", resumeMap[studId]); // 👈 DEBUG
       students.push({
         id: docSnap.id,
         nome: data.nome,
