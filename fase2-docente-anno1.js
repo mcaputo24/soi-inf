@@ -391,13 +391,6 @@ backToFase1Btn.href = 'fase1-docente-anno1.html';
 backToFase1Btn.className = 'button button-secondary';
 actionsDiv.appendChild(backToFase1Btn);
 
-// Pulsante Elenco Link di Recupero
-const linksPageBtn = document.createElement('a');
-linksPageBtn.textContent = 'Elenco Link di Recupero';
-linksPageBtn.href = 'resume-links.html';
-linksPageBtn.className = 'button button-secondary';
-studentSelection.appendChild(linksPageBtn);
-
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
 menuBtn.textContent = 'Menu principale';
@@ -427,3 +420,13 @@ backButton.addEventListener('click', (e) => {
 });
 
 loadStudentList();
+
+// Pulsante Elenco Link di Recupero (nella lista studenti)
+const linksPageBtn = document.createElement('a');
+linksPageBtn.textContent = 'Elenco Link di Recupero';
+linksPageBtn.href = 'resume-links.html';
+linksPageBtn.className = 'button button-secondary';
+linksPageBtn.style.marginLeft = "10px";
+
+// Lo appendiamo accanto al pulsante "Torna alla Fase 1" della lista
+studentSelection.appendChild(linksPageBtn);
