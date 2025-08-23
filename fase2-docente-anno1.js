@@ -102,12 +102,13 @@ const schede = {
 // Sostituisci l'intera funzione loadStudentList con questa
 
 async function loadStudentList() {
-  const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
-  const resumeSnapshot = await getDocs(collection(db, 'resumeLinks'));
+  const fase1Snap = await getDocs(collection(db, 'fase1-studente-anno1'));
+  const fase3Snap = await getDocs(collection(db, 'fase3-studente-anno1'));
+  const resumeSnap = await getDocs(collection(db, 'resumeLinks'));
 
-  // Mappa dei resumeLinks
+  // Mappa resumeLinks
   const resumeMap = {};
-  resumeSnapshot.forEach(docSnap => {
+  resumeSnap.forEach(docSnap => {
     const data = docSnap.data();
     resumeMap[docSnap.id] = {
       linkFase1: data.link || null,
@@ -116,9 +117,9 @@ async function loadStudentList() {
   });
 
   const students = [];
-  
-  // 1) Aggiungo tutti quelli che hanno fatto Fase 1
-  querySnapshot.forEach(docSnap => {
+
+  // 1) Studenti da fase1
+  fase1Snap.forEach(docSnap => {
     const data = docSnap.data();
     if (data.cognome && data.nome) {
       const studId = docSnap.id;
@@ -132,15 +133,16 @@ async function loadStudentList() {
     }
   });
 
-  // 2) Aggiungo quelli che hanno solo resumeLinks (es. Fase 3 ma non Fase 1)
-  resumeSnapshot.forEach(docSnap => {
+  // 2) Aggiungi quelli che hanno fatto solo fase3 (non fase1)
+  fase3Snap.forEach(docSnap => {
+    const data = docSnap.data();
     const studId = docSnap.id;
     if (!students.find(s => s.id === studId)) {
       students.push({
         id: studId,
-        nome: "(Fase 1 non compilata)",
-        cognome: "",
-        label: studId, // mostra solo lo studentId
+        nome: data.nome || "(Nome mancante)",
+        cognome: data.cognome || "",
+        label: (data.cognome && data.nome) ? `${data.cognome} ${data.nome}` : studId,
         resumeLinks: resumeMap[studId] || {}
       });
     }
@@ -148,8 +150,8 @@ async function loadStudentList() {
 
   // Ordina alfabeticamente
   students.sort((a, b) => a.label.localeCompare(b.label));
-  
-  // Stampa lista
+
+  // Render
   studentList.innerHTML = '';
   students.forEach(s => {
     const container = document.createElement('div');
@@ -166,7 +168,7 @@ async function loadStudentList() {
     btnStud.addEventListener('click', () => loadStudentDetail(s.id, s.label));
     container.appendChild(btnStud);
 
-    // Pulsante recupero Fase 1
+    // Pulsante Fase 1
     if (s.resumeLinks.linkFase1) {
       const linkBtn1 = document.createElement('a');
       linkBtn1.href = s.resumeLinks.linkFase1;
@@ -177,7 +179,7 @@ async function loadStudentList() {
       container.appendChild(linkBtn1);
     }
 
-    // Pulsante recupero Fase 3
+    // Pulsante Fase 3
     if (s.resumeLinks.linkFase3) {
       const linkBtn3 = document.createElement('a');
       linkBtn3.href = s.resumeLinks.linkFase3;
@@ -191,6 +193,7 @@ async function loadStudentList() {
     studentList.appendChild(container);
   });
 }
+
 
 
 // =================================================================
