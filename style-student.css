@@ -13,6 +13,28 @@ main {
   padding: 20px;
 }
 
+/* --- Header --- */
+header {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px;
+  border-bottom: 2px solid #ddd;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+header img.logo {
+  max-height: 80px;
+  display: block;
+  margin: 0 auto 10px;
+}
+header h1 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.6em;
+  text-align: center;
+}
+
 /* --- Card (contenitori domanda/risposta) --- */
 .card {
   background: #fff;
@@ -61,11 +83,11 @@ textarea {
   margin-top: 15px;
   width: 100%;
   font-size: 15px;
-  border: 1px solid #ddd;
+  border: 2px solid #bbb;
 }
 .styled-table th, .styled-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
+  border: 1px solid #bbb;
+  padding: 12px;
   vertical-align: top;
 }
 .styled-table th {
@@ -79,8 +101,11 @@ textarea {
 }
 .styled-table td label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-weight: normal;
+}
+.styled-table input[type="radio"] {
+  margin-right: 6px;
 }
 
 /* --- Pulsanti --- */
@@ -92,8 +117,8 @@ textarea {
   gap: 12px;
 }
 .button {
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 10px 25px;
+  border-radius: 6px;
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
@@ -102,13 +127,14 @@ textarea {
   display: inline-block;
   text-align: center;
   transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 .button-success {
-  background-color: #007bff;
+  background-color: #28a745;
   color: white;
 }
 .button-success:hover {
-  background-color: #0056b3;
+  background-color: #218838;
   transform: scale(1.05);
 }
 .button-secondary {
@@ -116,7 +142,7 @@ textarea {
   color: white;
 }
 .button-secondary:hover {
-  background-color: #565e64;
+  background-color: #5a6268;
   transform: scale(1.05);
 }
 
