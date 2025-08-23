@@ -396,7 +396,7 @@ const linksPageBtn = document.createElement('a');
 linksPageBtn.textContent = 'Elenco Link di Recupero';
 linksPageBtn.href = 'resume-links.html';
 linksPageBtn.className = 'button button-secondary';
-actionsDiv.appendChild(linksPageBtn);
+studentSelection.appendChild(linksPageBtn);
 
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
