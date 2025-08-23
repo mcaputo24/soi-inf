@@ -130,7 +130,11 @@ if (resumeDoc.exists()) {
       alert('Dati salvati correttamente!');
       
       // 3. MOSTRA SULLA PAGINA IL LINK UFFICIALE APPENA SALVATO
-      linkBox.innerHTML = `🔗 Link di recupero: <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>`;
+      linkBox.innerHTML = `
+  <strong>Riprendi il questionario</strong>
+  <p>Puoi continuare da un altro dispositivo usando questo link:</p>
+  <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>
+`;
 
     } catch (err) {
       console.error("Errore salvataggio:", err);
