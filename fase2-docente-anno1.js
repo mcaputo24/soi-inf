@@ -385,6 +385,13 @@ saveBtn.addEventListener('click', async () => {
 });
 actionsDiv.appendChild(saveBtn);
 
+// Pulsante Torna alla Fase 1 (allineato agli altri)
+const backToFase1Btn = document.createElement('a');
+backToFase1Btn.textContent = 'Torna alla Fase 1';
+backToFase1Btn.href = 'fase1-docente-anno1.html';
+backToFase1Btn.className = 'button button-secondary';
+actionsDiv.appendChild(backToFase1Btn);
+
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
 menuBtn.textContent = 'Menu principale';
