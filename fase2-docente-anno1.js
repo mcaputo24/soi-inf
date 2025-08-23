@@ -366,9 +366,6 @@ const viewBtn = document.createElement('button');
         }).join('')}
       </tbody>
     </table>`;
-<div style="text-align:center; margin-top:20px;">
-  <a href="fase1-docente-anno1.html" class="button button-secondary">Torna alla Fase 1</a>
-</div>
 
   evaluationForm.appendChild(summaryCard);
 
