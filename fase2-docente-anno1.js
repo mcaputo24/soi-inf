@@ -106,7 +106,7 @@ async function loadStudentList() {
   const fase3Snap = await getDocs(collection(db, 'fase3-studente-anno1'));
   const resumeSnap = await getDocs(collection(db, 'resumeLinks'));
 
-  // Mappa resumeLinks
+  // 1. Mappa resumeLinks
   const resumeMap = {};
   resumeSnap.forEach(docSnap => {
     const data = docSnap.data();
@@ -116,42 +116,52 @@ async function loadStudentList() {
     };
   });
 
-  const students = [];
+  // 2. Mappa fase3 per recuperare anagrafica in mancanza di fase1
+  const fase3Map = {};
+  fase3Snap.forEach(docSnap => {
+    const data = docSnap.data();
+    fase3Map[docSnap.id] = {
+      nome: data.nome || "",
+      cognome: data.cognome || ""
+    };
+  });
 
-  // 1) Studenti da fase1
+  // 3. Costruisci lista unica
+  const students = [];
+  const seen = new Set();
+
   fase1Snap.forEach(docSnap => {
     const data = docSnap.data();
-    if (data.cognome && data.nome) {
-      const studId = docSnap.id;
+    const studId = docSnap.id;
+    seen.add(studId);
+
+    students.push({
+      id: studId,
+      nome: data.nome,
+      cognome: data.cognome,
+      label: `${data.cognome} ${data.nome}`,
+      resumeLinks: resumeMap[studId] || {}
+    });
+  });
+
+  // Aggiungi chi ha fatto solo fase3
+  Object.keys(fase3Map).forEach(studId => {
+    if (!seen.has(studId)) {
+      const data = fase3Map[studId];
       students.push({
         id: studId,
         nome: data.nome,
         cognome: data.cognome,
-        label: data.cognome + ' ' + data.nome,
+        label: data.cognome && data.nome ? `${data.cognome} ${data.nome}` : studId,
         resumeLinks: resumeMap[studId] || {}
       });
     }
   });
 
-  // 2) Aggiungi quelli che hanno fatto solo fase3 (non fase1)
-  fase3Snap.forEach(docSnap => {
-    const data = docSnap.data();
-    const studId = docSnap.id;
-    if (!students.find(s => s.id === studId)) {
-      students.push({
-        id: studId,
-        nome: data.nome || "(Nome mancante)",
-        cognome: data.cognome || "",
-        label: (data.cognome && data.nome) ? `${data.cognome} ${data.nome}` : studId,
-        resumeLinks: resumeMap[studId] || {}
-      });
-    }
-  });
-
-  // Ordina alfabeticamente
+  // 4. Ordina
   students.sort((a, b) => a.label.localeCompare(b.label));
 
-  // Render
+  // 5. Render
   studentList.innerHTML = '';
   students.forEach(s => {
     const container = document.createElement('div');
@@ -160,7 +170,7 @@ async function loadStudentList() {
     container.style.gap = '10px';
     container.style.marginBottom = '10px';
 
-    // Pulsante selezione studente
+    // Nome studente
     const btnStud = document.createElement('button');
     btnStud.textContent = s.label;
     btnStud.className = 'button button-primary';
@@ -168,25 +178,21 @@ async function loadStudentList() {
     btnStud.addEventListener('click', () => loadStudentDetail(s.id, s.label));
     container.appendChild(btnStud);
 
-    // Pulsante Fase 1
+    // Pulsanti fase
     if (s.resumeLinks.linkFase1) {
       const linkBtn1 = document.createElement('a');
       linkBtn1.href = s.resumeLinks.linkFase1;
       linkBtn1.textContent = "Link Fase 1";
       linkBtn1.target = "_blank";
       linkBtn1.className = 'button button-success';
-      linkBtn1.style.minWidth = "140px";
       container.appendChild(linkBtn1);
     }
-
-    // Pulsante Fase 3
     if (s.resumeLinks.linkFase3) {
       const linkBtn3 = document.createElement('a');
       linkBtn3.href = s.resumeLinks.linkFase3;
       linkBtn3.textContent = "Link Fase 3";
       linkBtn3.target = "_blank";
       linkBtn3.className = 'button button-success';
-      linkBtn3.style.minWidth = "140px";
       container.appendChild(linkBtn3);
     }
 
