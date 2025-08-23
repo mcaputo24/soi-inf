@@ -4,18 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fase 4 – Rielaborazione generale esperienze</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="style-form.css" />
+  
   <link rel="stylesheet" href="style-studente.css" />
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo SOI" class="logo" />
-    <h1>Sistema di Orientamento Integrato</h1>
-  </header>
 
   <main>
+    <header class="card">
+      <img src="logo.png" alt="Logo SOI" />
+      <h1>Sistema di Orientamento Integrato</h1>
+    </header>
+
     <form id="fase4-form" class="card">
       <h2>SCHEDA – RIELABORAZIONE GENERALE per gli STUDENTI</h2>
 
@@ -127,12 +129,11 @@
       <div class="form-actions">
         <button type="submit" class="button button-success">📩 Salva</button>
         <button type="button" id="download-pdf-btn" class="button button-success">📄 Scarica PDF</button>
-        <a href="index.html" class="button button-secondary">⬅ Torna al Menu</a>
+        <a href="index.html" class="button button-primary">⬅ Torna al Menu</a>
       </div>
     </form>
 
-    <!-- BOX LINK DI RECUPERO -->
-    <div id="link-recupero"></div>
+    <div id="link-recupero" class="card" style="margin-top: 20px; text-align: center;"></div>
   </main>
 
   <script type="module" src="fase4-anno1.js"></script>
