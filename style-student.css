@@ -139,3 +139,36 @@ textarea {
   background-color: #218838;
   transform: scale(1.05);
 }
+#link-recupero {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-top: 25px;
+  text-align: center;
+}
+
+#link-recupero strong {
+  display: block;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+#link-recupero a {
+  color: #007bff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#link-recupero a:hover {
+  text-decoration: underline;
+}
+/* Allarga gli input e le textarea dentro le tabelle */
+.responsive-table input[type="text"],
+.responsive-table input[type="date"],
+.responsive-table input[type="number"],
+.responsive-table textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
