@@ -101,105 +101,85 @@ const schede = {
 
 // Sostituisci l'intera funzione loadStudentList con questa
 
+// =================================================================
+// Sostituisci la tua attuale funzione loadStudentList con QUESTA
+// =================================================================
 async function loadStudentList() {
-  const fase1Snap = await getDocs(collection(db, 'fase1-studente-anno1'));
-  const fase3Snap = await getDocs(collection(db, 'fase3-studente-anno1'));
-  const resumeSnap = await getDocs(collection(db, 'resumeLinks'));
+  // Pulisce la lista attuale per evitare duplicati al ricaricamento
+  studentList.innerHTML = '';
 
-  // 1. Mappa resumeLinks
+  // 1. Recuperiamo tutti i dati necessari in una sola volta
+  const fase1Snapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
+  const resumeSnapshot = await getDocs(collection(db, 'resumeLinks'));
+
+  // 2. Creiamo una mappa unica per tutti i link di recupero
   const resumeMap = {};
-  resumeSnap.forEach(docSnap => {
+  resumeSnapshot.forEach(docSnap => {
     const data = docSnap.data();
-    resumeMap[docSnap.id] = {
-      linkFase1: data.link || null,
-      linkFase3: data.linkFase3 || null
-    };
+    // Inseriamo l'intero documento dei link, così possiamo accedere a linkFase1, linkFase3, ecc.
+    resumeMap[docSnap.id] = data; 
   });
 
-  // 2. Mappa fase3 per recuperare anagrafica in mancanza di fase1
-  const fase3Map = {};
-  fase3Snap.forEach(docSnap => {
-    const data = docSnap.data();
-    fase3Map[docSnap.id] = {
-      nome: data.nome || "",
-      cognome: data.cognome || ""
-    };
-  });
-
-  // 3. Costruisci lista unica
+  // 3. Creiamo la lista di studenti, partendo dalla Fase 1 (che è obbligatoria)
   const students = [];
-  const seen = new Set();
-
-  fase1Snap.forEach(docSnap => {
+  fase1Snapshot.forEach(docSnap => {
     const data = docSnap.data();
-    const studId = docSnap.id;
-    seen.add(studId);
-
-    students.push({
-      id: studId,
-      nome: data.nome,
-      cognome: data.cognome,
-      label: `${data.cognome} ${data.nome}`,
-      resumeLinks: resumeMap[studId] || {}
-    });
-  });
-
-  // Aggiungi chi ha fatto solo fase3
-  Object.keys(fase3Map).forEach(studId => {
-    if (!seen.has(studId)) {
-      const data = fase3Map[studId];
+    // Aggiungiamo uno studente solo se ha nome e cognome
+    if (data.cognome && data.nome) {
       students.push({
-        id: studId,
+        id: docSnap.id,
         nome: data.nome,
         cognome: data.cognome,
-        label: data.cognome && data.nome ? `${data.cognome} ${data.nome}` : studId,
-        resumeLinks: resumeMap[studId] || {}
+        label: `${data.cognome} ${data.nome}`,
+        // Associamo i link trovati (o un oggetto vuoto se non ci sono)
+        resumeLinks: resumeMap[docSnap.id] || {} 
       });
     }
   });
 
-  // 4. Ordina
+  // 4. Ordiniamo la lista alfabeticamente
   students.sort((a, b) => a.label.localeCompare(b.label));
 
-  // 5. Render
-  studentList.innerHTML = '';
+  // 5. Creiamo gli elementi HTML per ogni studente (una sola volta)
   students.forEach(s => {
     const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.alignItems = 'center';
-    container.style.gap = '10px';
-    container.style.marginBottom = '10px';
+    container.className = 'student-list-item'; // Usiamo una classe per lo stile
 
-    // Nome studente
+    // Pulsante con il nome dello studente
     const btnStud = document.createElement('button');
     btnStud.textContent = s.label;
-    btnStud.className = 'button button-primary';
-    btnStud.style.flex = '1';
+    btnStud.className = 'button button-primary student-name-btn';
     btnStud.addEventListener('click', () => loadStudentDetail(s.id, s.label));
     container.appendChild(btnStud);
 
-    // Pulsanti fase
-    if (s.resumeLinks.linkFase1) {
+    // Contenitore per i pulsanti dei link
+    const linksContainer = document.createElement('div');
+    linksContainer.className = 'student-links';
+    
+    // Aggiungi il pulsante "Link Fase 1" se esiste
+    if (s.resumeLinks.link) { // 'link' è il nome del campo per la Fase 1
       const linkBtn1 = document.createElement('a');
-      linkBtn1.href = s.resumeLinks.linkFase1;
+      linkBtn1.href = s.resumeLinks.link;
       linkBtn1.textContent = "Link Fase 1";
       linkBtn1.target = "_blank";
       linkBtn1.className = 'button button-success';
-      container.appendChild(linkBtn1);
+      linksContainer.appendChild(linkBtn1);
     }
+    
+    // Aggiungi il pulsante "Link Fase 3" se esiste
     if (s.resumeLinks.linkFase3) {
       const linkBtn3 = document.createElement('a');
       linkBtn3.href = s.resumeLinks.linkFase3;
       linkBtn3.textContent = "Link Fase 3";
       linkBtn3.target = "_blank";
       linkBtn3.className = 'button button-success';
-      container.appendChild(linkBtn3);
+      linksContainer.appendChild(linkBtn3);
     }
 
+    container.appendChild(linksContainer);
     studentList.appendChild(container);
   });
 }
-
 
 
 // =================================================================
