@@ -1,76 +1,109 @@
-// fase4-anno2.js
+// fase4-anno1.js
 import { db } from './firebase-init.js';
-import { collection, addDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
+import { doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const form = document.getElementById('fase4-form');
+  const linkBox = document.getElementById('link-recupero');
 
+  // --- Recupero studentId da URL o localStorage ---
+  const urlParams = new URLSearchParams(window.location.search);
+  let studentId = urlParams.get('id') || localStorage.getItem('fase4-studentId');
+
+  if (studentId) {
+    localStorage.setItem('fase4-studentId', studentId);
+
+    const docRef = doc(db, 'fase4-studente-anno1', studentId);
+    const snap = await getDoc(docRef);
+
+    if (snap.exists()) {
+      const data = snap.data();
+      // Riempie i campi del form con i dati salvati
+      for (const [key, value] of Object.entries(data)) {
+        const input = form.querySelector(`[name="${key}"]`);
+        if (input) input.value = value;
+      }
+    }
+
+    // Mostra il link di recupero
+    const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
+    linkBox.innerHTML = `🔗 Link di recupero: <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>`;
+  }
+
+  // --- Salvataggio dati ---
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
 
-    const docData = {
-      ...data,
-      timestamp: new Date()
-    };
+    if (!studentId) {
+      studentId = crypto.randomUUID();
+      localStorage.setItem('fase4-studentId', studentId);
+    }
 
-    await addDoc(collection(db, 'fase4-studente-anno1'), docData);
-    alert('Scheda salvata correttamente.');
-    form.reset();
+    const formData = new FormData(form);
+    const dataToSave = Object.fromEntries(formData.entries());
+
+    try {
+      // 1. Salva in Firestore
+      await setDoc(doc(db, 'fase4-studente-anno1', studentId), dataToSave, { merge: true });
+
+      // 2. Aggiorna resumeLinks
+      const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
+      await setDoc(doc(db, 'resumeLinks', studentId), { linkFase4: recoveryLink }, { merge: true });
+
+      alert('Dati salvati correttamente!');
+      linkBox.innerHTML = `🔗 Link di recupero: <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>`;
+    } catch (err) {
+      console.error("Errore salvataggio:", err);
+      alert("Errore durante il salvataggio, riprova.");
+    }
   });
 
-  document.getElementById('download-pdf-btn').addEventListener('click', async () => {
-    const nome = form.querySelector('[name="nome"]').value.trim();
-    const cognome = form.querySelector('[name="cognome"]').value.trim();
-    const classe = form.querySelector('[name="classe"]').value.trim();
+  // --- Download PDF ---
+  const pdfButton = document.getElementById('download-pdf-btn');
+  if (pdfButton) {
+    pdfButton.addEventListener('click', async () => {
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4");
+        const mainContent = document.querySelector('main');
 
-    if (!nome || !cognome || !classe) {
-      alert('Inserisci prima nome, cognome e classe.');
-      return;
-    }
+        pdfButton.textContent = 'Creazione PDF...';
+        pdfButton.disabled = true;
 
-    const q = query(collection(db, 'fase4-studente-anno1'),
-      where('nome', '==', nome),
-      where('cognome', '==', cognome),
-      where('classe', '==', classe)
-    );
+        const canvas = await window.html2canvas(mainContent, {
+          scale: 2,
+          windowWidth: mainContent.scrollWidth,
+          windowHeight: mainContent.scrollHeight
+        });
 
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      alert('Nessuna scheda trovata per questo studente.');
-      return;
-    }
+        const imgData = canvas.toDataURL("image/jpeg", 0.7);
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    let y = 10;
+        let position = 0;
+        let heightLeft = imgHeight;
 
-    doc.setFontSize(14);
-    doc.text(`Fase 4 – ${cognome} ${nome} (${classe})`, 10, y);
-    y += 10;
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
 
-    snapshot.forEach((docSnap, index) => {
-      const d = docSnap.data();
-      doc.setFontSize(12);
-      doc.text(`📅 Data: ${d.data || '—'}`, 10, y); y += 8;
-      doc.text(`🔍 Autovalutazione`, 10, y); y += 6;
-      doc.text(`- Capito come sei fatto: ${d.capito_chi_sei_si_no} (${d.capito_chi_sei_val})`, 10, y); y += 6;
-      doc.text(`- Cosa ti piace: ${d.cosa_ti_piace_si_no} (${d.cosa_ti_piace_val})`, 10, y); y += 6;
-      doc.text(`- Studio o lavoro: ${d.studiare_o_lavorare_si_no} (${d.studiare_o_lavorare_val})`, 10, y); y += 6;
-      doc.text(`- Decisioni: ${d.decisioni_si_no} (${d.decisioni_val})`, 10, y); y += 8;
-      doc.text(`🧠 Riflessività`, 10, y); y += 6;
-      doc.text(`- Cosa hai imparato: ${d.cosa_imparato_te}`, 10, y); y += 6;
-      doc.text(`- Cosa è emerso: ${d.emerso_rilevante}`, 10, y); y += 6;
-      doc.text(`- Qualità e miglioramenti: ${d.qualita_e_migliorare}`, 10, y); y += 6;
-      doc.text(`- Utilità futura: ${d.utilita_futura}`, 10, y); y += 6;
-      doc.text(`📎 Documenti allegati: ${d.documenti_allegati}`, 10, y); y += 10;
+        while (heightLeft > 0) {
+          position -= pageHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
 
-      if (y > 270) {
-        doc.addPage();
-        y = 10;
+        pdf.save("fase4-studente.pdf");
+
+      } catch (err) {
+        console.error("Errore generazione PDF:", err);
+        alert("Errore nella generazione del PDF.");
+      } finally {
+        pdfButton.textContent = 'Scarica PDF';
+        pdfButton.disabled = false;
       }
     });
-
-    doc.save(`fase4_${cognome}_${nome}.pdf`);
-  });
+  }
 });
