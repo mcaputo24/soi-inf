@@ -107,14 +107,15 @@ async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
   const resumeSnapshot = await getDocs(collection(db, 'resumeLinks'));
 
-  const resumeMap = {};
-  resumeSnapshot.forEach(docSnap => {
-    const data = docSnap.data();
-      resumeMap[docSnap.id] = {
-        linkFase1: data.link || null,
-        linkFase3: data.linkFase3 || null // Legge il nuovo campo
-      };
-  });
+  // Mappa degli resumeLinks
+const resumeMap = {};
+resumeSnapshot.forEach(docSnap => {
+  const data = docSnap.data();
+  resumeMap[docSnap.id] = {
+    linkFase1: data.link || null,
+    linkFase3: data.linkFase3 || null
+  };
+});
 
   const students = [];
   querySnapshot.forEach(docSnap => {
@@ -148,27 +149,27 @@ async function loadStudentList() {
     btnStud.addEventListener('click', () => loadStudentDetail(s.id, s.label));
     container.appendChild(btnStud);
 
-    // Crea il pulsante per il link della Fase 1, se esiste
-    if (s.resumeLinks.linkFase1) {
-      const linkBtn1 = document.createElement('a');
-      linkBtn1.href = s.resumeLinks.linkFase1;
-      linkBtn1.textContent = "Link Fase 1";
-      linkBtn1.target = "_blank";
-      linkBtn1.className = 'button button-success';
-      linkBtn1.style.minWidth = "140px";
-      container.appendChild(linkBtn1);
-    }
+    // Link Fase 1
+if (s.resumeLinks.linkFase1) {
+  const linkBtn1 = document.createElement('a');
+  linkBtn1.href = s.resumeLinks.linkFase1;
+  linkBtn1.textContent = "Link Fase 1";
+  linkBtn1.target = "_blank";
+  linkBtn1.className = 'button button-success';
+  linkBtn1.style.minWidth = "140px";
+  container.appendChild(linkBtn1);
+}
 
-    // Crea il pulsante per il link della Fase 3, se esiste
-    if (s.resumeLinks.linkFase3) {
-      const linkBtn3 = document.createElement('a');
-      linkBtn3.href = s.resumeLinks.linkFase3;
-      linkBtn3.textContent = "Link Fase 3";
-      linkBtn3.target = "_blank";
-      linkBtn3.className = 'button button-success';
-      linkBtn3.style.minWidth = "140px";
-      container.appendChild(linkBtn3);
-    }
+// Link Fase 3
+if (s.resumeLinks.linkFase3) {
+  const linkBtn3 = document.createElement('a');
+  linkBtn3.href = s.resumeLinks.linkFase3;
+  linkBtn3.textContent = "Link Fase 3";
+  linkBtn3.target = "_blank";
+  linkBtn3.className = 'button button-success';
+  linkBtn3.style.minWidth = "140px";
+  container.appendChild(linkBtn3);
+}
 
     studentList.appendChild(container);
   });
