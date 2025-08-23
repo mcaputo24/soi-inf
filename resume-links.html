@@ -6,6 +6,10 @@
   <title>Elenco Link di Recupero</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    body {
+      background: none !important;
+      background-color: #f0f4f8; /* neutro chiaro */
+    }
     main {
       max-width: 1100px;
       margin: 30px auto;
@@ -43,6 +47,20 @@
     a:hover {
       text-decoration: underline;
     }
+    .button {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .button-secondary {
+      background-color: #6c757d;
+      color: #fff;
+    }
+    .button-secondary:hover {
+      background-color: #5a6268;
+    }
   </style>
 </head>
 <body>
@@ -61,9 +79,9 @@
         <!-- Righe generate da JS -->
       </tbody>
     </table>
-<div style="text-align:center; margin-top:20px;">
-  <a href="fase1-docente-anno1.html" class="button button-secondary">Torna alla Fase 1</a>
-</div>
+    <div style="text-align:center; margin-top:20px;">
+      <a href="fase1-docente-anno1.html" class="button button-secondary">Torna alla Fase 1</a>
+    </div>
   </main>
 
   <script type="module" src="resume-links.js"></script>
