@@ -36,7 +36,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Mostra il link di recupero
     const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
-    linkBox.innerHTML = `🔗 Link di recupero: <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>`;
+    linkBox.innerHTML = `
+  <strong>Riprendi il questionario</strong>
+  <p>Puoi continuare da un altro dispositivo usando questo link:</p>
+  <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>
+`;
   }
 
   // --- Salvataggio dati ---
