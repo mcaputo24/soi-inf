@@ -101,42 +101,56 @@ const schede = {
 
 // Sostituisci l'intera funzione loadStudentList con questa
 
-// Verifica che questa funzione sia presente nel tuo fase2-docente-anno1.js
-
 async function loadStudentList() {
   const querySnapshot = await getDocs(collection(db, 'fase1-studente-anno1'));
   const resumeSnapshot = await getDocs(collection(db, 'resumeLinks'));
 
-  // Mappa degli resumeLinks
-const resumeMap = {};
-resumeSnapshot.forEach(docSnap => {
-  const data = docSnap.data();
-  console.log("resumeLinks doc:", docSnap.id, data); // 👈 DEBUG
-  resumeMap[docSnap.id] = {
-    linkFase1: data.link || null,
-    linkFase3: data.linkFase3 || null
-  };
-});
+  // Mappa dei resumeLinks
+  const resumeMap = {};
+  resumeSnapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    resumeMap[docSnap.id] = {
+      linkFase1: data.link || null,
+      linkFase3: data.linkFase3 || null
+    };
+  });
 
   const students = [];
+  
+  // 1) Aggiungo tutti quelli che hanno fatto Fase 1
   querySnapshot.forEach(docSnap => {
     const data = docSnap.data();
     if (data.cognome && data.nome) {
-    console.log("Studente:", studId, "links:", resumeMap[studId]); // 👈 DEBUG
+      const studId = docSnap.id;
       students.push({
-        id: docSnap.id,
+        id: studId,
         nome: data.nome,
         cognome: data.cognome,
         label: data.cognome + ' ' + data.nome,
-        resumeLinks: resumeMap[docSnap.id] || {}
+        resumeLinks: resumeMap[studId] || {}
       });
     }
   });
 
+  // 2) Aggiungo quelli che hanno solo resumeLinks (es. Fase 3 ma non Fase 1)
+  resumeSnapshot.forEach(docSnap => {
+    const studId = docSnap.id;
+    if (!students.find(s => s.id === studId)) {
+      students.push({
+        id: studId,
+        nome: "(Fase 1 non compilata)",
+        cognome: "",
+        label: studId, // mostra solo lo studentId
+        resumeLinks: resumeMap[studId] || {}
+      });
+    }
+  });
+
+  // Ordina alfabeticamente
   students.sort((a, b) => a.label.localeCompare(b.label));
   
+  // Stampa lista
   studentList.innerHTML = '';
-
   students.forEach(s => {
     const container = document.createElement('div');
     container.style.display = 'flex';
@@ -144,6 +158,7 @@ resumeSnapshot.forEach(docSnap => {
     container.style.gap = '10px';
     container.style.marginBottom = '10px';
 
+    // Pulsante selezione studente
     const btnStud = document.createElement('button');
     btnStud.textContent = s.label;
     btnStud.className = 'button button-primary';
@@ -151,27 +166,27 @@ resumeSnapshot.forEach(docSnap => {
     btnStud.addEventListener('click', () => loadStudentDetail(s.id, s.label));
     container.appendChild(btnStud);
 
-    // Link Fase 1
-if (s.resumeLinks.linkFase1) {
-  const linkBtn1 = document.createElement('a');
-  linkBtn1.href = s.resumeLinks.linkFase1;
-  linkBtn1.textContent = "Link Fase 1";
-  linkBtn1.target = "_blank";
-  linkBtn1.className = 'button button-success';
-  linkBtn1.style.minWidth = "140px";
-  container.appendChild(linkBtn1);
-}
+    // Pulsante recupero Fase 1
+    if (s.resumeLinks.linkFase1) {
+      const linkBtn1 = document.createElement('a');
+      linkBtn1.href = s.resumeLinks.linkFase1;
+      linkBtn1.textContent = "Link Fase 1";
+      linkBtn1.target = "_blank";
+      linkBtn1.className = 'button button-success';
+      linkBtn1.style.minWidth = "140px";
+      container.appendChild(linkBtn1);
+    }
 
-// Link Fase 3
-if (s.resumeLinks.linkFase3) {
-  const linkBtn3 = document.createElement('a');
-  linkBtn3.href = s.resumeLinks.linkFase3;
-  linkBtn3.textContent = "Link Fase 3";
-  linkBtn3.target = "_blank";
-  linkBtn3.className = 'button button-success';
-  linkBtn3.style.minWidth = "140px";
-  container.appendChild(linkBtn3);
-}
+    // Pulsante recupero Fase 3
+    if (s.resumeLinks.linkFase3) {
+      const linkBtn3 = document.createElement('a');
+      linkBtn3.href = s.resumeLinks.linkFase3;
+      linkBtn3.textContent = "Link Fase 3";
+      linkBtn3.target = "_blank";
+      linkBtn3.className = 'button button-success';
+      linkBtn3.style.minWidth = "140px";
+      container.appendChild(linkBtn3);
+    }
 
     studentList.appendChild(container);
   });
