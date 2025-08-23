@@ -366,6 +366,10 @@ const viewBtn = document.createElement('button');
         }).join('')}
       </tbody>
     </table>`;
+<div style="text-align:center; margin-top:20px;">
+  <a href="fase1-docente-anno1.html" class="button button-secondary">Torna alla Fase 1</a>
+</div>
+
   evaluationForm.appendChild(summaryCard);
 
 // Contenitore pulsanti in basso
@@ -383,13 +387,6 @@ saveBtn.addEventListener('click', async () => {
   alert('Valutazione salvata');
 });
 actionsDiv.appendChild(saveBtn);
-
-// Pulsante Torna alla Fase 1
-const backToFase1Btn = document.createElement('a');
-backToFase1Btn.textContent = 'Torna alla Fase 1';
-backToFase1Btn.href = 'fase1-docente-anno1.html';
-backToFase1Btn.className = 'button button-secondary';
-actionsDiv.appendChild(backToFase1Btn);
 
 // Pulsante Menu principale
 const menuBtn = document.createElement('a');
@@ -421,12 +418,26 @@ backButton.addEventListener('click', (e) => {
 
 loadStudentList();
 
-// Pulsante Elenco Link di Recupero (nella lista studenti)
+// Contenitore pulsanti sotto la lista studenti
+const bottomActions = document.createElement('div');
+bottomActions.style.display = "flex";
+bottomActions.style.justifyContent = "center";
+bottomActions.style.gap = "10px";
+bottomActions.style.marginTop = "20px";
+
+// Pulsante Torna alla Fase 1
+const backToFase1ListBtn = document.createElement('a');
+backToFase1ListBtn.textContent = 'Torna alla Fase 1';
+backToFase1ListBtn.href = 'fase1-docente-anno1.html';
+backToFase1ListBtn.className = 'button button-secondary';
+bottomActions.appendChild(backToFase1ListBtn);
+
+// Pulsante Elenco Link di Recupero
 const linksPageBtn = document.createElement('a');
 linksPageBtn.textContent = 'Elenco Link di Recupero';
 linksPageBtn.href = 'resume-links.html';
 linksPageBtn.className = 'button button-secondary';
-linksPageBtn.style.marginLeft = "10px";
+bottomActions.appendChild(linksPageBtn);
 
-// Lo appendiamo accanto al pulsante "Torna alla Fase 1" della lista
-studentSelection.appendChild(linksPageBtn);
+// Appendiamo il contenitore alla pagina elenco studenti
+studentSelection.appendChild(bottomActions);
