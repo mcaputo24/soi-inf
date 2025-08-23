@@ -172,3 +172,17 @@ textarea {
   width: 100%;
   box-sizing: border-box;
 }
+/* Aggiungi questo alla fine del tuo file style-student.css */
+
+/*
+  Questa regola assicura che gli input e le textarea
+  dentro la tabella si espandano per occupare il 100%
+  dello spazio della loro cella.
+*/
+.responsive-table input[type="text"],
+.responsive-table input[type="date"],
+.responsive-table input[type="number"],
+.responsive-table textarea {
+  width: 100%;
+  box-sizing: border-box; /* Assicura che padding e bordi non rompano il layout */
+}
