@@ -40,14 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       form.querySelector('[name="sintesi_cognome"]').value = data.cognome || '';
       form.querySelector('[name="sintesi_classe"]').value = data.classe || '';
 
-// Carica il resume link della Fase 3, se esiste già
-const resumeDoc = await getDoc(doc(db, 'resumeLinks', studentId));
-if (resumeDoc.exists()) {
-  const resumeData = resumeDoc.data();
-  if (resumeData.linkFase3) {
-    linkBox.innerHTML = `🔗 Link di recupero: <a href="${resumeData.linkFase3}" target="_blank">${resumeData.linkFase3}</a>`;
-  }
-}
 
       // LOGICA DI CARICAMENTO CORRETTA
       const allEntries = form.querySelectorAll('.experience-entry');
