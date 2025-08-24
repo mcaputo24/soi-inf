@@ -69,8 +69,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           });
       }
     }
-  
-  }
 
 const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
   linkBox.innerHTML = `
