@@ -186,3 +186,14 @@ textarea {
   width: 100%;
   box-sizing: border-box; /* Assicura che padding e bordi non rompano il layout */
 }
+.responsive-table td:first-child {
+  font-weight: bold;
+  width: 30%; /* <-- Ridotto per dare più spazio ai campi */
+  background-color: #eef4ff;
+  white-space: normal; /* Assicura che il testo lungo vada a capo correttamente */
+}
+
+/* NUOVA REGOLA: Assegna esplicitamente il resto dello spazio alla seconda colonna */
+.responsive-table td:nth-child(2) {
+    width: 70%;
+}
