@@ -72,6 +72,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   }
 
+const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
+  linkBox.innerHTML = `
+    <strong>Riprendi il questionario</strong>
+    <p>Puoi continuare da un altro dispositivo usando questo link:</p>
+    <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>
+  `;
+}
+
   // --- Logica di Salvataggio ---
   // --- Logica di Salvataggio ---
   // --- Logica di Salvataggio ---
