@@ -121,16 +121,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       alert('Dati salvati correttamente!');
       
-     // Mostra il link di recupero
-    const recoveryLink = `${window.location.origin}${window.location.pathname}?id=${studentId}`;
-    linkBox.innerHTML = `
+      // 3. MOSTRA SULLA PAGINA IL LINK UFFICIALE APPENA SALVATO
+      linkBox.innerHTML = `
   <strong>Riprendi il questionario</strong>
   <p>Puoi continuare da un altro dispositivo usando questo link:</p>
   <a href="${recoveryLink}" target="_blank">${recoveryLink}</a>
 `;
 
-    }
-catch (err) {
+    } catch (err) {
       console.error("Errore salvataggio:", err);
       alert("Errore durante il salvataggio, riprova.");
     }
