@@ -36,6 +36,7 @@ body {
 main {
   max-width: 1200px; /* Aumentato per il layout a 2 colonne */
   margin-inline: auto;
+  background-color: transparent; /* Assicura la trasparenza */
 }
 
 /* --- 3. Componenti di Layout --- */
@@ -330,4 +331,29 @@ header h1 {
   display: flex;
   gap: 10px;
   flex-shrink: 0; /* Impedisce ai pulsanti dei link di rimpicciolirsi */
+}
+#link-recupero {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-top: 25px;
+  text-align: center;
+}
+
+#link-recupero strong {
+  display: block;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+#link-recupero a {
+  color: #007bff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#link-recupero a:hover {
+  text-decoration: underline;
 }
