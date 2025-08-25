@@ -315,6 +315,24 @@ async function salvaSoloFirebase() {
   const form = document.querySelector('form');
   const data = Object.fromEntries(new FormData(form).entries());
 
+// --- Raccolta Scheda 5 ---
+const statiSelezionati = Array.from(
+  form.querySelectorAll('input[name="s5_stato[]"]:checked')
+).map(cb => cb.value);
+
+const scheda5 = {
+  stati: statiSelezionati,
+  spiegazioni: {
+    disinteressato: form.querySelector('[name="s5_disinteressato_spieg"]')?.value || '',
+    curioso: form.querySelector('[name="s5_curioso_spieg"]')?.value || '',
+    sicuro: form.querySelector('[name="s5_sicuro_spieg"]')?.value || '',
+    confuso: form.querySelector('[name="s5_confuso_spieg"]')?.value || '',
+    tranquillo: form.querySelector('[name="s5_tranquillo_spieg"]')?.value || '',
+    supportato: form.querySelector('[name="s5_supportato_spieg"]')?.value || ''
+  },
+  racconto_finale: form.querySelector('[name="s5_racconto_finale"]')?.value || ''
+};
+
   const checkboxCounts = {
     gente: parseInt(sumFields.gente.textContent) || 0,
     idee: parseInt(sumFields.idee.textContent) || 0,
@@ -338,6 +356,7 @@ async function salvaSoloFirebase() {
   try {
     const payload = {
       ...data,
+      scheda5,
       checkboxCounts,
       conceptMap: edgesForDB,
       cyElements,
@@ -483,6 +502,29 @@ function avviaPreloadQuandoDOMPronto(id) {
       const snap = await getDoc(doc(db, 'fase1-studente-anno3', id));
       if (!snap.exists()) return;
       const saved = snap.data();
+
+// --- Ripristino Scheda 5 ---
+if (saved.scheda5) {
+  // checkbox
+  if (Array.isArray(saved.scheda5.stati)) {
+    saved.scheda5.stati.forEach(val => {
+      const cb = form.querySelector(`input[name="s5_stato[]"][value="${val}"]`);
+      if (cb) cb.checked = true;
+    });
+  }
+  // textarea spiegazioni
+  if (saved.scheda5.spiegazioni) {
+    form.querySelector('[name="s5_disinteressato_spieg"]').value = saved.scheda5.spiegazioni.disinteressato || '';
+    form.querySelector('[name="s5_curioso_spieg"]').value = saved.scheda5.spiegazioni.curioso || '';
+    form.querySelector('[name="s5_sicuro_spieg"]').value = saved.scheda5.spiegazioni.sicuro || '';
+    form.querySelector('[name="s5_confuso_spieg"]').value = saved.scheda5.spiegazioni.confuso || '';
+    form.querySelector('[name="s5_tranquillo_spieg"]').value = saved.scheda5.spiegazioni.tranquillo || '';
+    form.querySelector('[name="s5_supportato_spieg"]').value = saved.scheda5.spiegazioni.supportato || '';
+  }
+  // racconto finale
+  form.querySelector('[name="s5_racconto_finale"]').value = saved.scheda5.racconto_finale || '';
+}
+
       console.log('Dati recuperati da Firebase:', saved);
 
       // Prefill form (input, textarea, select) — compatibile con tutti i tipi di input
