@@ -362,3 +362,16 @@ ul.work-modes li:nth-child(4) { background-color: var(--pastel-green); }
 .scheda-title + .recovery-link.card {
   margin-top: 0;
 }
+/* Allineamento migliore per le checkbox */
+#scheda5 label {
+  display: flex;
+  align-items: center;      /* centra verticalmente il checkbox con il testo */
+  gap: 8px;                 /* spazio tra checkbox e testo */
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+/* La textarea subito dopo la checkbox avrà un po’ di margine sopra */
+#scheda5 textarea {
+  margin-top: 6px;
+}
